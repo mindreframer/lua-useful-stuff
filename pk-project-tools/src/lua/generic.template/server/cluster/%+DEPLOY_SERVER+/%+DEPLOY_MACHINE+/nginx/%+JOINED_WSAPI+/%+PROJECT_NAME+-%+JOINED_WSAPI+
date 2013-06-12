@@ -1,0 +1,35 @@
+server {
+--[[BLOCK_START:EMPTY_LISTEN]]
+  listen 80;
+--[[BLOCK_END:EMPTY_LISTEN]]
+--[[BLOCK_START:NORMAL_LISTEN]]
+  listen #{URLIFY(JOINED_WSAPI)}#{URLIFY(SERVICE_INDEX)}#{URLIFY(DEPLOY_SERVER_DOMAIN)}:80;
+--[[BLOCK_END:NORMAL_LISTEN]]
+  server_name #{URLIFY(JOINED_WSAPI)}#{URLIFY(SERVICE_INDEX)}#{URLIFY(DEPLOY_SERVER_DOMAIN)};
+
+  error_log  /var/log/nginx/#{URLIFY(PROJECT_NAME)}-#{URLIFY(JOINED_WSAPI)}.error.log;
+  access_log  /var/log/nginx/#{URLIFY(PROJECT_NAME)}-#{URLIFY(JOINED_WSAPI)}.access.log;
+  set_real_ip_from 0.0.0.0/0;
+  real_ip_header X-Real-IP;
+
+  location /static/ {
+    alias /usr/local/lib/luarocks/rocks/#{PROJECT_NAME}.#{JOINED_WSAPI}/scm-1/www/#{JOINED_WSAPI}/static/;
+  }
+
+  location / {
+    fastcgi_pass unix:/tmp/#{PROJECT_NAME}-#{JOINED_WSAPI}.socket;
+
+    fastcgi_param  SCRIPT_FILENAME  run.lua;
+    fastcgi_param  PATH_INFO        $document_uri;
+    fastcgi_param  QUERY_STRING     $query_string;
+    fastcgi_param  REQUEST_METHOD   $request_method;
+    fastcgi_param  CONTENT_TYPE     $content_type;
+    fastcgi_param  CONTENT_LENGTH   $content_length;
+
+    fastcgi_param  X-FORWARDED-FOR  $remote_addr;
+    fastcgi_param  REMOTE_ADDR      $remote_addr;
+
+    fastcgi_param  PK_CONFIG_HOST "internal-config#{DEPLOY_SERVER_DOMAIN}";
+    fastcgi_param  PK_CONFIG_PORT "80";
+  }
+}

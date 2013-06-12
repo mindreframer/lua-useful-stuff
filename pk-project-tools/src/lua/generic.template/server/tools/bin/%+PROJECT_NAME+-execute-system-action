@@ -1,0 +1,120 @@
+#! /usr/bin/env pk-lua-interpreter
+
+local SERVICE_NAME = assert(select(1, ...), "missing service name")
+local SERVICE_NODE = assert(select(2, ...), "missing service node")
+local ACTION_NAME = assert(select(3, ...), "missing action name")
+
+--------------------------------------------------------------------------------
+
+require 'lua-nucleo.module'
+require 'lua-nucleo.strict'
+
+require = import 'lua-nucleo/require_and_declare.lua' { 'require_and_declare' }
+
+local zmq = require 'zmq'
+local luabins = require 'luabins'
+local posix = require 'posix'
+
+--------------------------------------------------------------------------------
+
+do
+  local LOG_LEVEL = import 'lua-nucleo/log.lua' { 'LOG_LEVEL' }
+
+  import 'pk-core/common_logging.lua' {
+      'create_common_stdout_logging'
+    } {
+      [LOG_LEVEL.DEBUG] = true;
+      [LOG_LEVEL.SPAM] = true;
+    }
+end
+
+--------------------------------------------------------------------------------
+
+local log, dbg, spam, log_error
+    = import 'pk-core/log.lua' { 'make_loggers' } (
+        "pk-banner/execute-system-action", "ESA"
+      )
+
+--------------------------------------------------------------------------------
+
+local tstr
+      = import 'lua-nucleo/tstr.lua'
+      {
+        'tstr'
+      }
+
+local call
+      = import 'pk-core/error.lua'
+      {
+        'call'
+      }
+
+local make_hiredis_manager,
+      make_hiredis_connection_manager
+      = import 'pk-engine/hiredis/hiredis_manager.lua'
+      {
+        'make_hiredis_manager',
+        'make_hiredis_connection_manager'
+      }
+
+local try_send_system_message
+      = import 'pk-engine/webservice/client_api/system_message.lua'
+      {
+        'try_send_system_message'
+      }
+
+local make_config_manager
+      = import '#{PROJECT_NAME}/internal_config_client.lua'
+      {
+        'make_config_manager'
+      }
+
+local INTERNAL_CONFIG_HOST,
+      INTERNAL_CONFIG_PORT
+      = import '#{PROJECT_NAME}/cluster/config.lua'
+      {
+        'INTERNAL_CONFIG_HOST',
+        'INTERNAL_CONFIG_PORT'
+      }
+
+--------------------------------------------------------------------------------
+
+local config_manager = assert(
+    make_config_manager(INTERNAL_CONFIG_HOST, INTERNAL_CONFIG_PORT)
+  )
+
+-- TODO: Make on demand? Anyway, it is deprecated.
+local redis_manager = assert(
+    make_hiredis_manager(config_manager, make_hiredis_connection_manager())
+  )
+
+local zmq_context = assert(zmq.init(1))
+
+log("executing", SERVICE_NAME, SERVICE_NODE, ACTION_NAME)
+
+io.stdout:write(
+    "Received: ",
+    tstr(
+        assert(
+            call(
+                try_send_system_message,
+                false, -- Don't skip any urls
+                config_manager,
+                redis_manager,
+                zmq_context,
+                SERVICE_NAME,
+                SERVICE_NODE,
+                ACTION_NAME
+                -- TODO: Support additional parameters
+              )
+          )
+      ),
+    "\n"
+  )
+
+log("terminating zmq context")
+
+zmq_context:term()
+zmq_context = nil
+
+io.stdout:flush()

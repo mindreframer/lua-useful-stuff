@@ -1,0 +1,16 @@
+server {
+--[[BLOCK_START:EMPTY_LISTEN]]
+  listen 80;
+--[[BLOCK_END:EMPTY_LISTEN]]
+--[[BLOCK_START:NORMAL_LISTEN]]
+  listen rocks#{DEPLOY_SERVER_DOMAIN}:80;
+--[[BLOCK_END:NORMAL_LISTEN]]
+  server_name rocks#{DEPLOY_SERVER_DOMAIN};
+
+  error_log  /var/log/nginx/rocks#{DEPLOY_SERVER_DOMAIN}.error.log;
+  access_log  /var/log/nginx/rocks#{DEPLOY_SERVER_DOMAIN}.access.log;
+
+  location / {
+    alias /srv/#{PROJECT_NAME}#{REMOTE_ROOT_DIR}/cluster/#{DEPLOY_SERVER}/rocks/;
+  }
+}

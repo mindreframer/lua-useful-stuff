@@ -1,0 +1,42 @@
+#! /usr/bin/env pk-lua-interpreter
+
+--------------------------------------------------------------------------------
+-- pk-call-lua-module: run arbitrary function from Lua module in pk environment
+--------------------------------------------------------------------------------
+
+pcall(require, 'luarocks.require') -- Ignoring errors
+
+--------------------------------------------------------------------------------
+
+require 'lua-nucleo.module'
+require 'lua-nucleo.strict'
+
+require = import 'lua-nucleo/require_and_declare.lua' { 'require_and_declare' }
+
+--------------------------------------------------------------------------------
+
+import 'pk-core/common_logging.lua' { 'create_common_stdout_logging' } ()
+
+--------------------------------------------------------------------------------
+
+local extra_path = assert(select(1, ...), "missing extra_path")
+local module_name = assert(select(2, ...), "missing module_name")
+local function_name = assert(select(3, ...), "missing function_name")
+
+if extra_path ~= "" then
+  if extra_path:sub(#extra_path) ~= ";" then
+    extra_path = extra_path .. ";"
+  end
+
+  if package.path:sub(#package.path) ~= ";" then
+    package.path = package.path .. ";"
+  end
+
+  package.path = extra_path .. package.path
+end
+
+local module = require(module_name)
+assert(
+    module[function_name],
+    "module does not export specified function"
+  )(select(4, ...))

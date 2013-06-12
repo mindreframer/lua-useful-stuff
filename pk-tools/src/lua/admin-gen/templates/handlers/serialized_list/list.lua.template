@@ -1,0 +1,49 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/list"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+    input:DB_ID "list_container_id";
+    input:DB_ID "start";
+    input:INTEGER "limit";
+  };
+
+  api:output
+  {
+    output:ROOT_LIST "result"
+    {
+      output:INTEGER "total";
+      output:LIST_NODE "item"
+      {
+        $(ITEM_FIELDS)
+      }
+    };
+  };
+
+  api:additional_errors
+  {
+  };
+
+ --------------------------------------------------------------------------------
+
+  api:session_handler (function(api_context, param)
+    $(MAKE_SERIALIZED_LIST_API)
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    local post_query = " LIMIT " .. param.start .. "," .. param.limit
+    local items = try("INTERNAL_ERROR", table_api:list(post_query))
+    items.total = #items
+
+    return items
+  end);
+
+--------------------------------------------------------------------------------
+
+  api:tests (function()
+    -- TODO: All
+  end);
+}

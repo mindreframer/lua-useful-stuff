@@ -1,0 +1,40 @@
+#!/bin/bash
+# Use this as a run script with daemontools or runit
+
+## ABSOLUTE path to the spawn-fcgi binary
+SPAWNFCGI="/usr/bin/spawn-fcgi"
+
+## ABSOLUTE path to the multiwatch binary
+MULTIWATCH="/usr/bin/multiwatch"
+
+## ABSOLUTE path to the FastCGI application (php-cgi, dispatch.fcgi, ...)
+FCGIPROGRAM="/usr/local/bin/#{PROJECT_NAME}-#{JOINED_WSAPI}.fcgi"
+
+## bind to unix socket
+FCGISOCKET="/tmp/#{PROJECT_NAME}-#{JOINED_WSAPI}.socket"
+
+## Number of forks
+FCGI_CHILDREN=#{SERVICE_FCGI_CHILDREN}
+
+## if this script is run as root switch to the following user
+USERID=www-data
+SOCKUSERID=www-data
+
+################## no config below this line
+
+exec 2>&1
+
+# Added to recreate /var/run dir that is used by service
+NODE_ID="$(pk-node-id)" #install pk-tools.pk-node-id rock
+mkdir -p /var/run/#{PROJECT_NAME}/#{JOINED_WSAPI}/control/$NODE_ID
+chown www-data:www-data /var/run/#{PROJECT_NAME}/#{JOINED_WSAPI}/control/$NODE_ID
+sudo chmod 775 /var/run/#{PROJECT_NAME}/#{JOINED_WSAPI}/control/$NODE_ID
+
+EX="$SPAWNFCGI -n -s $FCGISOCKET -u $USERID -U $SOCKUSERID -- $MULTIWATCH -f $FCGI_CHILDREN $FCGIPROGRAM"
+
+# get extra environment variables
+EXTRA_ENV="/etc/pk-services/#{PROJECT_NAME}.#{JOINED_WSAPI}"
+E=$(cat $EXTRA_ENV)
+
+# clean environment and set up a new one
+exec env - $E $EX

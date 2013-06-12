@@ -1,0 +1,61 @@
+--[[BLOCK_START:API_NAME]]
+#{API_NAME} =
+{
+  prefix = "#{PROJECT_NAME}.#{API_NAME}";
+  actions =
+  {
+    ["reopen_log_file"] = true;
+    ["shutdown"] = true;
+  };
+  zmq =
+  {
+    protocol = "ipc://";
+    path = "/var/run/#{PROJECT_NAME}/#{API_NAME}/control/${NODE_ID}";
+    mask = ".*%.ipc$";
+  };
+}
+
+--[[BLOCK_END:API_NAME]]
+--[[BLOCK_START:JOINED_WSAPI]]
+#{JOINED_WSAPI} =
+{
+  prefix = "#{PROJECT_NAME}.#{JOINED_WSAPI}";
+  actions =
+  {
+    ["reopen_log_file"] = true;
+    ["shutdown"] = true;
+  };
+  zmq =
+  {
+    protocol = "ipc://";
+    path = "/var/run/#{PROJECT_NAME}/#{JOINED_WSAPI}/control/${NODE_ID}";
+    mask = ".*%.ipc$";
+  };
+}
+
+--[[BLOCK_END:JOINED_WSAPI]]
+--[[BLOCK_START:SERVICE_NAME]]
+#{UNDERLINE(SERVICE_NAME)} =
+{
+  prefix = "#{PROJECT_NAME}:#{SERVICE_NAME}:";
+  actions =
+  {
+    ["reopen_log_file"] = true;
+    ["shutdown"] = true;
+  };
+  nodes =
+  {
+    [1] =
+    {
+      url = false;
+    };
+  };
+--[[BLOCK_START:HAS_TASK_PROCESSOR]]
+  task_processor =
+  {
+    db_name = "#{TASK_DB_NAME}";
+    key = "#{PROJECT_NAME}:#{SERVICE_NAME}:tasks";
+  };
+--[[BLOCK_END:HAS_TASK_PROCESSOR]]
+}
+--[[BLOCK_END:SERVICE_NAME]]

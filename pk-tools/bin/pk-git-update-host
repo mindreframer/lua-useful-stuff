@@ -1,0 +1,96 @@
+#!/bin/bash
+
+set -o errexit
+
+HOST=$1
+DESTBRANCH=$2
+SRCREMOTE=$3
+SRCBRANCH=$4
+ROOT=$5
+
+set -o nounset
+
+set -e
+
+# TODO: Generalize copy-paste!
+green='\033[32m'
+red='\033[31m'
+restore='\033[0m'
+
+function failure() {
+  echo -e "${red}---> Failed to update host${restore}" >&2;
+  exit 1
+}
+
+trap failure SIGINT
+trap failure SIGHUP
+trap failure SIGTERM
+trap failure SIGQUIT
+trap failure ERR
+#trap success EXIT
+
+function usage() {
+  echo "Usage:" >&2
+  echo "  $0 <host> <destbranch> [srcremote] [srcbranch] [root]" >&2
+  echo "Example:" >&2
+  echo "  $0 ia32.local ia32 origin ia32 /srv/pk" >&2
+}
+
+if [ -z "${HOST}" ]; then
+  usage
+  exit 1
+fi
+
+if [ -z "${DESTBRANCH}" ]; then
+  usage
+  exit 1
+fi
+
+echo "---> Updating host..."
+
+if [ -z "${SRCREMOTE}" ]; then
+  SRCREMOTE="origin"
+  echo "---> Using '${SRCREMOTE}' as srcremote"
+fi
+
+if [ -z "${SRCBRANCH}" ]; then
+  SRCBRANCH="${DESTBRANCH}"
+  echo "---> Using '${SRCBRANCH}' as srcbranch"
+fi
+
+if [ -z "${ROOT}" ]; then
+  ROOT="/srv/li-logiceditor"
+  echo "---> Working with remote git tree root at '${ROOT}'"
+fi
+
+GIT="git --git-dir=${ROOT}/.git --work-tree=${ROOT}"
+
+echo "---> Do not forget to push before running this script!"
+
+# TODO: Fail if status is not clean!
+echo "---> Current HEAD"
+CMD="${GIT} rev-parse HEAD"
+ssh ${HOST} ${CMD}
+
+echo "---> Current status"
+CMD="${GIT} status"
+ssh ${HOST} ${CMD} || true # Ignoring error
+
+# WARNING: Unconditionally resetting working copy.
+#          Never do this on a developer machine.
+echo "---> Resetting '${HOST}' to current '${DESTBRANCH}' branch"
+
+# NOTE: Use "&&", not ";". We need to catch all errors here.
+CMD="${GIT} fetch ${SRCREMOTE}"
+CMD="${CMD} && ${GIT} checkout -f ${DESTBRANCH}"
+CMD="${CMD} && ${GIT} reset --hard ${SRCREMOTE}/${SRCBRANCH}"
+CMD="${CMD} && ${GIT} clean -fdx"
+ssh ${HOST} "${CMD}"
+
+# TODO: Unsafe hack! This slows down deployment and requires sudo privileges!
+#       Fix umask instead.
+echo "---> Setting group write permissions to ${ROOT}"
+CMD="sudo chmod -R g+w ${ROOT}"
+ssh ${HOST} ${CMD}
+
+echo -e "${green}---> Done updating host${restore}"

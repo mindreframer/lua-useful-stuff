@@ -1,0 +1,28 @@
+$(HEADER)
+PK.navigation.add_topic(
+    $(TOPIC_NAME),
+    function() { return PKAdmin.make_table_view({
+        title: $(TITLE),
+        primaryKey: $(PRIMARY_KEY),
+        columns:
+        [
+          $(COLUMNS)
+        ],
+        displayMsg: I18N('Displaying items {0} - {1} of {2}'),
+        emptyMsg: I18N('No items'),
+        table_element_editor: $(TABLE_ELEMENT_EDITOR),
+        server_handler_name: $(HANDLER),
+        on_add_item: function(table_element_editor, show_params)
+        {
+          PK.navigation.go_to_topic(table_element_editor, ["new", show_params[0]]);
+        },
+        on_edit_item: function(table_element_editor, show_params, id)
+        {
+          PK.navigation.go_to_topic(table_element_editor, [id, show_params[0]]);
+        },
+        add_request_params: function(request_params, show_params)
+        {
+          request_params.list_container_id = show_params[0];
+        }
+      })}
+  );

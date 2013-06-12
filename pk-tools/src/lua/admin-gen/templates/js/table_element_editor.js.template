@@ -1,0 +1,20 @@
+$(HEADER)
+PK.navigation.add_topic(
+    $(TOPIC_NAME),
+    function() { return PKAdmin.make_table_element_editor({
+        topic_name: $(TOPIC_NAME),
+        primaryKey: $(PRIMARY_KEY),
+        table_view_topic_name: $(TABLE_VIEW_TOPIC_NAME),
+        existing_item_title: $(EXISTING_ITEM_TITLE),
+        new_item_title: $(NEW_ITEM_TITLE),
+        msg_on_successful_update:
+          I18N('Item updated. Click \'ok\' to return to list.'),
+        msg_on_successful_insert:
+          I18N('Item added. Do you want to add another item?'),
+        nameWidth:  150,
+        valueWidth: 400,
+        custom_tbar: $(CUSTOM_TBAR),
+        properties: $(PROPERTIES),
+        server_handler_name: $(HANDLER)
+      })}
+  );

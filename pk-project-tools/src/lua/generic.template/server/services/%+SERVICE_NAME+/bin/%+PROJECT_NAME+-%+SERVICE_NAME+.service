@@ -1,0 +1,17 @@
+#! /bin/bash
+
+set -e
+
+LUA="luajit2"
+if [ -z "$(which ${LUA})" ]; then
+  LUA="lua"
+
+  if [ -z "$(which ${LUA})" ]; then
+    echo "Error: luajit2 and lua executables not found" >&2
+    exit 1
+  fi
+fi
+
+ROCK=#{PROJECT_NAME}-#{SERVICE_NAME}
+
+${LUA} -lluarocks.require -e "require('${ROCK}.run').loop()"

@@ -1,0 +1,40 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/get_by_id"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+    input:DB_ID "list_container_id";
+    input:DB_ID "id";
+  };
+
+  api:output
+  {
+    output:ROOT_NODE "result"
+    {
+        $(ITEM_FIELDS)
+    };
+  };
+
+  api:additional_errors
+  {
+  };
+
+ --------------------------------------------------------------------------------
+
+  api:session_handler (function(api_context, param)
+    $(MAKE_SERIALIZED_LIST_API)
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    return try("INTERNAL_ERROR", table_api:get(param.id))
+  end);
+
+--------------------------------------------------------------------------------
+
+  api:tests (function()
+    -- TODO: All
+  end);
+}

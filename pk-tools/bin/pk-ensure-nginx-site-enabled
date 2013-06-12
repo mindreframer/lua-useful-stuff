@@ -1,0 +1,39 @@
+#! /bin/bash
+
+set -e
+
+CONFIG_FILENAME="${1}"
+if [ -z "${CONFIG_FILENAME}" ]; then
+  echo "Usage: ${0} <config_filename>" >&2
+  exit 1
+fi
+
+if [ ! -f "${CONFIG_FILENAME}" ]; then
+  echo "Can't find file '${CONFIG_FILENAME}'" >&2
+  exit 2
+fi
+
+if [ ! "$(id -u)" == "0" ]; then
+  echo "Must be root" >&2
+  exit 3
+fi
+
+SITES_AVAILABLE_PATH=/etc/nginx/sites-available
+SITES_ENABLED_PATH=/etc/nginx/sites-enabled
+
+CONFIG_BASENAME="$(basename ${CONFIG_FILENAME})"
+if [ -z "${CONFIG_BASENAME}" ]; then
+  # Should not happen
+  echo "Config filename is too weird: '${CONFIG_FILENAME}'" >&2
+  exit 4
+fi
+
+# TODO: Must be atomic!
+# TODO: Do all this only if symlinks are missing or incorrect
+
+rm -f "${SITES_AVAILABLE_PATH}/${CONFIG_BASENAME}"
+ln -s "${CONFIG_FILENAME}" "${SITES_AVAILABLE_PATH}/${CONFIG_BASENAME}"
+rm -f "${SITES_ENABLED_PATH}/${CONFIG_BASENAME}"
+ln -s "${SITES_AVAILABLE_PATH}/${CONFIG_BASENAME}" "${SITES_ENABLED_PATH}/${CONFIG_BASENAME}"
+
+service nginx reload

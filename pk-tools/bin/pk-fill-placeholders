@@ -1,0 +1,16 @@
+#! /bin/bash
+
+set -e
+
+NAME="fill-placeholders"
+
+MODULE="${NAME}.run"
+ROCK="pk-tools.pk-${NAME}"
+
+PRIVATE_MODULES_PATH="$(luarocks show --rock-dir ${ROCK})/src/lua/?.lua"
+
+pk-call-lua-module \
+  "${PRIVATE_MODULES_PATH}" \
+  "${MODULE}" \
+  "run" \
+  "$@"

@@ -1,0 +1,44 @@
+# LogRotate script for the first node of #{SERVICE_NAME}
+#
+/var/log/#{PROJECT_NAME}-#{SERVICE_NAME}-service.log {
+  #
+  # Keep logs for .. days
+  #
+  rotate #{KEEP_LOGS_DAYS}
+  #
+  # Rotate daily
+  #
+  daily
+  #
+  # Compress logs
+  #
+  compress
+  #
+  # Keep most fresh rotated log uncompressed. Important!
+  #
+  delaycompress
+  #
+  # OK if file is missing
+  #
+  missingok
+  #
+  # Don't rotate empty file
+  #
+  notifempty
+  #
+  # Create a log new file with these permissions
+  #
+  create 640 www-data www-data
+  #
+  # Archive old versions of log files adding a daily extension like YYYYMMDD
+  # instead of simply adding a number.
+  # The extension may be configured using the dateformat option.
+  #
+  dateext
+  #
+  # Tell service to let go of the old log file (works only with delaycompress on)
+  #
+  postrotate
+    #{PROJECT_NAME}-execute-system-action #{UNDERLINE(SERVICE_NAME)} 1 reopen_log_file
+  endscript
+}
