@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Data_logger">Data logger</a></li>
+<li><a href="#Remote_controlled_robot">Remote controlled robot</a></li>
+<li><a href="#Reactive_robotics">Reactive robotics</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><strong>1-Tutorial.md</strong></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>1-Tutorial.md</code></h1>
+
+    
+<h1>Tutorial.</h1>
+
+<p>Here we will build a few programs, step-by-step.</p>
+
+
+<p><a name="Data_logger"></a></p>
+<h2>Data logger</h2>
+
+<p>First we will do a data logger, that will save information read from an AX-12 motor to a file. We will call the task "axlogger".</p>
+
+<p>We start by editing the configuration file. We must configure two things: enable the dynamixel device loader, and register the new task, adding the configuration parameters we might use. We do that by adding the following lines to miconf.conf:</p>
+
+
+<pre>
+ deviceloaders.dynamixel.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.dynamixel.filename = <span class="string">'/dev/ttyUSB0'</span>
+ tasks.axlogger.<span class="global">load</span>=<span class="keyword">true</span>
+ tasks.axlogger.motorname=<span class="string">'ax12:3'</span>
+ tasks.axlogger.interval=<span class="number">1</span>
+ tasks.axlogger.outfile=<span class="string">'motor.log'</span>
+</pre>
+
+<p>Then we place the task's code in the tasks/ folder. The tasks/axlogger.lua file:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> sched=<span class="global">require</span> <span class="string">'sched'</span>
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+
+ M.init = <span class="keyword">function</span>(conf)
+
+     <span class="keyword">local</span> file = <span class="global">io</span>.open(conf.outfile <span class="keyword">or</span> <span class="string">'data.log'</span>, <span class="string">'w'</span>)
+     <span class="keyword">local</span> motor = toribio.wait_for_device(conf.motorname)
+     <span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
+         <span class="keyword">local</span> l = motor:get_load()
+         file:write(sched.get_time()..<span class="string">' '</span>..l..<span class="string">'\n'</span>)
+         file:flush()
+         sched.sleep(conf.interval <span class="keyword">or</span> <span class="number">5</span>)
+     <span class="keyword">end</span>
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>The log file will contain motor load readings. The process (the function provided to sched.run) starts opening a file for writing and getting the Device for the specified motor. </p>
+
+<p>The process will loop reading data from the motor and logging it, and then sleeping for the specified interval.</p>
+
+<p>Notice how in the program we provide default values for configuration parameters in case they're missing (like a 5 second interval).</p>
+
+<p>Finally, we run the program:</p>
+
+
+<pre>
+ lua toribio-go.lua -c miconf.conf
+</pre>
+
+<p><a name="Remote_controlled_robot"></a></p>
+<h2>Remote controlled robot</h2>
+
+<p>We will do a remote controlled robot. The idea is that we want to control a two-wheled differential robot using the mouse on another machine. We will see two methods: one using the Lumen's proxy service, and explicitly opening a socket.</p>
+
+<h3>Remote control using a proxy</h3>
+
+<p>This is is the simplest method. The proxy task provided with Lumen allows a Toribio to receive events from another Toribio instance, trough a network. Thus the ""remote control"" Toribio only have to start the proxy task and load the mouse device, and the 'robot' Toribio can receive mouse events as if they were local.</p>
+
+<p>There is no need to write code for the remote control, everything is achieved trough configuration:</p>
+
+
+<pre>
+ deviceloaders.mice.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.proxy.<span class="global">load</span> = <span class="keyword">true</span>
+</pre>
+
+<p>The robot will have a task (named rcp_bot.lua) that will use the proxy service to receive the mouse events. For the moment, we will only show how to receive the mouse events without actually moving the motors. The configuration file will have the following:</p>
+
+
+<pre>
+ tasks.rcp_bot.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.rcp_bot.rc_ip = <span class="string">"192.168.1.100"</span>
+ tasks.rcp_bot.rc_port = <span class="number">1985</span> <span class="comment">--default port for proxy
+</span>
+</pre>
+
+<p>The rcp_bot.lua file to place in the tasks/ folder is the following:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+ <span class="keyword">local</span> sched = <span class="global">require</span> <span class="string">'sched'</span>
+ <span class="keyword">local</span> proxy = <span class="global">require</span> <span class="string">'tasks/proxy'</span>
+
+ M.init = <span class="keyword">function</span>(conf)
+     <span class="keyword">local</span> waitd = proxy.new_remote_waitd(conf.rc_ip, conf.rc_port, {
+         emitter = {<span class="string">'mice:/dev/input/mice'</span>},
+         events = {<span class="string">'move'</span>, <span class="string">'leftbutton'</span>},
+     })
+
+     <span class="keyword">local</span> left, right = <span class="number">0</span>, <span class="number">0</span>
+     sched.sigrun(waitd, <span class="keyword">function</span>(_, _, _, event, v1, v2) 
+         <span class="global">print</span> (event, v1, v2)
+     <span class="keyword">end</span>)
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>The "robot" will print <code>'move', x, y</code> as the mouse is moved and <code>'leftbutton', 'true'</code> when the left button is clicked and <code>'leftbutton', 'false'</code> when released.</p>
+
+<p>This method is very convenient, but does not adapt very well for a remote control: the robot is the one connecting to the control, which is somehow backwards. We will implement a more traditional remote control application next. In this implementation one instance of toribio will read inputs from the mouse (the task rc_control), and generate commands over a UDP link to a Toribio instance in a robot (task rc_robot) which will receive and parse the commands.</p>
+
+<h3>Remote Control</h3>
+
+<p>We will need the mice device, and a task to process mice input and generate commands. We begin with the rc_control.conf configuration file:</p>
+
+
+<pre>
+ deviceloaders.mice.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.rc_control.<span class="global">load</span>=<span class="keyword">true</span>
+ tasks.rc_control.ip=<span class="string">'127.0.0.1'</span> <span class="comment">--change with the ip adress of the robot
+</span> tasks.rc_control.port=<span class="number">9999</span>
+</pre>
+
+<p>The remote control will behave as follows: it tracks mouse's movements, generates messages of the form "left, right" and sends them over udp. A message is sent at least each 0.5 seconds, so if we stop transmitting the robot can deduce it must stop. The skeleton for the tasks/rc_control.lua file is as follows:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+ <span class="keyword">local</span> sched = <span class="global">require</span> <span class="string">'sched'</span>
+
+ M.init = <span class="keyword">function</span>(conf)
+
+     <span class="keyword">local</span> <span class="keyword">function</span> generate_output(x, y)
+         <span class="comment">--calculate velocities and send them over udp
+</span>     <span class="keyword">end</span>
+
+     <span class="keyword">local</span> mice = toribio.wait_for_device(<span class="string">'mice:/dev/input/mice'</span>)
+     <span class="keyword">local</span> lastx, lasty = <span class="number">0</span>, <span class="number">0</span>
+     mice:register_callback(<span class="string">'move'</span>, <span class="keyword">function</span> (x, y)
+         <span class="keyword">if</span> x <span class="keyword">then</span> 
+             generate_output(x, y)
+             lastx, lasty = x, y
+         <span class="keyword">else</span>
+             <span class="comment">-- timeout with no mouse movements
+</span>             generate_output(lastx, lasty)
+         <span class="keyword">end</span>
+     <span class="keyword">end</span>, <span class="number">0.5</span>)
+
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>In this program we use the register_callback method, instead of the explicit loop with a sched.wait inside as in the first program. This will start yet another process (the one listening for the signal), that will keep runing while the first process (the one started with sched.run) will finish immediatelly. The register_callback method has a timeout parameter set (the 0.5 at the end). When the timeout runs out without signals, it will wake our function with <code>nil, 'timeout'</code> as parameters: that's why we check for x to see wether we have a new coordinate, or must use the last recorded set of coordinates.</p>
+
+<p>The only part missing is the generate_output function. We will use nixio to create a UDP socket and use it to send the messages.</p>
+
+
+<pre>
+ <span class="keyword">local</span> nixio = <span class="global">require</span> <span class="string">'nixio'</span>
+ <span class="keyword">local</span> udp = <span class="global">assert</span>(nixio.bind(<span class="string">'*'</span>, <span class="number">0</span>, <span class="string">'inet'</span>, <span class="string">'dgram'</span>))
+ udp:connect(conf.ip, conf.port)
+ <span class="keyword">local</span> <span class="keyword">function</span> generate_output(x, y)
+     <span class="keyword">local</span> left = (y + x)/<span class="number">2</span>
+     <span class="keyword">local</span> right = (y - x)/<span class="number">2</span>
+     udp:send(left..<span class="string">','</span>..right)
+ <span class="keyword">end</span>
+</pre>
+
+<p>This program can be easily improved adding a callback that would react to mouse clicks. For example adding the following callback allows to stop the robot clicking the left button.</p>
+
+
+<pre>
+ mice:register_callback(<span class="string">'leftbutton'</span>, <span class="keyword">function</span> (is_pressed)
+     <span class="keyword">if</span> is_pressed <span class="keyword">then</span> 
+         generate_output(<span class="number">0</span>, <span class="number">0</span>)
+         mice.reset_pos(<span class="number">0</span>, <span class="number">0</span>)
+         lastx, lasty = <span class="number">0</span>, <span class="number">0</span>
+     <span class="keyword">end</span>
+ <span class="keyword">end</span>)
+</pre>
+
+<h3>Controlled bot</h3>
+
+<p>The bot listens for UDP packets, parses them and set motor velocities. As allways, the configuration in rc_bot.conf:</p>
+
+
+<pre>
+ deviceloaders.dynamixel.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.dynamixel.filename = <span class="string">'/dev/ttyUSB0'</span>
+ tasks.rc_bot.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.rc_bot.ip = <span class="string">'127.0.0.1'</span> <span class="comment">--change with the ip adress of the robot
+</span> tasks.rc_bot.motor_left=<span class="string">'ax12:3'</span>
+ tasks.rc_bot.motor_right=<span class="string">'ax12:12'</span>
+ tasks.rc_bot.port = <span class="number">9999</span>
+</pre>
+
+<p>And the tasks/rc_bot.lua skeleton:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+ <span class="keyword">local</span> sched = <span class="global">require</span> <span class="string">'sched'</span>
+
+ M.init = <span class="keyword">function</span>(conf)
+
+
+     <span class="comment">--initialize motors
+</span>     <span class="keyword">local</span> motor_left = toribio.wait_for_device(conf.motor_left)
+     <span class="keyword">local</span> motor_right = toribio.wait_for_device(conf.motor_right)
+     motor_left.init_mode_wheel()
+     motor_right.init_mode_wheel()
+
+     <span class="comment">--initialize socket
+</span>     <span class="keyword">local</span> nixio = <span class="global">require</span> <span class="string">'nixio'</span>
+     <span class="keyword">local</span> udp = <span class="global">assert</span>(nixio.bind(conf.ip, conf.port, <span class="string">'inet'</span>, <span class="string">'dgram'</span>))
+     <span class="keyword">local</span> selector = <span class="global">require</span> <span class="string">'tasks/selector'</span>
+     <span class="keyword">local</span> udp = selector.new_udp(conf.ip, conf.port, <span class="number">1480</span>)
+
+     <span class="comment">--listen for messages
+</span>     sched.sigrun({emitter=udp.task, events={udp.events.data}, timeout=<span class="number">1</span>}, 
+         <span class="keyword">function</span>(_, _, msg) 
+             <span class="keyword">local</span> left, right = <span class="number">0</span>, <span class="number">0</span>
+             <span class="keyword">if</span> msg <span class="keyword">then</span>
+                 left, right = msg:match(<span class="string">'^([^,]+),([^,]+)$'</span>)
+             <span class="keyword">end</span>
+             motor_left.set_speed(left)
+             motor_right.set_speed(right)
+         <span class="keyword">end</span>
+     )
+
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>Notice how we use the selector service to create a udp socket object, that will emit signals when data arrives. Then we listen for these signals with a function (registered in the sched.sigrun call). The timeout is set so if we do not receive a command within a second, the robot will stop.</p>
+
+<p>Now we run toribio with rc_control task enabled on one machine, connected to a second machine with rc_bot enabled.</p>
+
+
+<pre>
+ lua toribio-go.lua -c rc_control.conf
+</pre>
+
+<p>and</p>
+
+
+<pre>
+ lua toribio-go.lua -c rc_bot.conf
+</pre>
+
+<p>Notice that rc_control might have to be run as sudo, if your distribution request such thing for accesing /dev/input/mice.</p>
+
+<p><a name="Reactive_robotics"></a></p>
+<h2>Reactive robotics</h2>
+
+<p>In this example, we will use a usb4butia IO board. Our task will be called bootia, and we will use the deviceloader/bobot task to access the hardware. Thus, our configuration file will have the following:</p>
+
+
+<pre>
+ deviceloaders.bobot.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.bobot.path = <span class="string">'../bobot'</span> <span class="comment">--path to bobot library
+</span> deviceloaders.bobot.comms = {<span class="string">"usb"</span>}
+ deviceloaders.bobot.timeout_refresh = <span class="number">10</span>
+ tasks.bootia.<span class="global">load</span>=<span class="keyword">true</span>
+</pre>
+
+<p>The code for the tasks/bootia.lua might be as follows:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> sched = <span class="global">require</span> <span class="string">'sched'</span>
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+
+ M.init = <span class="keyword">function</span>()
+     sched.run(<span class="keyword">function</span>()
+         <span class="keyword">local</span> button = toribio.wait_for_device({<span class="global">module</span>=<span class="string">'bb-button'</span>})
+         <span class="keyword">local</span> pressed = <span class="keyword">false</span>
+         <span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
+             <span class="keyword">local</span> now = ( button.getValue()==<span class="number">1</span> )
+             <span class="keyword">if</span> pressed <span class="keyword">and</span> <span class="keyword">not</span> now <span class="keyword">then</span> 
+                 <span class="global">print</span> (<span class="string">"pressed!"</span>)
+                 pressed=now
+             <span class="keyword">elseif</span> <span class="keyword">not</span> pressed <span class="keyword">and</span> now <span class="keyword">then</span>
+                 <span class="global">print</span> (<span class="string">"released!"</span>)
+                 pressed=now
+             <span class="keyword">end</span>
+             sched.sleep(<span class="number">0.1</span>)
+         <span class="keyword">end</span>
+     <span class="keyword">end</span>)
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>This process polls a button connected to the usb4butia board (any button will do), and prints "pressed!" or "released!" when the button changes state. You can change the polling rate in the sched.sleep() call. The absolutely minimum you can expect to work is at least call sched.yield() from time to time, to give opportunity to other processes to do their stuff.</p>
+
+<p>Now suppose you have a usb4butia powered robot that only goes forward and backwards, changind the direction with a button press. You could put the direction changind code right in the previous process, but we will do it using a more flexible method: signalling. </p>
+
+<p>The idea is that there will be a signal that requests a direction change, and a separate process that will wait for these signals and apply them. The previous process will be modified to emit a signal as follows:</p>
+
+
+<pre>
+ <span class="keyword">if</span> pressed <span class="keyword">and</span> <span class="keyword">not</span> now <span class="keyword">then</span> 
+     sched.signal(<span class="string">'change direction!'</span>)
+     pressed=now
+ <span class="keyword">elseif</span> <span class="keyword">not</span> pressed <span class="keyword">and</span> now <span class="keyword">then</span>
+     pressed=now
+ <span class="keyword">end</span>
+</pre>
+
+<p>Now that button process fires events, we can start another process that will listen for them and change the 
+motor direction (the motors will start moving at the first button press):</p>
+
+
+<pre>
+ sched.run(<span class="keyword">function</span>()
+     <span class="keyword">local</span> motors = toribio.wait_for_device(<span class="string">'bb-motors'</span>)
+     <span class="keyword">local</span> direction = <span class="number">1</span>
+     sched.sigrun({emitter=<span class="string">'*'</span>, events={<span class="string">'change direction!'</span>}}, <span class="keyword">function</span>()
+         motors.setvel2mtr(direction, <span class="number">500</span>, direction, <span class="number">500</span>)
+         direction=<span class="number">1</span>-direction
+     <span class="keyword">end</span>)
+ <span class="keyword">end</span>)
+</pre>
+
+<p>Because our wait descriptor for changing direction accepts events from anyone (the <code>emitter='*'</code> field), we can have more processes that fire it. Suppose that we want to add the behavior that the robot will change direction randomly, anywhere between 10 to 20 seconds. We can have it simply adding another process:</p>
+
+
+<pre>
+ sched.run(<span class="keyword">function</span>()
+     <span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
+         sched.sleep(<span class="number">10</span> + <span class="number">10</span>*<span class="global">math</span>.random())
+         sched.signal(<span class="string">'change direction!'</span>)
+     <span class="keyword">end</span>
+ <span class="keyword">end</span>)
+</pre>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

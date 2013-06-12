@@ -1,0 +1,1395 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#Atribute_getters">Atribute getters</a></li>
+<li><a href="#Atribute_setters">Atribute setters</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><strong>dynamixel-motor</strong></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>dynamixel-motor</code></h1>
+
+<p>Library for Dynamixel motors.</p>
+<p> This library allows to manipulate devices that use Dynamixel 
+ protocol, such as AX-12 robotic servo motors.
+ For basic manipulation, it is enough to use the <a href="../modules/dynamixel-motor.html#rotate_to_angle">rotate_to_angle</a> and <a href="../modules/dynamixel-motor.html#spin">spin</a> functions,
+ and perhaps set the <a href="../modules/dynamixel-motor.html#set.torque_enable">set.torque_enable</a>. For more sophisticated tasks, the full 
+ Dynamixel functionality is available trough getter and setter functions. <br/>
+ When available, each connected motor will be published
+ as a device in torobio.devices table, named
+ (for example) 'ax12:1', labeled as module 'ax'. Aditionally, an 'ax:all'
+ device will represent the broadcast wide motor. Also, 'ax:sync' motors can be used to 
+ control several motors at the same time. Notice you can not read from broadcast nor sync
+ motors, only send commands to them. <br/>
+ Some of the setable parameters set are located on the motors EEPROM (marked "persist"),
+ and others are on RAM (marked "volatile"). The attributes stored in RAM are reset when the 
+ motor is powered down. <br/>
+ For defaut values, check the Dynamixel documentation.</p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local toribio = require 'toribio'
+local motor = toribio.wait_for_device('ax12:1')
+motor.set.led(true)</pre>
+    </ul>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ping">ping&nbsp;()</a></td>
+	<td class="summary">Ping the motor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reset_factory_default">reset_factory_default&nbsp;()</a></td>
+	<td class="summary">Reset configuration to factory default.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reg_write_start">reg_write_start&nbsp;()</a></td>
+	<td class="summary">Starts a register write mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reg_write_action">reg_write_action&nbsp;()</a></td>
+	<td class="summary">Finishes a register write mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rotate_to_angle">rotate_to_angle&nbsp;(angle, speed)</a></td>
+	<td class="summary">Rotate to the indicated angle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spin">spin&nbsp;(power)</a></td>
+	<td class="summary">Spin at the indicated torque.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#filename">filename</a></td>
+	<td class="summary">Device file of the bus.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#busdevice">busdevice</a></td>
+	<td class="summary">Bus device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#motor_id">motor_id</a></td>
+	<td class="summary">Dynamixel ID number.</td>
+	</tr>
+</table>
+<h2><a href="#Atribute_getters">Atribute getters</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#get.model_number">get.model_number&nbsp;()</a></td>
+	<td class="summary">Get the dynamixel model number.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.firmware_version">get.firmware_version&nbsp;()</a></td>
+	<td class="summary">Get the version of the actuator's firmware.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.id">get.id&nbsp;()</a></td>
+	<td class="summary">Get the ID number of the actuator.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.baud_rate">get.baud_rate&nbsp;()</a></td>
+	<td class="summary">Get the baud rate.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.return_delay_time">get.return_delay_time&nbsp;()</a></td>
+	<td class="summary">Get the response delay.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.rotation_mode">get.rotation_mode&nbsp;()</a></td>
+	<td class="summary">Get the rotation mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.angle_limit">get.angle_limit&nbsp;()</a></td>
+	<td class="summary">Get the angle limit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.limit_temperature">get.limit_temperature&nbsp;()</a></td>
+	<td class="summary">Get the temperature limit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.limit_voltage">get.limit_voltage&nbsp;()</a></td>
+	<td class="summary">Get the voltage limit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.max_torque">get.max_torque&nbsp;()</a></td>
+	<td class="summary">Get the torque limit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.status_return_level">get.status_return_level&nbsp;()</a></td>
+	<td class="summary">Get the Return Level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.alarm_led">get.alarm_led&nbsp;()</a></td>
+	<td class="summary">Get the LED alarm setup.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.alarm_shutodown">get.alarm_shutodown&nbsp;()</a></td>
+	<td class="summary">Get the alarm shutdown setup.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.torque_enable">get.torque_enable&nbsp;()</a></td>
+	<td class="summary">Get the Torque Enable status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.compliance_margin">get.compliance_margin&nbsp;()</a></td>
+	<td class="summary">Get the Compliance Margin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.compliance_slope">get.compliance_slope&nbsp;()</a></td>
+	<td class="summary">Get the Compliance Slope.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.punch">get.punch&nbsp;()</a></td>
+	<td class="summary">Get the Punch value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.goal_position">get.goal_position&nbsp;()</a></td>
+	<td class="summary">Get the goal angle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.moving_speed">get.moving_speed&nbsp;()</a></td>
+	<td class="summary">Get rotation speed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.torque_limit">get.torque_limit&nbsp;()</a></td>
+	<td class="summary">Get the torque limit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_position">get.present_position&nbsp;()</a></td>
+	<td class="summary">Get the axle position.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_speed">get.present_speed&nbsp;()</a></td>
+	<td class="summary">Get the actual rotation speed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_load">get.present_load&nbsp;()</a></td>
+	<td class="summary">Get the motor load.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_voltage">get.present_voltage&nbsp;()</a></td>
+	<td class="summary">Get the supplied voltage.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_temperature">get.present_temperature&nbsp;()</a></td>
+	<td class="summary">Get the internal temperature.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.registered">get.registered&nbsp;()</a></td>
+	<td class="summary">Get registered commands status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.present_temperature">get.present_temperature&nbsp;()</a></td>
+	<td class="summary">Get the moving status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get.lock">get.lock&nbsp;()</a></td>
+	<td class="summary">Get the lock status.</td>
+	</tr>
+</table>
+<h2><a href="#Atribute_setters">Atribute setters</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#set.id">set.id&nbsp;(ID)</a></td>
+	<td class="summary">Set the ID number of the actuator (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.baud_rate">set.baud_rate&nbsp;(bps)</a></td>
+	<td class="summary">Set the baud rate (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.return_delay_time">set.return_delay_time&nbsp;(sec)</a></td>
+	<td class="summary">Set the response delay (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.rotation_mode">set.rotation_mode&nbsp;(mode)</a></td>
+	<td class="summary">Set the rotation mode (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.angle_limit">set.angle_limit&nbsp;(cw, ccw)</a></td>
+	<td class="summary">Set the angle limit (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.limit_temperature">set.limit_temperature&nbsp;(deg)</a></td>
+	<td class="summary">Set the temperature limit  (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.limit_voltage">set.limit_voltage&nbsp;(min, max)</a></td>
+	<td class="summary">Set the voltage limit  (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.max_torque">set.max_torque&nbsp;(torque)</a></td>
+	<td class="summary">Set the torque limit  (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.status_return_level">set.status_return_level&nbsp;(return_level)</a></td>
+	<td class="summary">Set the Return Level (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.alarm_led">set.alarm_led&nbsp;(errors)</a></td>
+	<td class="summary">Set LED alarm (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.alarm_shutodown">set.alarm_shutodown&nbsp;(errors)</a></td>
+	<td class="summary">Set alarm shutdown (persist).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.torque_enable">set.torque_enable&nbsp;(status)</a></td>
+	<td class="summary">Set the Torque Enable status (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.compliance_margin">set.compliance_margin&nbsp;(cw, ccw)</a></td>
+	<td class="summary">Set the Compliance Margin (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.compliance_slope">set.compliance_slope&nbsp;(step)</a></td>
+	<td class="summary">Set the Compliance Slope (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.punch">set.punch&nbsp;(punch)</a></td>
+	<td class="summary">Set the Punch value (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.goal_position">set.goal_position&nbsp;(angle)</a></td>
+	<td class="summary">Set the goal angle (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.moving_speed">set.moving_speed&nbsp;(speed)</a></td>
+	<td class="summary">Set the rotation speed (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.torque_limit">set.torque_limit&nbsp;(torque)</a></td>
+	<td class="summary">Set the torque limit (volatile).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set.lock">set.lock&nbsp;(lock)</a></td>
+	<td class="summary">Set the lock status (volatile).</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "ping"></a>
+    <strong>ping&nbsp;()</strong>
+    </dt>
+    <dd>
+    Ping the motor. 
+ Only available for single motors, not sync nor broadcast.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a dynamixel error code
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "reset_factory_default"></a>
+    <strong>reset_factory_default&nbsp;()</strong>
+    </dt>
+    <dd>
+    Reset configuration to factory default. 
+ Use with care, as it also resets the ID number and baud rate. 
+ For factory defaults, check Dynamixal documentation.
+ This command only works for single motors (not sync nor broadcast). <br/>
+ For defaut values, check the Dynamixel documentation.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a dynamixel error code
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "reg_write_start"></a>
+    <strong>reg_write_start&nbsp;()</strong>
+    </dt>
+    <dd>
+    Starts a register write mode. 
+ In reg_write mode changes in configuration to devices
+ are not applied until a <a href="../modules/dynamixel-motor.html#reg_write_action">reg_write_action</a> call. <br/>
+ This command only works for single motors (not sync nor broadcast).
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "reg_write_action"></a>
+    <strong>reg_write_action&nbsp;()</strong>
+    </dt>
+    <dd>
+    Finishes a register write mode. 
+ All changes in configuration applied after a previous
+ <a href="../modules/dynamixel-motor.html#reg_write_start">reg_write_start</a> are commited. <br/>
+ This command only works for single motors (not sync nor broadcast).
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rotate_to_angle"></a>
+    <strong>rotate_to_angle&nbsp;(angle, speed)</strong>
+    </dt>
+    <dd>
+    Rotate to the indicated angle. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>angle</em></code>:  Position in degrees in the 0-300 range.</li>
+       <li><code><em>speed</em></code>:  optional rotational speed, in deg/sec in the 1 .. 684 range. 
+ Defaults to max unregulated speed.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spin"></a>
+    <strong>spin&nbsp;(power)</strong>
+    </dt>
+    <dd>
+    Spin at the indicated torque. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  % of max torque, in the -100% .. 100% range.</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "filename"></a>
+    <strong>filename</strong>
+    </dt>
+    <dd>
+    Device file of the bus. 
+ Filename of the bus to which the motor is connected.
+ For example, <em>'/dev/ttyUSB0'</em>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "busdevice"></a>
+    <strong>busdevice</strong>
+    </dt>
+    <dd>
+    Bus device. 
+ The dynamixel bus Device to which the motor is connected
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "motor_id"></a>
+    <strong>motor_id</strong>
+    </dt>
+    <dd>
+    Dynamixel ID number. 
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Atribute_getters"></a>Atribute getters</h2>
+     Functions used to get values from the Dynamixel control table. These functions
+ are not available for broadcast nor sync motors.
+    <dl class="function">
+    <dt>
+    <a name = "get.model_number"></a>
+    <strong>get.model_number&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the dynamixel model number. 
+ For an AX-12 this will return 12.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a model number, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.firmware_version"></a>
+    <strong>get.firmware_version&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the version of the actuator's firmware. 
+ For an AX-12 this will return 12.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a version number, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.id"></a>
+    <strong>get.id&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the ID number of the actuator. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a ID number, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.baud_rate"></a>
+    <strong>get.baud_rate&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the baud rate. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a serial bus speed in bps, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.return_delay_time"></a>
+    <strong>get.return_delay_time&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the response delay. 
+ The time in secs an actuator waits before answering a call.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the edlay time in secs, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.rotation_mode"></a>
+    <strong>get.rotation_mode&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the rotation mode. 
+  Wheel mode is equivalent to having limits cw=0, ccw=0, and mode joint is equivalent to cw=0, ccw=300
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        Either 'wheel' or 'joint', followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.angle_limit"></a>
+    <strong>get.angle_limit&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the angle limit. 
+  The extreme positions possible for the Joint mode.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the cw limit, then the ccw limit, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.limit_temperature"></a>
+    <strong>get.limit_temperature&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the temperature limit. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The maximum allowed temperature in degrees Celsius, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.limit_voltage"></a>
+    <strong>get.limit_voltage&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the voltage limit. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The minumum and maximum allowed voltage in Volts, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.max_torque"></a>
+    <strong>get.max_torque&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the torque limit. 
+ This is also the default value for <code>torque_limit</code>.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the maximum producible torque, as percentage of maximum possible (in the 0% - 100% range), 
+ followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.status_return_level"></a>
+    <strong>get.status_return_level&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the Return Level. 
+ Control what commands must generate a status response 
+ from the actuator. Possible values are 'ONLY_PING', 'ONLY_READ' and 'ALL' (default)
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the return level, followed by a dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.alarm_led"></a>
+    <strong>get.alarm_led&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the LED alarm setup. 
+ A list of error conditions that cause the LED to blink.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A double indexed set, by entry number and error code, followed by a dynamixel error code. The possible 
+ error codes in the list are 'ERROR_INPUT_VOLTAGE', 'ERROR_ANGLE_LIMIT', 'ERROR_OVERHEATING', 
+ 'ERROR_RANGE', 'ERROR_CHECKSUM', 'ERROR_OVERLOAD' and 'ERROR_INSTRUCTION'.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.alarm_shutodown"></a>
+    <strong>get.alarm_shutodown&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the alarm shutdown setup. 
+ A list of error conditions that cause the  <code>torque_limit</code> attribute to
+ be set to 0, halting the motor.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A double indexed set, by entry number and error code, followed by a dynamixel error code. The possible 
+ error codes in the list are 'ERROR_INPUT_VOLTAGE', 'ERROR_ANGLE_LIMIT', 'ERROR_OVERHEATING', 
+ 'ERROR_RANGE', 'ERROR_CHECKSUM', 'ERROR_OVERLOAD' and 'ERROR_INSTRUCTION'.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.torque_enable"></a>
+    <strong>get.torque_enable&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the Torque Enable status. 
+ Control the power supply to the motor.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        Boolean
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.compliance_margin"></a>
+    <strong>get.compliance_margin&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the Compliance Margin. 
+  See Dynamiel reference.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        cw margin, ccw margin (both in degrees), followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.compliance_slope"></a>
+    <strong>get.compliance_slope&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the Compliance Slope. 
+ See Dynamiel reference.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the step value, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.punch"></a>
+    <strong>get.punch&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the Punch value. 
+ See Dynamiel reference.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        punch as % of max torque (in the 0..100 range)
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.goal_position"></a>
+    <strong>get.goal_position&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the goal angle. 
+ The target position for the actuator is going to. Only works in joint mode.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the target angle in degrees, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.moving_speed"></a>
+    <strong>get.moving_speed&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get rotation speed. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        If motor in joint mode, speed in deg/sec (0 means max unregulated speed), if in wheel
+ mode, as a % of max torque, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.torque_limit"></a>
+    <strong>get.torque_limit&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the torque limit. 
+ Controls the 'ERROR_OVERLOAD' error triggering.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The torque limit as percentage of maximum possible.
+ If in wheel mode, as a % of max torque (in the -100 .. 100 range)
+ , followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_position"></a>
+    <strong>get.present_position&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the axle position. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The current position of the motor axle, in degrees (only valid in the
+ 0 .. 300 range), followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_speed"></a>
+    <strong>get.present_speed&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the actual rotation speed. 
+ Only valid in the 0..300 deg position.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        If motor in joint mode, speed in deg/sec, if in wheel
+ mode, as a % of max torque, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_load"></a>
+    <strong>get.present_load&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the motor load. 
+ Only valid in the 0..300 deg position, and aproximate.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        Percentage of max torque (positive is clockwise, negative is 
+ counterclockwise), followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_voltage"></a>
+    <strong>get.present_voltage&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the supplied voltage. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The supplied voltage in Volts, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_temperature"></a>
+    <strong>get.present_temperature&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the internal temperature. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The Internal temperature in degrees Celsius, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.registered"></a>
+    <strong>get.registered&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get registered commands status. 
+ Wether there are registerd commands (see <a href="../modules/dynamixel-motor.html#reg_write_start">reg_write_start</a> and <a href="../modules/dynamixel-motor.html#reg_write_action">reg_write_action</a>)
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A boolean, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.present_temperature"></a>
+    <strong>get.present_temperature&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the moving status. 
+ Wether the motor has reached <a href="../modules/dynamixel-motor.html#get.goal_position">get.goal_position</a>.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A boolean, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get.lock"></a>
+    <strong>get.lock&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get the lock status. 
+ Whether the EEPROM (persistent) attributes are blocked for writing.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        boolean, followed by a Dynamiel error code.
+    </ol>
+
+
+</dd>
+</dl>
+    <h2><a name="Atribute_setters"></a>Atribute setters</h2>
+     Functions used to set values for the Dynamixel control table. 
+ Some of the setable parameters set are located on the motors EEPROM (marked "persist"),
+ and others are on RAM (marked "volatile"). The attributes stored in RAM are reset when the 
+ motor is powered down.  
+    <dl class="function">
+    <dt>
+    <a name = "set.id"></a>
+    <strong>set.id&nbsp;(ID)</strong>
+    </dt>
+    <dd>
+    Set the ID number of the actuator (persist). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>ID</em></code>:  number, must be in the 0 .. 253 range.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.baud_rate"></a>
+    <strong>set.baud_rate&nbsp;(bps)</strong>
+    </dt>
+    <dd>
+    Set the baud rate (persist). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>bps</em></code>:  bus rate in bps, in the 9600 to 1000000 range. Check the Dynamixel docs for supported values.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.return_delay_time"></a>
+    <strong>set.return_delay_time&nbsp;(sec)</strong>
+    </dt>
+    <dd>
+    Set the response delay (persist). 
+ The time in secs an actuator waits before answering a call.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>sec</em></code>:  a time in sec.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.rotation_mode"></a>
+    <strong>set.rotation_mode&nbsp;(mode)</strong>
+    </dt>
+    <dd>
+    Set the rotation mode (persist). 
+  Wheel mode is for continuous rotation, Joint is for servo. Setting this attribute resets the 
+ <code>angle_limit</code> parameter. Wheel mode is equivalent to having limits cw=0, ccw=0, and mode joint is equivalent to cw=0, ccw=300
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>mode</em></code>:  Either 'wheel' or 'joint'.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.angle_limit"></a>
+    <strong>set.angle_limit&nbsp;(cw, ccw)</strong>
+    </dt>
+    <dd>
+    Set the angle limit (persist). 
+  The extreme positions possible for the Joint mode. The angles are given in degrees, and must be in the 0&lt;=cw&lt;=ccw&lt;=300 range.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>cw</em></code>:  the clockwise limit.</li>
+       <li><code><em>ccw</em></code>:  the clockwise limit.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.limit_temperature"></a>
+    <strong>set.limit_temperature&nbsp;(deg)</strong>
+    </dt>
+    <dd>
+    Set the temperature limit  (persist). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>deg</em></code>:  the temperature in degrees Celsius.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.limit_voltage"></a>
+    <strong>set.limit_voltage&nbsp;(min, max)</strong>
+    </dt>
+    <dd>
+    Set the voltage limit  (persist). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>min</em></code>:  the minimum allowed voltage in Volts.</li>
+       <li><code><em>max</em></code>:  the maximum allowed voltage in Volts.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.max_torque"></a>
+    <strong>set.max_torque&nbsp;(torque)</strong>
+    </dt>
+    <dd>
+    Set the torque limit  (persist). 
+ This is also the default value for <code>torque_limit</code>.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>torque</em></code>:  the maximum producible torque, as percentage of maximum possible (in the 0% - 100% range)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.status_return_level"></a>
+    <strong>set.status_return_level&nbsp;(return_level)</strong>
+    </dt>
+    <dd>
+    Set the Return Level (persist). 
+ Control what commands must generate a status response 
+ from the actuator. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>return_level</em></code>:  Possible values are 'ONLY_PING', 'ONLY_READ' and 'ALL' (default)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.alarm_led"></a>
+    <strong>set.alarm_led&nbsp;(errors)</strong>
+    </dt>
+    <dd>
+    Set LED alarm (persist). 
+ A list of error conditions that cause the LED to blink.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>errors</em></code>:  A list of error codes. The possible 
+ error codes are 'ERROR_INPUT_VOLTAGE', 'ERROR_ANGLE_LIMIT', 'ERROR_OVERHEATING',</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.alarm_shutodown"></a>
+    <strong>set.alarm_shutodown&nbsp;(errors)</strong>
+    </dt>
+    <dd>
+    Set alarm shutdown (persist). 
+ A list of error conditions that cause the  <code>torque_limit</code> attribute to
+ be set to 0, halting the motor.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>errors</em></code>:  A list of error codes. The possible 
+ error codes are 'ERROR_INPUT_VOLTAGE', 'ERROR_ANGLE_LIMIT', 'ERROR_OVERHEATING',</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.torque_enable"></a>
+    <strong>set.torque_enable&nbsp;(status)</strong>
+    </dt>
+    <dd>
+    Set the Torque Enable status (volatile). 
+ Control the power supply to the motor.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>status</em></code>:  Boolean</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.compliance_margin"></a>
+    <strong>set.compliance_margin&nbsp;(cw, ccw)</strong>
+    </dt>
+    <dd>
+    Set the Compliance Margin (volatile). 
+ See Dynamiel reference.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>cw</em></code>:  clockwise margin, in deg.</li>
+       <li><code><em>ccw</em></code>:  counterclockwise margin, in deg.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.compliance_slope"></a>
+    <strong>set.compliance_slope&nbsp;(step)</strong>
+    </dt>
+    <dd>
+    Set the Compliance Slope (volatile). 
+ See Dynamiel reference.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>step</em></code>:  the step value.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.punch"></a>
+    <strong>set.punch&nbsp;(punch)</strong>
+    </dt>
+    <dd>
+    Set the Punch value (volatile). 
+ See Dynamiel reference.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>punch</em></code>:  as % of max torque (in the 0..100 range)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.goal_position"></a>
+    <strong>set.goal_position&nbsp;(angle)</strong>
+    </dt>
+    <dd>
+    Set the goal angle (volatile). 
+ The target position for the actuator to go, in degrees. Only works in joint mode.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>angle</em></code>:  the target angle in degrees</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.moving_speed"></a>
+    <strong>set.moving_speed&nbsp;(speed)</strong>
+    </dt>
+    <dd>
+    Set the rotation speed (volatile). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>speed</em></code>:  If motor in joint mode, speed in deg/sec in the 0 .. 684 range 
+ (0 means max unregulated speed). <br/>
+ If in wheel mode, as a % of max torque (in the -100 .. 100 range).</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.torque_limit"></a>
+    <strong>set.torque_limit&nbsp;(torque)</strong>
+    </dt>
+    <dd>
+    Set the torque limit (volatile). 
+ Controls the 'ERROR_OVERLOAD' error triggering.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>torque</em></code>:  The torque limit as percentage of maximum possible.
+ If in wheel mode, as a % of max torque (in the -100 .. 100 range).</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "set.lock"></a>
+    <strong>set.lock&nbsp;(lock)</strong>
+    </dt>
+    <dd>
+    Set the lock status (volatile). 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>lock</em></code>:  once set to true, can be unlocked only powering down the motor.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A dynamixel error code.
+    </ol>
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

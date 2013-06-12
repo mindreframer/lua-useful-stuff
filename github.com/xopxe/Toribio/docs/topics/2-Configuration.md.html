@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#File_Format">File Format</a></li>
+<li><a href="#Interactive_shell">Interactive shell</a></li>
+<li><a href="#Log_Level">Log Level</a></li>
+<li><a href="#Parameters_on_the_commandline">Parameters on the commandline</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><strong>2-Configuration.md</strong></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>2-Configuration.md</code></h1>
+
+    
+<h1>Toribio Configuration.</h1>
+
+<p>Toribio's configuration file is toribio-go.conf. At run time, the content
+is available in toribio.configuration table.</p>
+
+<p><a name="File_Format"></a></p>
+<h2>File Format</h2>
+
+<p>The configuration file is actually a lua file, so usual lua syntax is valid.
+For example "--" starts a comment, {} defines a table, etc. </p>
+
+<p>The main task of the configuration file is to give value to atributes. An 
+attribute is just a index in a table structure.</p>
+
+<p>There are two predefined main levels: 'tasks' and 'deviceloaders'. They specify
+the tasks to start and what parameters provide to them.</p>
+
+<p>For example:</p>
+
+
+<pre>
+ tasks.xy.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.xy.motor_x = <span class="string">'ax12:3'</span>
+ tasks.xy.motor_y = <span class="string">'ax12:12'</span>
+</pre>
+
+<p>Describes a task available in the tasks/ folder, called 'xy' (thus, there
+is a tasks/xy.lua file). This task will be started automatically (the <code>true</code> 
+value). When the task is started, it will be provided with a configuration
+table as follows: <code>{motor_x='ax12:3', motor_y='ax12:12'}</code></p>
+
+<p>To quickly disable a task, set the load field to <code>false</code> or just comment that
+line.</p>
+
+<p>When creating an attribute, intermediate tables are generated automatically
+as needed. For example:</p>
+
+
+<pre>
+ deviceloaders.filedev.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.filedev.<span class="global">module</span>.mice = <span class="string">'/dev/input/mice'</span>
+ deviceloaders.filedev.<span class="global">module</span>.dynamixel = <span class="string">'/dev/ttyUSB*'</span>
+</pre>
+
+<p>creates a table named "module", which will have two fields, "mice" and 
+"dynamixel".</p>
+
+<p><a name="Interactive_shell"></a></p>
+<h2>Interactive shell</h2>
+
+<p>Besides Toribio provided tasks, Lumen's task are also available. For example, 
+there is an interactive shell, accesible trough telnet. To 
+enable it, add the following:</p>
+
+
+<pre>
+ tasks.shell.<span class="global">load</span> = <span class="keyword">true</span>
+ tasks.shell.ip = <span class="number">127.0</span>.<span class="number">0.1</span> <span class="comment">--defaults to '*'
+</span> tasks.shell.port = <span class="number">2012</span> <span class="comment">--defaults to 2012
+</span>
+</pre>
+
+<p><a name="Log_Level"></a></p>
+<h2>Log Level</h2>
+
+<p>Toribio uses Lumens logging infrastructure. It is possible to change the 
+default log level, and set level per logging module. Available levels are
+'NONE', 'ERROR', 'WARNING', 'INFO', 'DETAIL', 'DEBUG' and 'ALL'.</p>
+
+<p>For example, to set a default level of INFO, while muting logging from 
+the scheduler and showing all available messages from the dynamixel module, 
+use:</p>
+
+
+<pre>
+ log.level.default = <span class="string">'INFO'</span>
+ log.level.SCHED = <span class="string">'NONE'</span>
+ log.level.AX = <span class="string">'ALL'</span>
+</pre>
+
+<p><a name="Parameters_on_the_commandline"></a></p>
+<h2>Parameters on the commandline</h2>
+
+<p>TODO</p>
+
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

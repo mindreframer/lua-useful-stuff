@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><strong>rnr_client</strong></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>rnr_client</code></h1>
+
+<p>Library for using a Rnr content based bus.</p>
+<p>
+
+</p>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#init">init&nbsp;(conf)</a></td>
+	<td class="summary">Initialize and starts the module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#new_connection">new_connection&nbsp;()</a></td>
+	<td class="summary">Open a new connection.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#subscribe">subscribe&nbsp;(connd, subscrib_id, filter)</a></td>
+	<td class="summary">Add a Subscription.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unsubscribe">unsubscribe&nbsp;(connd, subscrib_id)</a></td>
+	<td class="summary">Remove a Subscription.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#emit_notification">emit_notification&nbsp;(connd, data)</a></td>
+	<td class="summary">Emit a Notification.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#connd">connd</a></td>
+	<td class="summary">Connection descriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#conf">conf</a></td>
+	<td class="summary">Configuration Table.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#name">name</a></td>
+	<td class="summary">Name of the device (in this case, 'rnr_client').</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#module">module</a></td>
+	<td class="summary">Module name (in this case, 'rnr_client').</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "init"></a>
+    <strong>init&nbsp;(conf)</strong>
+    </dt>
+    <dd>
+    Initialize and starts the module. 
+ This is called automatically by toribio if the <em>load</em> attribute for the module in the configuration file is set to
+ true.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>conf</em></code>:  the configuration table (see <a href="../modules/rnr_client.html#conf">conf</a>).</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "new_connection"></a>
+    <strong>new_connection&nbsp;()</strong>
+    </dt>
+    <dd>
+    Open a new connection. 
+ The descriptor allows object-oriented acces to methods, like connd:emite_notification(data)
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a connection descriptor (see <a href="../modules/rnr_client.html#connd">connd</a>) on success, <em>nil, message</em> on failure.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "subscribe"></a>
+    <strong>subscribe&nbsp;(connd, subscrib_id, filter)</strong>
+    </dt>
+    <dd>
+    Add a Subscription. 
+ When subscribed, matching notification will arrive as signals (see <a href="../modules/rnr_client.html#connd">connd</a>)
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>connd</em></code>:  a connection descriptor.</li>
+       <li><code><em>subscrib_id</em></code>:  a unique subscription id. If nil, a random one will be generated.</li>
+       <li><code><em>filter</em></code>:  an array contaning the subscription filter. Each entry in the array is a table
+ containing 'attr', 'op' and 'value' fields describing an expression.</li>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local rnr = bobot.wait_for_device('rnr_client')
+rnr.subscribe( 'subscrib100', {
+	{attrib='sensor', op='=', value='node1'},
+	{attrib='temperature', op='>', value='30'},
+})</pre>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <em>true</em> on succes, <em>nil, err</em> on failure
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "unsubscribe"></a>
+    <strong>unsubscribe&nbsp;(connd, subscrib_id)</strong>
+    </dt>
+    <dd>
+    Remove a Subscription. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>connd</em></code>:  a connection descriptor.</li>
+       <li><code><em>subscrib_id</em></code>:  a unique subscription id.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <em>true</em> on succes, <em>nil, err</em> on failure
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "emit_notification"></a>
+    <strong>emit_notification&nbsp;(connd, data)</strong>
+    </dt>
+    <dd>
+    Emit a Notification. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>connd</em></code>:  a connection descriptor.</li>
+       <li><code><em>data</em></code>:  a table with the data to be sent.</li>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local rnr = bobot.wait_for_device('rnr_client')
+rnr.subscribe( 'notif100', {sensor = 'node2', temperature = 25} )</pre>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <em>true</em> on succes, <em>nil, err</em> on failure
+    </ol>
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "connd"></a>
+    <strong>connd</strong>
+    </dt>
+    <dd>
+    Connection descriptor. 
+ This table is populated by toribio from the configuration file.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>task</em></code>:  task that will emit signals associated to this device.</li>
+       <li><code><em>events</em></code>:  task that will emit signals associated to this device.
+ It is a table with a single field, <code>notification_arrival</code>,  a new notification has arrived. <br/>
+ The first parameter of the signal is a table with the notification's content.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "conf"></a>
+    <strong>conf</strong>
+    </dt>
+    <dd>
+    Configuration Table. 
+ This table is populated by toribio from the configuration file.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>ip</em></code>:  the ip where the Rnr agent listens (defaults to '127.0.0.1')</li>
+       <li><code><em>port</em></code>:  the port where the Rnr agent listens (defaults to 8182)</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "name"></a>
+    <strong>name</strong>
+    </dt>
+    <dd>
+    Name of the device (in this case, 'rnr_client'). 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "module"></a>
+    <strong>module</strong>
+    </dt>
+    <dd>
+    Module name (in this case, 'rnr_client'). 
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

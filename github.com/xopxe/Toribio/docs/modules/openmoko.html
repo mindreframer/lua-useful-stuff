@@ -1,0 +1,703 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><strong>openmoko</strong></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>openmoko</code></h1>
+
+<p>Library for managing a OpenMoko smartphone.</p>
+<p> Uses the omhacks tool.
+ See http://manpages.ubuntu.com/manpages/precise/man1/om.1.html <br/>
+ It is possible to provide default values applied automatically at startup. For this a configuration field
+ matching a method name  must exist. Examples:</p>
+
+<p> deviceloaders.openmoko.usb_charger_mode = 'charge-battery' <br/>
+ deviceloaders.openmoko.usb_mode = 'host' <br/>
+ deviceloaders.openmoko.gps_power = {true, true}  </p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local toribio = require 'toribio'
+local om = toribio.wait_for_device('openmoko')
+print (om.battery_energy())</pre>
+    </ul>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#init">init&nbsp;(conf)</a></td>
+	<td class="summary">Initialize and starts the module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#usb_mode">usb_mode&nbsp;(mode)</a></td>
+	<td class="summary">Set USB mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#usb_charger_mode">usb_charger_mode&nbsp;(direction)</a></td>
+	<td class="summary">Set USB powering mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#usb_charger_limit">usb_charger_limit&nbsp;(currlim)</a></td>
+	<td class="summary">Set the current limit on the USB port.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#touchscreen_lock">touchscreen_lock&nbsp;(on)</a></td>
+	<td class="summary">Locks the touchsreen.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#battery_charger_limit">battery_charger_limit&nbsp;(currlim)</a></td>
+	<td class="summary">Set the current limit on the battery charger.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#battery_energy">battery_energy&nbsp;()</a></td>
+	<td class="summary">Return the battery charge level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#bt_power">bt_power&nbsp;(power)</a></td>
+	<td class="summary">Power the bluetooth module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#gps_power">gps_power&nbsp;(power, keep_on_in_suspend)</a></td>
+	<td class="summary">Power the gps module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#gsm_power">gsm_power&nbsp;(power)</a></td>
+	<td class="summary">Power the gsm module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#wifi_power">wifi_power&nbsp;(power)</a></td>
+	<td class="summary">Power the wifi module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#wifi_maxperf">wifi_maxperf&nbsp;(iface, on)</a></td>
+	<td class="summary">Enable the maxperf mode for wifi.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#wifi_keep_bus_on_in_suspend">wifi_keep_bus_on_in_suspend&nbsp;(iface, on)</a></td>
+	<td class="summary">Keep de wifi bus powered on suspend.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#screen_power">screen_power&nbsp;(power)</a></td>
+	<td class="summary">Power the screen.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#screen_glamo_bus_timings">screen_glamo_bus_timings&nbsp;(timing)</a></td>
+	<td class="summary">Control the glamo timings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#backlight_brightness">backlight_brightness&nbsp;(level)</a></td>
+	<td class="summary">Control the backlight brigthness.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#led_vibrator_power">led_vibrator_power&nbsp;(level, ontime, offtime)</a></td>
+	<td class="summary">Control the vibrator power.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#led_power_orange_power">led_power_orange_power&nbsp;(on, ontime, offtime)</a></td>
+	<td class="summary">Control the orange light of the power button.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#led_power_blue_power">led_power_blue_power&nbsp;(on, ontime, offtime)</a></td>
+	<td class="summary">Control the blue light of the power button.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#led_aux_red_power">led_aux_red_power&nbsp;(on, ontime, offtime)</a></td>
+	<td class="summary">Control the red light of the aux button.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#conf">conf</a></td>
+	<td class="summary">Configuration Table.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#name">name</a></td>
+	<td class="summary">Name of the device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#module">module</a></td>
+	<td class="summary">Module name.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "init"></a>
+    <strong>init&nbsp;(conf)</strong>
+    </dt>
+    <dd>
+    Initialize and starts the module. 
+ This is called automatically by toribio if the <em>load</em> attribute for the module in the configuration file is set to
+ true.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>conf</em></code>:  the configuration table (see <a href="../modules/openmoko.html#conf">conf</a>).</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "usb_mode"></a>
+    <strong>usb_mode&nbsp;(mode)</strong>
+    </dt>
+    <dd>
+    Set USB mode. 
+ In device mode the phone can  talk  to
+ USB hosts (PCs or phones in host mode). In host mode the phone
+ can talk to USB  devices. Also see usb.charge.mode
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>mode</em></code>:  Optional, either 'host' or 'device' changes the mode.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The mode as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "usb_charger_mode"></a>
+    <strong>usb_charger_mode&nbsp;(direction)</strong>
+    </dt>
+    <dd>
+    Set USB powering mode. 
+ Normally you want to charge
+ the battery in device mode and power the USB bus  in  host  mode
+ but  it is possible to for example use an external battery power
+ the USB bus so that the phone can be  in  host  mode  and  still
+ charge itself over USB. Also see usb.mode
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>direction</em></code>:  optional. Either 'charge-battery' or 'power-usb'</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The direction as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "usb_charger_limit"></a>
+    <strong>usb_charger_limit&nbsp;(currlim)</strong>
+    </dt>
+    <dd>
+    Set the current limit on the USB port. 
+ Control the current that the  phone  will  draw
+ from  the  USB  bus.  When  the phone is in device mode and some
+ gadget driver is loaded it will negotiate  the  highest  allowed
+ charging current automatically. However, if you are using a dumb
+ external USB battery it might be necessary to force larger limit
+ than the default of 100 mA. Do not set the limit to be too large
+ if your charger can not handle it!
+ When powered from an "dumb" device, the phone sets a 100mA limit by default.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>currlim</em></code>:  Optional the current limit in mA. Supported values are 0, 100, 500 and 1000.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The current limit as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "touchscreen_lock"></a>
+    <strong>touchscreen_lock&nbsp;(on)</strong>
+    </dt>
+    <dd>
+    Locks the touchsreen. 
+ This is useful  when  you want to keep the phone running in a pocket and
+ don't want the backlight to turn on every time you  accidentally
+ touch  the screen. Locking is done in a way that does not depend
+ on X so if X server crashes and restarts your screen will  still
+ stay locked.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>on</em></code>:  True to lock false to unlock, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The current lock mode as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "battery_charger_limit"></a>
+    <strong>battery_charger_limit&nbsp;(currlim)</strong>
+    </dt>
+    <dd>
+    Set the current limit on the battery charger. 
+ Usually is set equal to usb<em>charge</em>limit, but can be lower when powering from USB and only want to keep
+ battery charged and leave enough power for the rest of the phone.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>currlim</em></code>:  Optional the current limit in mA. Supported values are 0, 100, 500.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        The current limit as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "battery_energy"></a>
+    <strong>battery_energy&nbsp;()</strong>
+    </dt>
+    <dd>
+    Return the battery charge level. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a percentage of full charge.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "bt_power"></a>
+    <strong>bt_power&nbsp;(power)</strong>
+    </dt>
+    <dd>
+    Power the bluetooth module. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  true to enable, false to disable, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "gps_power"></a>
+    <strong>gps_power&nbsp;(power, keep_on_in_suspend)</strong>
+    </dt>
+    <dd>
+    Power the gps module. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  true to enable, false to disable, nil to keep.</li>
+       <li><code><em>keep_on_in_suspend</em></code>:  true to enable, false to disable, nil to keep</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the power as set, the suspend mode as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "gsm_power"></a>
+    <strong>gsm_power&nbsp;(power)</strong>
+    </dt>
+    <dd>
+    Power the gsm module. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  true to enable, false to disable, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "wifi_power"></a>
+    <strong>wifi_power&nbsp;(power)</strong>
+    </dt>
+    <dd>
+    Power the wifi module. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  true to enable, false to disable, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "wifi_maxperf"></a>
+    <strong>wifi_maxperf&nbsp;(iface, on)</strong>
+    </dt>
+    <dd>
+    Enable the maxperf mode for wifi. 
+ Enabling this  increases
+ energy consumption but lowers latency.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>iface</em></code>:  network interface (usually "eth1")</li>
+       <li><code><em>on</em></code>:  true to power on, false to power down, nil to keep as is.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "wifi_keep_bus_on_in_suspend"></a>
+    <strong>wifi_keep_bus_on_in_suspend&nbsp;(iface, on)</strong>
+    </dt>
+    <dd>
+    Keep de wifi bus powered on suspend. 
+ Needed for wake on wlan.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>iface</em></code>:  network interface (usually "eth1")</li>
+       <li><code><em>on</em></code>:  true to power on, false to power down, nil to keep as is.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "screen_power"></a>
+    <strong>screen_power&nbsp;(power)</strong>
+    </dt>
+    <dd>
+    Power the screen. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>power</em></code>:  true to enable, false to disable, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the mode as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "screen_glamo_bus_timings"></a>
+    <strong>screen_glamo_bus_timings&nbsp;(timing)</strong>
+    </dt>
+    <dd>
+    Control the glamo timings. 
+ Reads  or sets the timings of the memory bus between the CPU and
+ the glamo graphics chip. Numbers are SRAM interface  timings  of
+ the CPU. According to http://lists.openmoko.org/pipermail/community/2010-July/062495.html
+ using 2-4-2 is more appropriate, view that article and following
+ discussion for more details.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>timing</em></code>:  either '4-4-4' or '2-4-2', nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the timing as set
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "backlight_brightness"></a>
+    <strong>backlight_brightness&nbsp;(level)</strong>
+    </dt>
+    <dd>
+    Control the backlight brigthness. 
+ Reports true brightness only if the screen
+ has not been blanked with screen.power
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>level</em></code>:  the percentage of maxbrighness, nil to keep.</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the level as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "led_vibrator_power"></a>
+    <strong>led_vibrator_power&nbsp;(level, ontime, offtime)</strong>
+    </dt>
+    <dd>
+    Control the vibrator power. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>level</em></code>:  the vibrating power, in the 0..255 range</li>
+       <li><code><em>ontime</em></code>:  if provided with offtime, will blink at the indicated rate (milliseconds)</li>
+       <li><code><em>offtime</em></code>:  if provided with ontime, will blink at the indicated rate (milliseconds)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the level as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "led_power_orange_power"></a>
+    <strong>led_power_orange_power&nbsp;(on, ontime, offtime)</strong>
+    </dt>
+    <dd>
+    Control the orange light of the power button. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>on</em></code>:  true switches on, false off, nil keeps as is.</li>
+       <li><code><em>ontime</em></code>:  if provided with offtime, will blink at the indicated rate (milliseconds)</li>
+       <li><code><em>offtime</em></code>:  if provided with ontime, will blink at the indicated rate (milliseconds)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the parameters as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "led_power_blue_power"></a>
+    <strong>led_power_blue_power&nbsp;(on, ontime, offtime)</strong>
+    </dt>
+    <dd>
+    Control the blue light of the power button. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>on</em></code>:  true switches on, false off, nil keeps as is.</li>
+       <li><code><em>ontime</em></code>:  if provided with offtime, will blink at the indicated rate (milliseconds)</li>
+       <li><code><em>offtime</em></code>:  if provided with ontime, will blink at the indicated rate (milliseconds)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the parameters as set.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "led_aux_red_power"></a>
+    <strong>led_aux_red_power&nbsp;(on, ontime, offtime)</strong>
+    </dt>
+    <dd>
+    Control the red light of the aux button. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>on</em></code>:  true switches on, false off, nil keeps as is.</li>
+       <li><code><em>ontime</em></code>:  if provided with offtime, will blink at the indicated rate (milliseconds)</li>
+       <li><code><em>offtime</em></code>:  if provided with ontime, will blink at the indicated rate (milliseconds)</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        the parameters as set.
+    </ol>
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "conf"></a>
+    <strong>conf</strong>
+    </dt>
+    <dd>
+    Configuration Table. 
+ This table is populated by toribio from the configuration file. Can also be used to automatically
+ setup the openmoko calling the method with provided parameters. For example, to automatically 
+ start with a blinkig led, the following entrie could be added to the configuration file:
+ <em>deviceloaders.openmoko.led</em>aux<em>red</em>power = {true, 500, 500}_.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>load</em></code>:  whether toribio should start this module automatically at startup.</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "name"></a>
+    <strong>name</strong>
+    </dt>
+    <dd>
+    Name of the device. 
+ In this case, "openmoko".
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "module"></a>
+    <strong>module</strong>
+    </dt>
+    <dd>
+    Module name. 
+ In this case, "openmoko".
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

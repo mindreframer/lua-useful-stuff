@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Description">Description</a></li>
+<li><a href="#Dependencies">Dependencies</a></li>
+<li><a href="#Tutorial">Tutorial</a></li>
+<li><a href="#Contents">Contents</a></li>
+<li><a href="#License">License</a></li>
+<li><a href="#Who_">Who?</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><strong>README.md</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>README.md</code></h1>
+
+    
+<h1>Toribio: a Embedded Robotics Library.</h1>
+
+<p>Toribio is a library for developing robotics applications. It is based on 
+<a href="https://github.com/xopxe/Lumen">Lumen</a> cooperative
+scheduler, and allows to write coroutine, signal and callback based applications.
+Toribio provides a mechanism for easily accessing hardware, and is geared towards
+low end hardware, such as Single-Board Computers.</p>
+
+<p><a name="Description"></a></p>
+<h2>Description</h2>
+
+<p>Using Toribio consists of writing Toribio tasks. These tasks are started automatically.
+When writing these tasks, the programmer have easy access to available devices and to an 
+asynchronous socket and file server. The tasks use Lumen as a cooperative scheduler, and 
+thus can be synchronized exchanging signals. Signals also serve to exchange information 
+between tasks. In any case, Lumen is a shared memory environment and all tasks live in 
+the same VM, so tasks can declare global variables, etc.</p>
+
+<p>Toribio provides the concept of Device. A Device is an object that represents, f.e. a motor,
+the mouse or a distance sensor. Devices provide methods that allow to manipulate them. Also,
+Devices can emit signals: for example, there could be a signal emitted when a button is 
+pressed. These signals can be used trough callbacks: just register a function with Toribio 
+to attend a signal from a Device.</p>
+
+<p><a name="Dependencies"></a></p>
+<h2>Dependencies</h2>
+
+<p>Toribio runs on Lua 5.1 or LuaJIT. Compatibility with Lua 5.2 is planned.
+The only external dependency is the <a href="https://github.com/Neopallium/nixio">nixio</a> library.
+Additionally, for automatically managing devices on file creation and removal the 
+<code>inotifywait</code> program must be installed.</p>
+
+<p><a name="Tutorial"></a></p>
+<h2>Tutorial</h2>
+
+<p>A tutorial is available <a href="https://github.com/xopxe/Toribio/blob/master/docs/1-Tutorial.md">here</a></p>
+
+<p><a name="Contents"></a></p>
+<h2>Contents</h2>
+
+<ul>
+    <li>toribio.lua</li>
+</ul>
+
+<p>The main library. This is the library that will be require'd by tasks to get access 
+to devices, etc.</p>
+
+<ul>
+    <li>toribio-go.lua</li>
+</ul>
+
+<p>The launch script. Uses toribio-go.conf to start tasks and provide them parameters.</p>
+
+<ul>
+    <li>toribio-go.conf</li>
+</ul>
+
+<p>Central configuration repository. Will be available to tasks trough toribio library. 
+Also determines what tasks to start.</p>
+
+<ul>
+    <li>/deviceloaders/*</li>
+</ul>
+
+<p>Here go tasks that are able to discover new devices and instantiate new Device objects.
+You may want to add tasks there to extend Toribio with support for new hardware</p>
+
+<ul>
+    <li>/tasks/*</li>
+</ul>
+
+<p>Here go user tasks, that implement the behaviour of the robot. A task can implement some
+intelligence, or be a remote control server, or just be a data logger, etc.</p>
+
+<ul>
+    <li>/docs/*</li>
+</ul>
+
+<p>Full API reference and additional documentation.</p>
+
+<ul>
+    <li>Lumen/</li>
+</ul>
+
+<p>The Lumen scheduler.</p>
+
+<p><a name="License"></a></p>
+<h2>License</h2>
+
+<p>Same as Lua, see COPYRIGHT.</p>
+
+<p><a name="Who_"></a></p>
+<h2>Who?</h2>
+
+<p>Copyright (C) 2012 Jorge Visca, jvisca@fing.edu.uy</p>
+
+<p>MINA Group, University of the Republic, Uruguay</p>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
