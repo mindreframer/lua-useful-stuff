@@ -1,0 +1,4 @@
+*.so
+*.o
+*.rockspec
+*.src.rock
