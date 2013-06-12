@@ -1,0 +1,34 @@
+#!/usr/bin/lua
+
+pcall(require, "luarocks.require")
+
+local _G = _G
+
+require"luma"
+
+table.insert(package.loaders, 2, luma.loader)
+
+_G.loadfile = luma.loadfile
+_G.dofile = luma.dofile
+_G.loadstring = luma.loadstring
+_G.dostring = luma.dostring
+
+local args = { ... }
+
+local next_is_lib
+
+for _, arg in ipairs(args) do
+  if next_is_lib then
+    next_is_lib = false
+    require(arg)
+  elseif arg == "-l" then
+    next_is_lib = true
+  else
+    local lib = string.match(arg, "^-l[ ]?(.+)$")
+    if lib then
+      require(lib)
+    else
+      luma.dofile(arg)
+    end
+  end
+end

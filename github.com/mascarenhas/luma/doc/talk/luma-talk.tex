@@ -1,0 +1,256 @@
+\documentclass{beamer}
+\usepackage[latin1]{inputenc}
+
+\mode<presentation>{ \usetheme{Warsaw} } 
+
+\title{Luma - Lpeg-based Lua macros}
+
+\author{Fabio Mascarenhas}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Motivation}
+
+\begin{itemize}
+\item Macros that are not bound by Lua's syntax...
+\item ...but clearly delimited when mixed with Lua code
+\item Defining a macro's grammar and the code it generates
+should be as easy as possible
+\item Lpeg's re.lua for grammar and Cosmo for code templates
+\item Inspired by Scheme's \emph{define-syntax}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{A Luma Macro}
+
+\begin{verbatim}
+#!/usr/bin/env luma
+
+require_for_syntax[[automaton]]
+
+local aut = automaton [[
+  init: c -> more
+  more: a -> more
+        d -> more
+        ' ' -> more
+        r -> finish
+  finish: accept
+]]
+
+print(aut("cadar"))
+print(aut("cad ddar"))
+print(aut("caxadr"))
+
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Using Luma Macros}
+
+\begin{itemize}
+\item Macro application: \emph{selector} \verb|[[| \emph{data} \verb|]]|
+\item \emph{data} is any string that contains balanced \verb|[[|s and \verb|]]|s
+\item It's up to the macro to parse and interpret it
+\item Expansion is repeated until there are no more macros to expand, so
+macros can expand to macros
+\item Command line script, \emph{luma}, expands macros in files before running them
+\item \emph{require\_ for\_ syntax} macro require's a library in expansion time, so any
+macros defined by the library are available to the code that follows it
+\item Similarity to Converge's \emph{DSL blocks}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Defining \emph{automaton} - Syntax}
+A Luma macro needs a \emph{syntax}, a set of extra \emph{definitions and builders}, and
+a \emph{code template}. The syntax for \emph{automaton}:
+\begin{verbatim}
+local syntax = [[
+  aut <- _ state+ -> build_aut
+  char <- ([']{[ ]}['] / {.}) _
+  rule <- (char '->' _ {name} _) -> build_rule 
+  state <- ( {name} _ ':' _ rule* -> {} {'accept'?} _ ) 
+    -> build_state
+]]
+\end{verbatim}
+Luma uses re.lua, and defines a few default rules that can be used by
+any macro: spaces and Lua comments (\emph{\_}), Lua names (\emph{name}),
+Lua numbers (\emph{numbers}), and Lua strings (\emph{string}, \emph{shortstring},
+and \emph{longstring}).
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Defining \emph{automaton} - Definitions}
+\emph{automaton}'s definitions are the capture functions, they will build a description
+of the automaton suitable for use by the code template.
+\begin{verbatim}
+local defs = {
+  build_rule = function (c, n)
+    return { char = c, next = n }
+  end,
+  build_state = function (n, rs, accept)
+    local final = tostring(accept == 'accept')
+    return { name = n, rules = rs, final = final }
+  end,
+  build_aut = function (...)
+    return { init = (...).name, states = { ... }, 
+      substr = luma.gensym(), c = luma.gensym(),
+      input = luma.gensym(), rest = luma.gensym() }
+  end
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Defining \emph{automaton} - Code Template}
+Luma uses \emph{Cosmo} for its code templates, Cosmo templates expect a table (the first
+capture the grammar returns on match) and use this table to fill the template.
+\begin{verbatim}
+local code = [[
+  (function ($input)
+    local $substr = string.sub
+    $states[=[
+      local $name
+    ]=]
+    $states[=[
+      $name = function ($rest)
+        if #$rest == 0 then
+          return $final
+        end
+\end{verbatim}
+\emph{continues...}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Defining \emph{automaton} - Code Template contd.}
+\begin{verbatim}
+        local $c = $substr($rest, 1, 1)
+        $rest = $substr($rest, 2, #$rest)
+        $rules[==[
+          if $c == '$char' then
+            return $next($rest)
+          end
+        ]==]
+        return false
+      end
+    ]=]
+    return $init($input)
+  end)]]
+\end{verbatim}
+Macro hygiene is currently the macro programmer's responsibility.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Using Lua's syntax}
+
+Defining macros that use a subset of Lua's syntax is possible, just use \emph{Leg}'s Lua parser. If
+Luma detects that Leg is present it modifies the parser so Luma's macro applications are legal Lua syntax.
+
+Example (list comprehensions):
+
+\begin{verbatim}
+x = L[[i | i <- 1,3]] -- x = {1, 2, 3}
+y = L[[L[[j | j <- 1, 3]] | i <- 1, 3]] 
+    -- y = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}}
+z = L[[tostring(automaton[[init: c -> more 
+                           more: a -> more
+                                 d -> more
+                                 r -> finish
+                           finish: accept]](line))
+       | line <- io.lines()]]
+    -- tries to recognize each line from stdin with
+    -- the automaton and collect results in z
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{List comprehensions - Syntax}
+The list comprehension macro imports the \emph{Exp} rule from Leg as \emph{exp}:
+
+\begin{verbatim}
+local syntax = [[
+  comp <- (_ {exp} _ '|'  _ (numfor / genfor) _)
+    -> build_comp
+  numfor <-  ({name} _ {~ '<-' -> '=' ~} _ 
+    {exp _ ',' _ exp _ (',' _ exp)?}) -> concat
+  genfor <- ({name} _ (',' _ name)* _ {~ '<-' -> 'in' ~}
+    _ {exp _ (',' _ exp)*}) -> concat
+]]
+\end{verbatim}
+
+The builders are boilerplate, \emph{concat} concatenates all captures
+separated by whitespace, \emph{build\_ comp} creates a table with the expression,
+the \emph{for} part and a gensym for the final list.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{List comprehensions - Code}
+The \emph{expression} and \emph{for} parts are already in the correct Lua syntax, so the
+code is straightforward:
+
+\begin{verbatim}
+local code = [[
+  (function ()
+    local $list = {}
+    for $for_part do
+      $list[#$list + 1] = $exp
+    end
+    return $list
+  end)()
+]]
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Inlining definitions}
+Luma defines a \emph{meta} macro that lets you execute arbitray code
+at expansion time. This lets you define macros in the same file they
+are used:
+
+\begin{verbatim}
+meta[[
+  local function fact(n)
+    n = tonumber(n)
+    if n<=1 then return 1 else return n*fact(n-1) end
+  end
+  luma.define("fact", "{number}", fact) 
+]]
+
+print(fact[[3]]) -- expands to print(6)
+\end{verbatim}
+
+If a macro is very simple you can use a function that returns
+its expansion instead of a Cosmo template.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Final Remarks and Issues}
+\begin{itemize}
+\item Currently Luma has several other examples: class definitions,
+try/catch/finally (with proper treatment of return, inc, 
+match/with using Lpeg, Python-like \emph{from module import symbol}, and others
+\item Most macros defined in less than 50 lines of code, the simplest
+in less than 10 lines, including templates
+\item But no good error reporting yet (just a generic parse error if
+a macro doesn't match)
+\item gensym doesn't solve the problem of user code shadowing identifiers the macro needs
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+Questions? Suggestions? Flames? :-)
+\end{center}
+\end{frame}
+
+\end{document}
