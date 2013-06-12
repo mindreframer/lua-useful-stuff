@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd src
+
+if [ "$1" == "watch" ]
+then
+	moonc -t ../lib -w .
+else
+	moonc -t ../lib .
+fi
