@@ -1,0 +1,9 @@
+#!/bin/sh
+
+./build
+luarocks make
+PATH=~/OpenResty/nginx/sbin:$PATH
+export PATH
+nginx -p `pwd`/nginx/ -c nginx.conf -s stop
+nginx -p `pwd`/nginx/ -c nginx.conf
+tail -f nginx/logs/error.log
