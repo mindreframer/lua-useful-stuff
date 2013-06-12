@@ -1,0 +1,6 @@
+#!/usr/bin/env lua
+local ml = require 'ml'
+local lxp = require 'lxp'
+local socket = require 'socket'
+
+print 'doof'
