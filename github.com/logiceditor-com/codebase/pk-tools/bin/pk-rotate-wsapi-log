@@ -1,0 +1,150 @@
+#! /bin/bash
+
+set -e
+
+SERVICE_NAME="${1}"
+LOG_FILENAME="${2}"
+
+if [ -z "${SERVICE_NAME}" ]; then
+  echo "Usage: ${0} <service_name> <log_filename>" >&2
+  exit 1
+fi
+
+if [ -z "${LOG_FILENAME}" ]; then
+  echo "Usage: ${0} <service_name> <log_filename>" >&2
+  exit 2
+fi
+
+if [ ! -f "${LOG_FILENAME}" ]; then
+  echo "Can't find file '${LOG_FILENAME}'" >&2
+  exit 3
+fi
+
+if [ ! "$(id -u)" == "0" ]; then
+  echo "Must be root" >&2
+  exit 4
+fi
+
+LUA="luajit2"
+if [ -z "$(which ${LUA})" ]; then
+  LUA="lua"
+
+  if [ -z "$(which ${LUA})" ]; then
+    echo "Error: luajit2 and lua executables not found" >&2
+    exit 1
+  fi
+fi
+
+LOG_PATH="$(dirname ${LOG_FILENAME})"
+LOG_NAMEONLY="$(basename ${LOG_FILENAME})"
+
+LOG_RIGHTS="$(stat -c %a ${LOG_FILENAME})"
+LOG_OWNER="$(stat -c %U:%G ${LOG_FILENAME})"
+
+${LUA} - "${SERVICE_NAME}" "${LOG_PATH}" "${LOG_NAMEONLY}" "${LOG_FILENAME}" "${LOG_RIGHTS}" "${LOG_OWNER}" <<'EOF'
+--------------------------------------------------------------------------------
+
+local SERVICE_NAME = assert(select(1, ...))
+local LOG_PATH = assert(select(2, ...))
+local LOG_NAMEONLY = assert(select(3, ...))
+local LOG_FILENAME = assert(select(4, ...))
+local LOG_RIGHTS = assert(select(5, ...))
+local LOG_OWNER = assert(select(6, ...))
+
+--------------------------------------------------------------------------------
+
+require 'lfs'
+
+require 'lua-nucleo.module'
+require 'lua-nucleo.strict'
+require 'lua-aplicado.module'
+
+--------------------------------------------------------------------------------
+
+local tstr = import 'lua-nucleo/tstr.lua' { 'tstr' }
+
+local find_all_files = import 'lua-aplicado/filesystem.lua' { 'find_all_files' }
+
+--------------------------------------------------------------------------------
+
+-- TODO: Generalize with deploy-rocks!
+
+local shell_exec = function(command, ...)
+  local cmd = table.concat({command, ...}, " ")
+  -- log("executing:", cmd)
+  return assert(os.execute(cmd))
+end
+
+local shell_read = function(command, ...)
+  local cmd = table_concat({command, ...}, " ")
+  -- log("reading:", cmd)
+  local f = assert(io.popen(cmd))
+  local result = f:read("*a")
+  f:close()
+  f = nil
+  -- log("READ", "`"..result.."'")
+  return result
+end
+
+-- TODO: Move to lua-nucleo.
+local escape_lua_pattern
+do
+  local matches =
+  {
+    ["^"] = "%^";
+    ["$"] = "%$";
+    ["("] = "%(";
+    [")"] = "%)";
+    ["%"] = "%%";
+    ["."] = "%.";
+    ["["] = "%[";
+    ["]"] = "%]";
+    ["*"] = "%*";
+    ["+"] = "%+";
+    ["-"] = "%-";
+    ["?"] = "%?";
+  }
+
+  escape_lua_pattern = function(s)
+    return s:gsub(".", matches)
+  end
+end
+
+-- TODO: Should be shell_escape
+local Q = function(s) return ("%q"):format(s) end
+
+--------------------------------------------------------------------------------
+
+local old_log_filenames = find_all_files(LOG_PATH, "^" .. escape_lua_pattern(LOG_NAMEONLY) .. "%.(%d+)$")
+
+local old_logs = { }
+for i = 1, #old_log_filenames do
+  local filename = old_log_filenames[i]
+  old_logs[#old_logs + 1] = { name = filename, n = tonumber(filename:match("%.(%d+)$")) }
+end
+
+old_logs[#old_logs + 1] = { name = LOG_FILENAME, n = 0 }
+
+table.sort(old_logs, function(lhs, rhs) return lhs.n < rhs.n end)
+
+-- TODO: Not atomic! Lock something!
+for i = #old_logs, 1, -1 do
+  local info = old_logs[i]
+  local new_name = LOG_FILENAME .. "." .. (info.n + 1)
+  io.stdout:write("moving `", info.name, "' to `", new_name, "'...\n")
+  assert(not lfs.attributes(new_name), "destination file already exists")
+  assert(shell_exec("mv", Q(info.name), Q(new_name)) == 0)
+end
+
+io.stdout:write("creating new `", LOG_FILENAME, "'...\n")
+
+assert(shell_exec("touch", Q(LOG_FILENAME)) == 0)
+assert(shell_exec("chmod", LOG_RIGHTS, Q(LOG_FILENAME)) == 0)
+assert(shell_exec("chown", LOG_OWNER, Q(LOG_FILENAME)) == 0)
+
+io.stdout:write("restating wsapi service `", SERVICE_NAME, "'...\n")
+
+assert(shell_exec("pk-restart-wsapi-service", SERVICE_NAME) == 0)
+
+--------------------------------------------------------------------------------
+EOF

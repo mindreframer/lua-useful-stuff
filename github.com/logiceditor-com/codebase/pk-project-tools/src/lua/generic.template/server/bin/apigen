@@ -1,0 +1,35 @@
+#! /bin/bash
+
+set -e
+
+ROOT="${BASH_SOURCE[0]}";
+if([ -h "${ROOT}" ]) then
+  while([ -h "${ROOT}" ]) do ROOT=`readlink "${ROOT}"`; done
+fi
+ROOT=$(cd `dirname "${ROOT}"` && cd .. && pwd) # Up one level
+
+SUBPROJECT="${1}"
+
+if [ -z "${SUBPROJECT}" ]; then
+  echo "Usage: ${0} <subproject> <command>" >&2
+  exit 1
+fi
+shift
+
+NAME="apigen"
+
+MODULE="${NAME}.run"
+ROCK="pk-tools.${NAME}"
+
+# WARNING: copy-paste carefully! Enables absolute paths!
+PRIVATE_MODULES_PATH="$(luarocks show --rock-dir ${ROCK})/src/lua/?.lua;${ROOT}/?.lua;?.lua"
+
+BASE_CONFIG="${ROOT}/project-config/apigen/${SUBPROJECT}.lua"
+
+pk-call-lua-module \
+  "${PRIVATE_MODULES_PATH}" \
+  "${MODULE}" \
+  "run" \
+  "--root=${ROOT}/" \
+  --base-config=${BASE_CONFIG} \
+  "$@"

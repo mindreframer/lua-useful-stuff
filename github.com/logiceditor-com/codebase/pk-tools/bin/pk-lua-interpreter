@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+
+set -e
+
+LUA="$(which luajit2)" || true
+if [ -z "${LUA}" ]; then
+  LUA="$(which luajit)" || true
+
+  if [ -z "${LUA}" ]; then
+    LUA="$(which lua)" || true
+
+    if [ -z "${LUA}" ]; then
+      echo "Error: luajit2, luajit and lua executables not found" >&2
+      exit 1
+    fi
+  fi
+fi
+
+exec /usr/bin/env ${LUA} "$@"

@@ -1,0 +1,16 @@
+#! /bin/bash
+
+set -e
+
+NAME="project-create"
+
+MODULE="${NAME}.run"
+ROCK="pk-project-tools.pk-${NAME}"
+
+PRIVATE_MODULES_PATH="$(luarocks show --rock-dir ${ROCK})/src/lua/?.lua"
+
+pk-call-lua-module \
+  "${PRIVATE_MODULES_PATH}" \
+  "${MODULE}" \
+  "run" \
+  "$@"

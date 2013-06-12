@@ -1,0 +1,1 @@
+api:version "#{PROJECT_NAME}.#{JOINED_WSAPI}.2010-12-19-1"

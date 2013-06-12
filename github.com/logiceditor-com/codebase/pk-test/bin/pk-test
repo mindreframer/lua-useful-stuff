@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e
+
+ROOT="${BASH_SOURCE[0]}";
+if([ -h "${ROOT}" ]) then
+  while([ -h "${ROOT}" ]) do ROOT=$(readlink "${ROOT}"); done
+fi
+ROOT=$(cd $(dirname "${ROOT}")/../ && pwd)
+
+NAME="pk-test"
+MODULE="pk-test/run"
+
+if [ "$1" = "--rockless" ]; then
+    shift
+    ROCK_DIR="$(dirname $0)/../"
+else
+    ROCK_DIR="$(luarocks show --rock-dir ${NAME})"
+fi
+PRIVATE_MODULES_PATH="${ROCK_DIR}/?.lua"
+
+WORKDIR="$(pwd)"
+while [ ! -d "${WORKDIR}/test/cases" -a ! "${WORKDIR}" = "/" ]; do
+    WORKDIR="$(dirname $WORKDIR)"
+done
+if [ "${WORKDIR}" = "/" ]; then
+    echo "${NAME}: test/cases not found" >&2
+    exit 1
+fi
+
+TEST_CASES_PATH="${WORKDIR}/test/cases"
+PRIVATE_MODULES_PATH="${PRIVATE_MODULES_PATH};${WORKDIR}/?.lua"
+
+exec pk-call-lua-module \
+  "${PRIVATE_MODULES_PATH}" \
+  "${MODULE}" \
+  "run" \
+  "--root=${ROOT}" \
+  "--test-cases-path=${TEST_CASES_PATH}" \
+  "$@"

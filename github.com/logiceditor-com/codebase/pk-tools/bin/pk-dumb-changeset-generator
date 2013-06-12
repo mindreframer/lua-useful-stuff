@@ -1,0 +1,559 @@
+#! /usr/bin/env luajit2
+
+--------------------------------------------------------------------------------
+-- dumb_changeset_generator: generates alter changesets from dbgen force diffs
+--------------------------------------------------------------------------------
+-- HINT: Use `git add -p' to edit diffs
+--------------------------------------------------------------------------------
+
+pcall(require, 'luarocks.require') -- Ignoring errors
+
+--------------------------------------------------------------------------------
+
+local posix = require 'posix'
+local socket = require 'socket' -- for logging with microtime
+local lfs = require 'lfs'
+local uuid = require 'uuid'
+
+--------------------------------------------------------------------------------
+
+require 'lua-nucleo.module'
+require 'lua-nucleo.strict'
+require 'lua-aplicado.module'
+require 'pk-core.module'
+
+--------------------------------------------------------------------------------
+
+local LOG_LEVEL,
+      wrap_file_sink,
+      make_common_logging_config
+      = import 'lua-nucleo/log.lua'
+      {
+        'LOG_LEVEL',
+        'wrap_file_sink',
+        'make_common_logging_config'
+      }
+
+local create_common_logging_system,
+      get_current_logsystem_date_microsecond
+      = import 'pk-core/log.lua'
+      {
+        'create_common_logging_system',
+        'get_current_logsystem_date_microsecond'
+      }
+
+--------------------------------------------------------------------------------
+
+do
+  local LOG_LEVEL_CONFIG =
+  {
+    [LOG_LEVEL.ERROR] = true;
+    [LOG_LEVEL.LOG]   = true;
+    [LOG_LEVEL.DEBUG] = false;
+    [LOG_LEVEL.SPAM]  = false;
+  }
+
+  local LOG_MODULE_CONFIG =
+  {
+    -- Empty; everything is enabled by default.
+  }
+
+  local logging_system_id = ""
+
+  create_common_logging_system(
+      logging_system_id,
+      wrap_file_sink(io.stdout),
+      make_common_logging_config(
+          LOG_LEVEL_CONFIG,
+          LOG_MODULE_CONFIG
+        ),
+      get_current_logsystem_date_microsecond
+    )
+end
+
+--------------------------------------------------------------------------------
+
+local log, dbg, spam, log_error
+      = import 'pk-core/log.lua' { 'make_loggers' } (
+          "deploy-rocks", "DRO"
+        )
+
+--------------------------------------------------------------------------------
+
+local pairs, pcall, assert, error, select, next, loadfile
+    = pairs, pcall, assert, error, select, next, loadfile
+
+local table_concat = table.concat
+
+local io = io
+local os = os
+
+--------------------------------------------------------------------------------
+
+local arguments,
+      optional_arguments,
+      method_arguments
+      = import 'lua-nucleo/args.lua'
+      {
+        'arguments',
+        'optional_arguments',
+        'method_arguments'
+      }
+
+local assert_is_table
+      = import 'lua-nucleo/typeassert.lua'
+      {
+        'assert_is_table'
+      }
+
+local tpretty
+      = import 'lua-nucleo/tpretty.lua'
+      {
+        'tpretty'
+      }
+
+local tset,
+      timapofrecords,
+      twithdefaults,
+      tkeys,
+      tclone,
+      tvalues
+      = import 'lua-nucleo/table-utils.lua'
+      {
+        'tset',
+        'timapofrecords',
+        'twithdefaults',
+        'tkeys',
+        'tclone',
+        'tvalues'
+      }
+
+local fill_curly_placeholders,
+      make_concatter,
+      trim
+      = import 'lua-nucleo/string.lua'
+      {
+        'fill_curly_placeholders',
+        'make_concatter',
+        'trim'
+      }
+
+local do_in_environment
+      = import 'lua-nucleo/sandbox.lua'
+      {
+        'do_in_environment'
+      }
+
+local make_checker
+      = import 'lua-nucleo/checker.lua'
+      {
+        'make_checker'
+      }
+
+local write_file,
+      read_file,
+      find_all_files
+      = import 'lua-aplicado/filesystem.lua'
+      {
+        'write_file',
+        'read_file',
+        'find_all_files'
+      }
+
+--------------------------------------------------------------------------------
+
+-- TODO: Generalize with deploy-rocks ASAP!
+
+local git_format_command = function(path, command, ...)
+  -- TODO: If command is rebase (or some other commands),
+  --       do pushd/popd instead.
+
+  local result = "git"
+
+  -- TODO: Revert back to this code when false positives in is_dirty are fixed.
+--[[
+  if path:sub(-4) == ".git" then
+    result = result .. " --git-dir=" .. path
+  else
+    result = result
+      .. " --git-dir=" .. path .. "/.git"
+      .. " --work-tree=" .. path
+  end
+--]]
+
+  result = table_concat({result, command, ...}, " ")
+
+  -- Workaround for false positives:
+  result = "cd '" .. path .. "' >/dev/null && " .. result .. " && cd - >/dev/null"
+
+  return result
+end
+
+-- TODO: Move elsewhere
+local shell_exec = function(command, ...)
+  local cmd = table_concat({command, ...}, " ")
+  -- log("executing:", cmd)
+  return assert(os.execute(cmd))
+end
+
+-- TODO: Move elsewhere
+local shell_read = function(command, ...)
+  local cmd = table_concat({command, ...}, " ")
+  -- log("reading:", cmd)
+  local f = assert(io.popen(cmd))
+  local result = f:read("*a")
+  f:close()
+  f = nil
+  -- log("READ", "`"..result.."'")
+  return result
+end
+
+local git_exec = function(path, command, ...)
+  return shell_exec(git_format_command(path, command, ...))
+end
+
+local git_read = function(path, command, ...)
+  return shell_read(git_format_command(path, command, ...))
+end
+
+local split_lines_to_table = function(str)
+  local r = { }
+
+  for line in str:gmatch("(.-)\n") do
+    r[#r + 1] = line
+  end
+
+  return r
+end
+
+local git_list_changed_files_in_subdir = function(path, subdir)
+  return split_lines_to_table(
+      git_read(path, "diff-index", "--name-only", "HEAD", "--", subdir)
+    )
+end
+
+-- TODO: Not generic enough?
+local git_list_changed_lines_in_file = function(path, filename)
+  local output = split_lines_to_table(
+      git_read(path, "diff-index", "--patch", "--unified=0", "HEAD", "--", filename)
+    )
+  -- TODO: Support access mode changes etc.
+  assert(#output > 4)
+
+  -- TODO: validate better!
+  assert(output[1]:match("^diff %-%-git .*$"))
+  assert(output[2]:match("^index .*$"))
+  assert(output[3]:match("^%-%-%- .*$"))
+  assert(output[4]:match("^%+%+%+ .*$"))
+
+  local result = { }
+
+  for i = 5, #output do
+    local line = output[i]
+    local action, data = line:match("^(.)(.*)$")
+    if action == "@" then
+      -- Do nothing
+    elseif action == "-" or action == "+" then
+      result[#result + 1] = { action = action, data }
+    else
+      error("unknown diff prefix at line " .. i)
+    end
+  end
+
+  return result
+end
+
+-- TODO: Move to lua-nucleo.
+local escape_lua_pattern
+do
+  local matches =
+  {
+    ["^"] = "%^";
+    ["$"] = "%$";
+    ["("] = "%(";
+    [")"] = "%)";
+    ["%"] = "%%";
+    ["."] = "%.";
+    ["["] = "%[";
+    ["]"] = "%]";
+    ["*"] = "%*";
+    ["+"] = "%+";
+    ["-"] = "%-";
+    ["?"] = "%?";
+  }
+
+  escape_lua_pattern = function(s)
+    return (s:gsub(".", matches))
+  end
+end
+
+--------------------------------------------------------------------------------
+
+local trim_and_remove_trailing_commas_inplace = function(changed_lines)
+  for i = 1, #changed_lines do
+    local line = changed_lines[i]
+
+    line[1] = trim(line[1]):match("^(.-),?$")
+  end
+
+  return changed_lines
+end
+
+local filter_out_noop_changes = function(changed_lines)
+  local opposites =
+  {
+    ["+"] = "-";
+    ["-"] = "+";
+  }
+
+  local data_to_i =
+  {
+    ["+"] = { };
+    ["-"] = { };
+  }
+
+  changed_lines = tclone(changed_lines) -- TODO: Lazy hack. Write non-duplicates to result table instead.
+
+  for i = 1, #changed_lines do
+    local line = changed_lines[i]
+    local data, action = line[1], line.action
+
+    local opposite = assert(opposites[action])
+
+    local opposite_i = assert(data_to_i[opposite])[data]
+    if opposite_i then
+      changed_lines[opposite_i] = nil
+      changed_lines[i] = nil
+
+      data_to_i[opposite][data] = nil
+    else
+      data_to_i[action][data] = i
+    end
+  end
+
+  return tvalues(changed_lines) -- Remove holes
+end
+
+local gen_changeset_query = function(table_name, changed_lines, config)
+  local cat, concat = make_concatter()
+
+  cat [[
+    ALTER TABLE `]] (table_name) [[`]]
+
+  for i = 1, #changed_lines do
+    local line = changed_lines[i]
+    local action, data = line.action, line[1]
+
+    local info = assert(config[action])
+
+    local op = info[1]
+    if info.name_only then
+      -- TODO: Hack
+      local prefix = ""
+      if
+        data:upper():find("INDEX")
+        or data:upper():find("KEY")
+        or data:upper():find("UNIQUE")
+      then
+        prefix = "INDEX "
+      end
+
+      data = prefix .. assert(data:match("^.-(`.-`).*$"))
+    end
+
+    cat [[
+
+      ]] (op) [[ ]] (data) ((i ~= #changed_lines) and "," or "") [[
+]]
+  end
+
+  return concat()
+end
+
+--------------------------------------------------------------------------------
+
+local GIT_REPO_PATH = assert(os.getenv("HOME")) .. "/projects/pk-postcards/database"
+local DB_CHANGES_SUBDIR = "db/changes"
+local DB_CHANGES_PATH = GIT_REPO_PATH .. "/" .. DB_CHANGES_SUBDIR
+local CHANGESET_FILENAME_PATTERN = "(%d%d%d%d)%-(.-)%-(.-)%.lua"
+
+--------------------------------------------------------------------------------
+
+local changed_files = git_list_changed_files_in_subdir(
+    GIT_REPO_PATH,
+    DB_CHANGES_SUBDIR
+  )
+
+table.sort(changed_files)
+
+if not next(changed_files) then
+  io.stderr:write("Error: No changes detected. Run `tools/dbgen-update-db.sh force'?\n")
+  io.stderr:flush()
+  os.exit(1)
+end
+
+local generated_changesets = { }
+
+for i = 1, #changed_files do
+  local filename = changed_files[i]
+
+  io.stdout:write("----> Processing `", filename, "'...\n")
+
+  local index_str, table_name, changeset_action = filename:match(
+      escape_lua_pattern(DB_CHANGES_SUBDIR) .. "/" .. CHANGESET_FILENAME_PATTERN
+    )
+
+  local index = tonumber(index_str)
+  if not index then
+    io.stderr:write("Error: Changeset: `", filename, "' has non-numeric index.\n")
+    io.stderr:flush()
+    os.exit(1)
+  end
+
+  if not table_name or not changeset_action then
+    io.stderr:write("Error: Can't parse changeset name: `", filename, "'. Commit changeset or reset changes.\n")
+    io.stderr:flush()
+    os.exit(1)
+  end
+
+  if changeset_action ~= "create" then
+    io.stderr:write("Error: Changeset: `", filename, "' is not a creation changeset. Commit changeset or reset changes.\n")
+    io.stderr:flush()
+    os.exit(1)
+  end
+
+  -- TODO: Sandbox? Reuse changeset.lua?
+  local data = assert(assert(loadfile(GIT_REPO_PATH .. "/" .. filename))())
+
+  local db_name = assert(data.DB_NAME)
+  local uuid_table_name = assert(data.UUID):match(
+      escape_lua_pattern(db_name)
+   .. "/(.-)"
+   .. "/" .. escape_lua_pattern(changeset_action)
+   .. "/" .. ".*" -- TODO: need stricter check
+    )
+
+  if not uuid_table_name then
+    io.stderr:write("Error: Can't parse UUID of changeset `", filename, "'.\n")
+    io.stderr:flush()
+    os.exit(1)
+  end
+
+  assert(table_name == uuid_table_name) -- Changeset sanity check
+
+  local new_changeset = { }
+
+  new_changeset.filename_template = DB_CHANGES_PATH .. "/%04d-" .. table_name .. "-alter.lua"
+  new_changeset.DB_NAME = db_name
+  new_changeset.UUID = db_name .. "/" .. table_name .. "/alter/" .. uuid.new()
+
+  local changed_lines = git_list_changed_lines_in_file(GIT_REPO_PATH, filename)
+
+  changed_lines = filter_out_noop_changes( -- Noop changes may appear after comma trim
+      trim_and_remove_trailing_commas_inplace(changed_lines)
+    )
+
+  new_changeset.APPLY_QUERY = gen_changeset_query(
+      table_name,
+      changed_lines,
+      {
+        ["+"] = { "ADD", name_only = false };
+        ["-"] = { "DROP", name_only = true };
+      }
+    )
+
+  new_changeset.REVERT_QUERY = gen_changeset_query(
+      table_name,
+      changed_lines,
+      {
+        ["+"] = { "DROP", name_only = true };
+        ["-"] = { "ADD", name_only = false };
+      }
+    )
+
+  generated_changesets[#generated_changesets + 1] = new_changeset
+end
+
+io.stdout:write("----> Looking for maximum changeset number...\n")
+local max_index = 0
+do
+  local changeset_filenames = find_all_files(
+      DB_CHANGES_PATH,
+      ".*%.lua$",
+      { }
+    )
+  table.sort(changeset_filenames)
+  for i = 1, #changeset_filenames do
+    local filename = changeset_filenames[i]
+
+    local index_str, table_name, changeset_action = filename:match(
+        escape_lua_pattern(DB_CHANGES_PATH) .. "/" .. "(%d%d%d%d)%-(.-)%.lua"
+      )
+
+    local index = tonumber(index_str)
+    if not index then
+      io.stderr:write("Error: Changeset: `", filename, "' has non-numeric index.\n")
+      io.stderr:flush()
+      os.exit(1)
+    end
+
+    max_index = math.max(max_index, index)
+  end
+end
+
+io.stdout:write(max_index, "\n")
+
+io.stdout:write("----> Writing changeset files...\n")
+for i = 1, #generated_changesets do
+  local changeset = generated_changesets[i]
+
+  local filename = changeset.filename_template:format(max_index + i)
+
+  io.stdout:write("----> Writing ", filename, "...\n")
+
+  assert(
+      write_file(
+          filename,
+          fill_curly_placeholders(
+              [===[
+--------------------------------------------------------------------------------
+-- WARNING: NEVER CHANGE THIS FILE AFTER IT HAS BEEN PUSHED UPSTREAM!
+--------------------------------------------------------------------------------
+--
+-- Generated by dumb_changeset_generator
+--
+--------------------------------------------------------------------------------
+
+local DB_NAME = "${DB_NAME}"
+
+local UUID = "${UUID}"
+
+local apply = function(db_conn)
+  return db_conn:execute [[
+${APPLY_QUERY}
+]]
+end
+
+local revert = function(db_conn)
+  return db_conn:execute [[
+${REVERT_QUERY}
+]]
+end
+
+return
+{
+  DB_NAME = DB_NAME;
+  UUID = UUID;
+  apply = apply;
+  revert = revert;
+}
+]===],
+             changeset
+           )
+        )
+    )
+end
+
+io.stdout:write("OK\n")
+
+io.stdout:flush()

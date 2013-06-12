@@ -1,0 +1,3 @@
+--[[BLOCK_START:REDIS_BASE]]
+#{REDIS_BASE} = { address = { host = '#{REDIS_BASE_HOST}', port = #{REDIS_BASE_PORT} }, database = #{REDIS_BASE_NUMBER} }
+--[[BLOCK_END:REDIS_BASE]]

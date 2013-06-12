@@ -1,0 +1,25 @@
+#! /bin/bash
+
+set -e
+
+SERVICE_NAME="${1}"
+SHELLENV_FILENAME="${2}"
+
+if [ -z "${SERVICE_NAME}" ]; then
+  echo "Usage: ${0} <service_name> <shellenv_filename>" >&2
+  exit 1
+fi
+
+if [ -z "${SHELLENV_FILENAME}" ]; then
+  echo "Usage: ${0} <service_name> <shellenv_filename>" >&2
+  exit 2
+fi
+
+SHELLENV_PATH=/etc/pk-services
+
+mkdir -p "${SHELLENV_PATH}"
+
+if [ ! "$(readlink '${SHELLENV_PATH}/${SERVICE_NAME}')" == "${SHELLENV_FILENAME}" ]; then
+  rm -f "${SHELLENV_PATH}/${SERVICE_NAME}"
+  ln -s "${SHELLENV_FILENAME}" "${SHELLENV_PATH}/${SERVICE_NAME}"
+fi

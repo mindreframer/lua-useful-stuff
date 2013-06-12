@@ -1,0 +1,77 @@
+#!/usr/bin/env sh
+
+# Based on script by AF:
+# http://gist.github.com/212082
+
+set -e
+
+# TODO: Not very elegant. Cache git tag -l output etc.!
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <suffix> major|minor|build|getlast [--dry-run] [--no-push]" >&2
+  exit 1
+fi
+
+if [ "$3" != "--dry-run" ]; then
+  if [ "$3" != "--no-push" ]; then
+    if [ ! -z "$3" ]; then
+      echo "Usage: $0 <suffix> major|minor|build|getlast [--dry-run] [--no-push]" >&2
+      exit 1
+    fi
+  fi
+fi
+
+suffix=$1
+
+lastversion=`git tag -l | egrep "^v[0-9]+\.[0-9]+\.[0-9]+-$suffix" | cut -d"-" -f 1 | sed "s/^v//g" | sort | tail -n 1`
+if [ -e $lastversion ]
+then
+  lastversion="0.0.0-$suffix"
+else
+  tmpmajor=`git tag -l | egrep "^v[0-9]+\.[0-9]+\.[0-9]+-$suffix" | sed "s/^v//g" | cut -d"." -f1 | sort -n | tail -n 1`
+  tmpminor=`git tag -l | egrep "^v$tmpmajor\.[0-9]+\.[0-9]+-$suffix" | sed "s/^v//g" | cut -d"." -f2 | sort -n | tail -n 1`
+  tmpbuild=`git tag -l | egrep "^v$tmpmajor\.$tmpminor\.[0-9]+-$suffix" | cut -d"-" -f 1 | sed "s/^v//g" | cut -d"." -f3 | sort -n | tail -n 1`
+  lastversion="$tmpmajor.$tmpminor.$tmpbuild-$suffix"
+fi
+
+lastmajor=`echo $lastversion | cut -d"." -f 1`
+lastminor=`echo $lastversion | cut -d"." -f 2`
+lastbuild=`echo $lastversion | cut -d"-" -f 1 | cut -d"." -f 3`
+
+newmajor=$lastmajor
+newminor=$lastminor
+newbuild=$lastbuild
+
+case $2 in
+  major)
+    newmajor=`echo "$lastmajor + 1" | bc`
+    newminor="0"
+    newbuild="0"
+  ;;
+  minor)
+    newminor=`echo "$lastminor + 1" | bc`
+    newbuild="0"
+  ;;
+  build)
+    newbuild=`echo "$lastbuild + 1" | bc`
+  ;;
+  getlast)
+    echo "$lastversion"
+    exit 0
+  ;;
+  *)
+    echo "Usage: $0 <suffix> major|minor|build" >&2
+    exit 1
+  ;;
+esac
+
+newversion="v$newmajor.$newminor.$newbuild-$suffix"
+echo "$newversion"
+
+if [ "$3" != "--dry-run" ]; then
+  git tag -a -m "version $newversion (auto)" $newversion || exit 1
+
+  if [ "$3" != "--no-push" ]; then
+    git push --tags origin $newversion
+  fi
+fi

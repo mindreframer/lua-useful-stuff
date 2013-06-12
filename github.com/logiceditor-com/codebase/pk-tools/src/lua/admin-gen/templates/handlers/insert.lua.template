@@ -1,0 +1,43 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/insert"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+
+    $(NEW_ITEM_FIELDS)
+  };
+
+  api:output
+  {
+    output:ROOT_NODE "result"
+    {
+      output:INTEGER "id";
+    };
+  };
+  api:additional_errors { };
+
+  api:session_handler (function(api_context, param)
+    local table_api = api_context:db():$(TABLE_NAME)()
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    local data = tclone(param)
+    data.u  = nil
+    data.s  = nil
+    data.id = nil
+
+$(CODEBLOCK_BEFORE_INSERT_OR_UPDATE)
+
+    try("INTERNAL_ERROR", table_api:insert(data))
+
+    local id = try("INTERNAL_ERROR", table_api:getlastautoid())
+
+    return
+    {
+      id = id;
+    }
+  end);
+}

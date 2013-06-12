@@ -1,0 +1,35 @@
+$(HEADER)
+PK.navigation.add_topic(
+    $(TOPIC_NAME),
+    function() { return PKAdmin.make_table_element_editor({
+        topic_name: $(TOPIC_NAME),
+        primaryKey: $(PRIMARY_KEY),
+        table_view_topic_name: $(TABLE_VIEW_TOPIC_NAME),
+        table_view_params_maker: function(show_params) { return [show_params[1]]; },
+        existing_item_title: $(EXISTING_ITEM_TITLE),
+        new_item_title: $(NEW_ITEM_TITLE),
+        msg_on_successful_update:
+          I18N('Item updated. Click \'ok\' to return to list.'),
+        msg_on_successful_insert:
+          I18N('Item added. Do you want to add another item?'),
+        nameWidth:  150,
+        valueWidth: 400,
+        properties:$(PROPERTIES),
+        server_handler_name: $(HANDLER),
+        get_by_id_request_params_maker: function(request_params, show_params)
+        {
+          request_params.list_container_id = show_params[1];
+          return PK.make_admin_request_params(request_params);
+        },
+        update_request_params_maker: function(request_params, show_params)
+        {
+          request_params.list_container_id = show_params[1];
+          return PK.make_admin_request_params(request_params);
+        },
+        insert_request_params_maker: function(request_params, show_params)
+        {
+          request_params.list_container_id = show_params[1];
+          return PK.make_admin_request_params(request_params);
+        }
+      })}
+  );

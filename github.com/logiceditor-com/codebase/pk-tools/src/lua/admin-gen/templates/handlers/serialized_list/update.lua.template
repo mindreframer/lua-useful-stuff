@@ -1,0 +1,42 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/update"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+    input:DB_ID "list_container_id";
+
+    $(UPDATED_ITEM_FIELDS)
+  };
+
+  api:output
+  {
+    output:ROOT_NODE "result"
+    {
+      output:INTEGER "count";
+    };
+  };
+  api:additional_errors { };
+
+  api:handler (function(api_context, param)
+    $(MAKE_SERIALIZED_LIST_API)
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    local data = tclone(param)
+    data.u  = nil
+    data.s  = nil
+    data.list_container_id = nil
+
+    local found = try("INTERNAL_ERROR", table_api:update(data))
+    if found == false then
+      return { count = 0; }
+    end
+
+    assert(found == true)
+
+    return { count = 1; }
+  end);
+}

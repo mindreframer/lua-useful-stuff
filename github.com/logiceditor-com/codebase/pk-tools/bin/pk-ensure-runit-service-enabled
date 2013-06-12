@@ -1,0 +1,43 @@
+#! /bin/bash
+
+set -e
+
+SERVICE_NAME="${1}"
+RUN_FILENAME="${2}"
+
+if [ -z "${SERVICE_NAME}" ]; then
+  echo "Usage: ${0} <service_name> <run_filename>" >&2
+  exit 1
+fi
+
+if [ -z "${RUN_FILENAME}" ]; then
+  echo "Usage: ${0} <service_name> <run_filename>" >&2
+  exit 2
+fi
+
+if [ ! -f "${RUN_FILENAME}" ]; then
+  echo "Can't find file '${RUN_FILENAME}'" >&2
+  exit 3
+fi
+
+if [ ! "$(id -u)" == "0" ]; then
+  echo "Must be root" >&2
+  exit 4
+fi
+
+SV_PATH=/etc/sv
+SERVICE_PATH=/etc/service
+
+mkdir -p "${SV_PATH}/${SERVICE_NAME}"
+
+if [ ! "$(readlink '${SV_PATH}/${SERVICE_NAME}/run')" == "${RUN_FILENAME}" ]; then
+  rm -f "${SV_PATH}/${SERVICE_NAME}/run"
+  ln -s "${RUN_FILENAME}" "${SV_PATH}/${SERVICE_NAME}/run"
+fi
+
+if [ ! "$(readlink '${SERVICE_PATH}/${SERVICE_NAME}')" == "${SV_PATH}/${SERVICE_NAME}" ]; then
+  rm -rf "${SERVICE_PATH}/${SERVICE_NAME}"
+  ln -s "${SV_PATH}/${SERVICE_NAME}" "${SERVICE_PATH}/${SERVICE_NAME}"
+fi
+
+# TODO: Restart service if run is changed.

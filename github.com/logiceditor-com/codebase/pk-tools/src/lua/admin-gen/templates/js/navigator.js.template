@@ -1,0 +1,86 @@
+$(HEADER)
+PK.WidgetMgr.navigator = new function()
+{
+  var panel_;
+
+  this.init = function(show_params)
+  {
+    function makeMenu()
+    {
+      var GameModelData =
+      {
+        text: I18N('Game model data'),
+        iconCls:'icon-game-model-data',
+        menu:
+        [
+          $(GAME_MODEL_DATA)
+        ]
+      };
+
+      var Administrating =
+      {
+        text: I18N('Administrating'),
+        iconCls:'icon-settings',
+        menu:
+        [
+          $(ADMINISTRATING)
+        ]
+      };
+
+      var Login =
+      {
+        text: I18N('Log in'),
+        iconCls:'icon-log-in',
+        handler: function() { PK.navigation.go_to_topic("login"); }
+      };
+
+      switch(PK.user.get_profile())
+      {
+        $(USER_PROFILES_WHICH_CAN_EDIT_ALL)
+          return [GameModelData, '-', Administrating];
+
+        $(USER_PROFILES_WHICH_CAN_EDIT_ONLY_GAME_DATA)
+          return [GameModelData];
+
+        case 'guest':
+          return [Login];
+      }
+
+      return [Login];
+    };
+
+    panel_ = new Ext.Panel({
+      renderTo: 'navigator-panel',
+      //height:50,
+      tbar: new Ext.Toolbar({
+        //enableOverflow: true,
+        items: makeMenu()
+      })
+    });
+
+    LOG("created module: navigator");
+  };
+
+  this.update = function()
+  {
+    this.hide();
+    this.show();
+  };
+
+
+  this.show = function(show_params)
+  {
+    if(!panel_) { this.init(show_params); }
+//    panel_.show(show_params);
+  };
+
+  this.hide = function()
+  {
+    if(panel_)
+    {
+//      panel_.hide();
+      panel_.destroy();
+      panel_ = undefined;
+    }
+  };
+};

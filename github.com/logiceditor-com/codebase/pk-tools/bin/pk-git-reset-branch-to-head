@@ -1,0 +1,95 @@
+#!/bin/bash
+
+set -o errexit
+
+DESTBRANCH=$1
+DESTREMOTE=$2
+SRCBRANCH=$3
+LOCALROOT=$4
+
+set -o nounset
+
+set -e
+
+# TODO: Generalize copy-paste!
+green='\033[32m'
+red='\033[31m'
+restore='\033[0m'
+
+function failure() {
+  echo -e "${red}---> Resetting branch failed${restore}" >&2;
+  exit 1
+}
+
+trap failure SIGINT
+trap failure SIGHUP
+trap failure SIGTERM
+trap failure SIGQUIT
+trap failure ERR
+#trap success EXIT
+
+function usage() {
+  echo "Usage:" >&2
+  echo "  $0 <destbranch> [destremote] [head] [localroot]" >&2
+  echo "Example:" >&2
+  echo "  $0 ia32 origin HEAD ${HOME}/projects/pk" >&2
+}
+
+if [ -z "${DESTBRANCH}" ]; then
+  usage
+  exit 1
+fi
+
+echo "---> Resetting branch..."
+
+if [ -z "${DESTREMOTE}" ]; then
+  DESTREMOTE="origin"
+  echo "---> Using '${DESTREMOTE}' as destremote"
+fi
+
+if [ -z "${SRCBRANCH}" ]; then
+  SRCBRANCH="HEAD"
+  echo "---> Using '${SRCBRANCH}' as head"
+fi
+
+if [ -z "${LOCALROOT}" ]; then
+  LOCALROOT="${HOME}/projects/li-logiceditor"
+  echo "---> Using '${LOCALROOT}' as local git tree root"
+fi
+
+DESTFULLBRANCH="refs/heads/${DESTBRANCH}"
+
+GIT="git --git-dir=${LOCALROOT}/.git --work-tree=${LOCALROOT}"
+
+${GIT} update-index -q --refresh
+${GIT} diff-index --exit-code --quiet HEAD || {
+    echo "Error: Dirty tree" >&2
+    exit 1
+  }
+
+# TODO: Protect from accidental override?
+
+echo "---> About to reset ${DESTFULLBRANCH} to ${SRCBRANCH}"
+read -p "Are you sure? [y/N] "
+if [ "${REPLY}" != "y" ]; then
+  echo "Cancelled"
+  exit 1
+fi
+
+# Note that it makes no sense to pull origin/test-programmers first,
+# since we're unconditionally overriding it anyway.
+# TODO: Is it good?
+
+echo "---> Resetting..."
+${GIT} update-ref ${DESTFULLBRANCH} ${SRCBRANCH} || {
+    echo "Error: Reset failed" >&2
+    exit 1
+  }
+
+echo "---> Pushing to ${DESTREMOTE} with override"
+${GIT} push ${DESTREMOTE} +${DESTBRANCH} || {
+    echo "Error: Push failed" >&2
+    exit 1
+  }
+
+echo -e "${green}---> Done resetting branch${restore}"

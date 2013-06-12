@@ -1,0 +1,13 @@
+server {
+  listen #{PROJECT_NAME}-internal-config:80;
+  server_name #{PROJECT_NAME}-internal-config;
+
+  error_log  /var/log/nginx/#{PROJECT_NAME}-internal-config.error.log;
+  access_log  /var/log/nginx/#{PROJECT_NAME}-internal-config.access.log;
+  set_real_ip_from 0.0.0.0/0;
+  real_ip_header X-Real-IP;
+
+  location / {
+    alias /usr/local/lib/luarocks/rocks/#{PROJECT_NAME}.internal-config.#{CLUSTER_NAME}/scm-1/cluster/#{CLUSTER_NAME}/internal-config/internal-config/;
+  }
+}

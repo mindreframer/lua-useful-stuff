@@ -1,0 +1,24 @@
+#! /bin/bash
+
+set -e
+
+ROOT="${BASH_SOURCE[0]}";
+if([ -h "${ROOT}" ]) then
+  while([ -h "${ROOT}" ]) do ROOT=`readlink "${ROOT}"`; done
+fi
+ROOT=$(cd `dirname "${ROOT}"` && cd .. && pwd) # Up one level
+
+NAME="deploy-rocks"
+MANIFEST_PATH="${ROOT}/manifest"
+
+MODULE="${NAME}.run"
+ROCK="pk-tools.${NAME}"
+PRIVATE_MODULES_PATH="$(luarocks show --rock-dir ${ROCK})/src/lua/?.lua"
+
+pk-call-lua-module \
+  "${PRIVATE_MODULES_PATH}" \
+  "${MODULE}" \
+  "run" \
+  "${ROOT}" \
+  "${MANIFEST_PATH}" \
+  "$@"

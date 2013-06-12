@@ -1,0 +1,47 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/delete"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+    input:DB_ID "list_container_id";
+    input:DB_ID "id";
+  };
+
+  api:output
+  {
+    output:ROOT_NODE "result"
+    {
+      output:INTEGER "count";
+    };
+  };
+
+  api:additional_errors
+  {
+  };
+
+--------------------------------------------------------------------------------
+
+  api:session_handler (function(api_context, param)
+    $(MAKE_SERIALIZED_LIST_API)
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    local found = try("INTERNAL_ERROR", table_api:delete(param.id))
+    if found == false then
+      return { count = 0; }
+    end
+
+    assert(found == true)
+
+    return { count = 1; }
+  end);
+
+--------------------------------------------------------------------------------
+
+  api:tests (function()
+    -- TODO: All
+  end);
+}

@@ -1,0 +1,145 @@
+#! /bin/bash
+
+LUA="luajit2"
+if [ -z "$(which ${LUA})" ]; then
+  LUA="lua"
+
+  if [ -z "$(which ${LUA})" ]; then
+    echo "Error: luajit2 and lua executables not found" >&2
+    exit 1
+  fi
+fi
+
+ROOT="${BASH_SOURCE[0]}";
+if([ -h "${ROOT}" ]) then
+  while([ -h "${ROOT}" ]) do ROOT=`readlink "${ROOT}"`; done
+fi
+ROOT=$(cd `dirname "${ROOT}"` && pwd)
+
+${LUA} - "${ROOT}" $@ <<EOF
+--------------------------------------------------------------------------------
+
+local ROOT = select(1, ...)
+
+--------------------------------------------------------------------------------
+
+pcall(require, 'luarocks.require') -- Ignoring errors
+
+--------------------------------------------------------------------------------
+
+require 'lua-nucleo.module'
+require 'lua-nucleo.strict'
+require 'lua-aplicado.module'
+
+require = import 'lua-nucleo/require_and_declare.lua' { 'require_and_declare' }
+
+require 'lfs'
+
+--------------------------------------------------------------------------------
+
+import 'pk-core/common_logging.lua' { 'create_common_stdout_logging' } ()
+
+--------------------------------------------------------------------------------
+
+local fill_curly_placeholders,
+      make_concatter
+      = import 'lua-nucleo/string.lua'
+      {
+        'fill_curly_placeholders',
+        'make_concatter'
+      }
+
+local find_all_files,
+      read_file,
+      write_file
+      = import 'lua-aplicado/filesystem.lua'
+      {
+        'find_all_files',
+        'read_file',
+        'write_file'
+      }
+
+--------------------------------------------------------------------------------
+
+local Q = function(s) return ("%q"):format(s) end
+
+--------------------------------------------------------------------------------
+
+local TARGETS =
+{
+  { name = "scm", version = 1, branch = "master" };
+}
+
+local MODULES
+do
+  local cat, concat = make_concatter()
+
+  local filenames = find_all_files(ROOT .. "/../generated/#{PROJECT_LIBDIR}/lib", ".*%.lua$")
+  table.sort(filenames)
+  for i = 1, #filenames do
+    local name = assert(filenames[i]:match(".*/generated/#{ESCAPED(PROJECT_NAME)}%-lib/(lib/.*)$"), "bad path")
+    cat [[
+      []] (Q("#{PROJECT_LIBDIR}." .. name:gsub("%.lua$", ""):gsub("/", "."))) [[
+] = ]] (Q("#{PROJECT_LIBDIR}/generated/#{PROJECT_LIBDIR}/" .. name)) [[;
+]]
+  end
+
+  local filenames = find_all_files(ROOT .. "/../generated/#{PROJECT_LIBDIR}/ext", ".*%.lua$")
+  table.sort(filenames)
+  for i = 1, #filenames do
+    local name = assert(filenames[i]:match(".*/generated/#{ESCAPED(PROJECT_NAME)}%-lib/(ext/.*)$"), "bad path")
+    cat [[
+      []] (Q("#{PROJECT_LIBDIR}." .. name:gsub("%.lua$", ""):gsub("/", "."))) [[
+] = ]] (Q("#{PROJECT_LIBDIR}/generated/#{PROJECT_LIBDIR}/" .. name)) [[;
+]]
+  end
+
+  local filenames = find_all_files(ROOT .. "/../generated/#{PROJECT_LIBDIR}/verbatim", ".*%.lua$")
+  table.sort(filenames)
+  for i = 1, #filenames do
+    local name = assert(filenames[i]:match(".*/generated/#{ESCAPED(PROJECT_NAME)}%-lib/verbatim(/.*)$"), "bad path")
+    cat [[
+      []] (Q("#{PROJECT_NAME}" .. name:gsub("%.lua$", ""):gsub("/", "."))) [[
+] = ]] (Q("#{PROJECT_LIBDIR}/generated/#{PROJECT_LIBDIR}/verbatim" .. name)) [[;
+]]
+  end
+
+  local filenames = find_all_files(ROOT .. "/../generated/#{PROJECT_LIBDIR}/extensions", ".*%.lua$")
+  table.sort(filenames)
+  for i = 1, #filenames do
+    local name = assert(filenames[i]:match(".*/generated/#{ESCAPED(PROJECT_NAME)}%-lib/(extensions/.*)$"), "bad path")
+    cat [[
+      []] (Q("#{PROJECT_NAME}." .. name:gsub("%.lua$", ""):gsub("/", "."))) [[
+] = ]] (Q("#{PROJECT_LIBDIR}/generated/#{PROJECT_LIBDIR}/" .. name)) [[;
+]]
+  end
+
+  MODULES = concat()
+end
+
+local TEMPLATE = assert(read_file(ROOT .. "/../rockspec/rockspec.template"))
+
+--------------------------------------------------------------------------------
+
+-- TODO: Update version automatically if file is changed (see update_file())
+for i = 1, #TARGETS do
+  local TARGET = TARGETS[i]
+
+  assert(
+      write_file(
+          ROOT .. "/../rockspec/#{PROJECT_LIB_ROCK}-"
+       .. TARGET.name .. "-" .. TARGET.version
+       .. ".rockspec",
+          fill_curly_placeholders(
+              TEMPLATE,
+              {
+                VERSION = TARGET.name .. "-" .. TARGET.version;
+                BRANCH = TARGET.branch;
+                MODULES = MODULES;
+              }
+            )
+        )
+    )
+end
+
+EOF

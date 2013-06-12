@@ -1,0 +1,71 @@
+#! /bin/bash
+
+set -e
+
+SERVICE_NAME="${1}"
+
+if [ -z "${SERVICE_NAME}" ]; then
+  echo "Usage: ${0} <service_name>" >&2
+  exit 1
+fi
+
+if [ ! "$(id -u)" == "0" ]; then
+  echo "Must be root" >&2
+  exit 4
+fi
+
+LUA="luajit2"
+if [ -z "$(which ${LUA})" ]; then
+  LUA="lua"
+
+  if [ -z "$(which ${LUA})" ]; then
+    echo "Error: luajit2 and lua executables not found" >&2
+    exit 1
+  fi
+fi
+
+${LUA} - ${SERVICE_NAME} <<'EOF'
+--------------------------------------------------------------------------------
+
+local service_name = assert(select(1, ...))
+
+-- TODO: Generalize with deploy-rocks!
+
+local shell_exec = function(command, ...)
+  local cmd = table.concat({command, ...}, " ")
+  -- log("executing:", cmd)
+  return assert(os.execute(cmd))
+end
+
+local shell_read = function(command, ...)
+  local cmd = table.concat({command, ...}, " ")
+  -- log("reading:", cmd)
+  local f = assert(io.popen(cmd))
+  local result = f:read("*a")
+  f:close()
+  f = nil
+  -- log("READ", "`"..result.."'")
+  return result
+end
+
+--------------------------------------------------------------------------------
+
+-- TODO: Read some pid file instead
+local pid_str = shell_read(
+    "ps ax | grep -F " .. service_name .. " | grep luajit2 | grep -v grep"
+  )
+local pid = pid_str:match("^%s-(%d+)%s+.*")
+if not pid then -- TODO: Is this error?
+  io.stderr:write("WARNING wsapi service ", service_name, " was down\n")
+  io.stderr:flush()
+else
+  io.stdout:write("killing ", service_name, " pid ", pid, "\n")
+  assert(shell_exec("kill", pid) == 0)
+  io.stdout:write("OK\n")
+  io.stdout:flush()
+end
+
+-- TODO: Check if service is started back again (sleep a bit first)
+
+--------------------------------------------------------------------------------
+EOF

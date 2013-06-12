@@ -1,0 +1,37 @@
+$(HEADER)
+api:url "/$(REQUEST_PREFIX)/insert"
+{
+  api:input
+  {
+    input:ACCOUNT_ID "u";
+    input:SESSION_ID "s";
+    input:DB_ID "list_container_id";
+
+    $(NEW_ITEM_FIELDS)
+  };
+
+  api:output
+  {
+    output:ROOT_NODE "result"
+    {
+      output:INTEGER "id";
+    };
+  };
+  api:additional_errors { };
+
+  api:handler (function(api_context, param)
+    $(MAKE_SERIALIZED_LIST_API)
+    if not table_api then
+      fail("INTERNAL_ERROR", "table not found")
+    end
+
+    local data = tclone(param)
+    data.u  = nil
+    data.s  = nil
+    data.list_container_id = nil
+
+    try("INTERNAL_ERROR", table_api:insert(data))
+
+    return { id = 0; }
+  end);
+}
