@@ -1,0 +1,57 @@
+#!../build/LuaJIT-2.0.1/src/luajit
+local function isscript(file)
+    local h = io.open(file, "r")
+    local line = h:read()
+    io.close(h)
+    if line and string.sub(line,1,1) == "#" then
+        return true
+    else
+        return false
+    end
+end
+
+local results = {}
+local failed,passed = 0,0
+for line in io.popen("find . -name '*.t'"):lines() do
+    local file = string.sub(line,3)
+    local e = { k = file }
+    table.insert(results,e)
+    print(e.k..":")
+    
+    local execstring
+    if isscript(file) then
+        execstring = "./" .. file
+    else
+        execstring = "../terra "..file
+    end
+    --things in the fail directory should cause terra compiler errors
+    --we dont check for the particular error
+    --but we do check to see that the "Errors reported.." message prints
+    --which suggests that the error was reported gracefully
+    --(if the compiler bites it before it finishes typechecking then it will not print this)
+    if string.sub(file,1,5) == "fails" then
+        if os.execute(execstring.." | grep 'Errors reported during'") ~= 0 then
+            e.v = "FAIL"
+            failed = failed + 1
+        else
+            e.v = "pass"
+            passed = passed + 1
+        end
+    elseif not string.match(file,"/") then
+        if os.execute(execstring) ~= 0 then
+            e.v = "FAIL"
+            failed = failed + 1
+        else
+            e.v = "pass"
+            passed = passed + 1
+        end
+    end
+end
+
+for i,e in ipairs(results) do
+    if e.v then
+        print(i,e.v,e.k)
+    end
+end
+print()
+print(tostring(passed).." tests passed. "..tostring(failed).." tests failed.")
