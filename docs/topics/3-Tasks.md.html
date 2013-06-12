@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Anatomy_of_a_task">Anatomy of a task</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><strong>3-Tasks.md</strong></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>3-Tasks.md</code></h1>
+
+    
+<h1>Tasks.</h1>
+
+<p>Developping for toribio consists of writing tasks. Tasks are described in 
+the configuration file, and copied in the tasks/ folder.</p>
+
+<p><a name="Anatomy_of_a_task_"></a></p>
+<h2>Anatomy of a task.</h2>
+
+<p>The skeleton of a task file (called say taskname.lua) is as follows:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> sched=<span class="global">require</span> <span class="string">'sched'</span>
+
+ <span class="keyword">function</span> M.init (conf)
+     <span class="comment">-- initialize stuff
+</span>     sched.run(<span class="keyword">function</span>()
+     <span class="comment">-- do something
+</span>     <span class="keyword">end</span>)
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>As the file is called taskname.lua, then there might be an entry
+in the toribio-go.conf file as follows</p>
+
+
+<pre>
+ tasks.taskname.<span class="global">load</span>=<span class="keyword">true</span>
+ tasks.taskname.someparameter=<span class="string">'text'</span>
+ tasks.taskname.anotherparameter=<span class="number">0</span>
+</pre>
+
+<p>The toribio-go.lua script will start the tasks if the load parameter is
+true. All the configuration parameters will be provided in the conf table 
+(when starting this task, toribio will invoke <code>M.init(tasks.taskname)</code>).
+Notice that the full configuration table is available at
+toribio.configuration.</p>
+
+<p>The <code>init()</code> call must start the Lumen process (there might be several), 
+register callbacks, etc. Optionally, the module can provide further methods. 
+For example, a task that will print "tick" at a regulable intervals of time 
+can be as follows:</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> sched=<span class="global">require</span> <span class="string">'sched'</span>
+
+ <span class="keyword">local</span> interval = <span class="number">1</span>
+
+ <span class="keyword">function</span> M.set_interval (v)
+     interval=v
+ <span class="keyword">end</span>
+
+ <span class="keyword">function</span> M.init (conf)
+     sched.run(<span class="keyword">function</span>()
+         <span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
+             sched.sleep(interval)
+             <span class="global">print</span>(<span class="string">'tick'</span>)
+         <span class="keyword">end</span>
+     <span class="keyword">end</span>)
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>A program to set the interval on this task would do the following:</p>
+
+
+<pre>
+ <span class="keyword">local</span> taskmodule=toribio.start(<span class="string">'tasks'</span>, <span class="string">'taskname'</span>)
+ taskmodule.set_interval(<span class="number">10</span>)
+</pre>
+
+<p>This is safe even if the module is already started: toribio will
+initialize each module only once.</p>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Device_Loaders">Device Loaders</a></li>
+<li><a href="#Accessing_devices">Accessing devices</a></li>
+<li><a href="#Using_devices">Using devices</a></li>
+<li><a href="#Creating_your_own_devices">Creating your own devices</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><strong>4-Devices.md</strong></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>4-Devices.md</code></h1>
+
+    
+<h1>Devices.</h1>
+
+<p>A device object represent some piece of hardware or service. 
+Devices have a unique "name" field, and a "module" field, which
+is Device's type.</p>
+
+<p><a name="Device_Loaders"></a></p>
+<h2>Device Loaders</h2>
+
+<p>Usually, devices are detected and instantiated by tasks in
+the deviceloaders/ directory. To use them, you should enable them
+in the toribio-go.conf configuration file.</p>
+
+<p>Some of the deviceloaders are:</p>
+
+<h3>accelxo</h3>
+
+<p>Supports the accelerometer installed in the OLPC XO-1.75 laptops. 
+The device is name <em>'accelxo'</em>, and the module is also <em>'accelxo'</em>.</p>
+
+<h3>bobot</h3>
+
+<p>Uses the bobot library to access the usb4butia modules. A device will
+be instantiated for each module. Hotplug is supported. The device's name
+and module is defined by bobot. Sample configuration:</p>
+
+
+<pre>
+ deviceloaders.bobot.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.bobot.comms = {<span class="string">'usb'</span>, <span class="string">'serial'</span>} <span class="comment">--comms services to use
+</span> deviceloaders.bobot.path = <span class="string">'../bobot'</span> <span class="comment">--path to bobot library
+</span> deviceloaders.bobot.timeout_refresh = <span class="number">10</span>
+</pre>
+
+<h3>dynamixel</h3>
+
+<p>Provides support for dynamixel servos. Sample configuration:</p>
+
+
+<pre>
+ deviceloaders.dynamixel.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.dynamixel.filename = <span class="string">'/dev/ttyUSB0'</span>
+</pre>
+
+<p>It will create a device for the dynamixel bus (named <em>'dynamixel:/dev/ttyUSB0'</em> 
+in the example and module <em>'dynamixel'</em>), plus a device for each motor (named like 
+<em>'ax12:5'</em> and module <em>'ax'</em>)</p>
+
+<h3>mice</h3>
+
+<p>This device allows you to read a mouse. As it reads from /dev/input/mice, you probably
+need to start toribio with sudo.</p>
+
+<h3>filedev</h3>
+
+<p>This is a special loader, that watches for a set of files and starts an associated
+loader when a file appears. When a file disappears, it will remove all depending devices.</p>
+
+
+<pre>
+ deviceloaders.filedev.<span class="global">load</span> = <span class="keyword">true</span>
+ deviceloaders.filedev.<span class="global">module</span>.mice = <span class="string">'/dev/input/mice'</span>
+ deviceloaders.filedev.<span class="global">module</span>.dynamixel = <span class="string">'/dev/ttyUSB*'</span>
+ deviceloaders.filedev.<span class="global">module</span>.accelxo = <span class="string">'/sys/devices/platform/lis3lv02d'</span>
+</pre>
+
+<p>When a file described by the mask appears, filedev will set the "filename" configuration 
+parameters for the corresponding task, and start it. Additional parameters for the 
+auto-started task can be provided in it's own section, tough the load attribute for it must
+not be set.</p>
+
+<p>When filedev detects a file removal, it will remove all devices that have it in the "filename"
+attribute.</p>
+
+<p>Filedev uses the tasks/inotifier.lua task, and therefore depends on the inotifywait program.</p>
+
+<p><a name="Accessing_devices"></a></p>
+<h2>Accessing devices</h2>
+
+<p>Devices are available trough the toribio.devices table, or using the 
+<code>toribio.wait_for_device(name|filter)</code> method.</p>
+
+<p>To iterate all devices, you can do:</p>
+
+
+<pre>
+ <span class="keyword">for</span> name,device <span class="keyword">in</span> <span class="global">pairs</span>(toribio.devices)<span class="keyword">do</span>
+     <span class="global">print</span>(name, device.<span class="global">module</span>)
+ <span class="keyword">end</span>
+</pre>
+
+<p>This will print out all the devices, with their name and what 
+type (module) are they.</p>
+
+<p>If you know the name of the object, you can retrieve it directly.
+Some devices can be detected after your task started,
+so instead of going directly to the table you can use the 
+<code>toribio.wait_for_device(name)</code> method. If the given device exists, 
+it will be returned immediately. Otherwise the call will block 
+until said device appears.</p>
+
+
+<pre>
+ <span class="keyword">local</span> mice = toribio.wait_for_device(<span class="string">'mice:/dev/input/mice'</span>)
+</pre>
+
+<p>You can also retrieve devices providing a table containing a filter the 
+device must match. For example, if you are interested in a dynamixel 
+motor connected to a particular serial bus, you can do:</p>
+
+
+<pre>
+ <span class="keyword">local</span> motor =  toribio.wait_for_device({
+     <span class="global">module</span> = <span class="string">'ax'</span>,
+     filename = <span class="string">'/dev/ttyUSB1'</span>
+ })
+</pre>
+
+<p>Some devices can connect and disconnect at runtime. If you're 
+interested in these events, you can listen for the <em>'new_device'</em> and
+<em>'removed_device'</em> events. For example:</p>
+
+
+<pre>
+ sched.sigrun(
+     {
+         emitter=toribio.task, 
+         signals={toribio.signals.new_device}
+     }, 
+     <span class="keyword">function</span>(device) 
+         <span class="global">print</span>(<span class="string">'new device!'</span>, device.name)
+     <span class="keyword">end</span>
+ )
+</pre>
+
+<p><a name="Using_devices"></a></p>
+<h2>Using devices</h2>
+
+<p>Devices have a set of common methods and fields, plus methods specific 
+to the instance.</p>
+
+<h3>Common fields</h3>
+
+<ul>
+    <li>device.name</li>
+</ul>
+
+<p>Device's unique name.</p>
+
+<ul>
+    <li>device.module</li>
+</ul>
+
+<p>Device's type. For example it can be "mice" for a mouse or "bb-dist" 
+for a distance sensor.</p>
+
+<ul>
+    <li>device.task</li>
+</ul>
+
+<p>If the device has a long-running task associated, it will be 
+available here. This is also the task that emits device's events.</p>
+
+<ul>
+    <li>device.signals</li>
+</ul>
+
+<p>A table containing the signals that the device can emit. The key is the
+name of the signal.</p>
+
+<ul>
+    <li>device.filename</li>
+</ul>
+
+<p>If the device depends on a device file, it will be here.</p>
+
+<ul>
+    <li>device:register_callback(...)</li>
+</ul>
+
+<p>OO-styled synonym for <code>toribio.register_callback(device, ...)</code></p>
+
+<h3>device-dependant fields</h3>
+
+<p>Each device will have a set of methods that allow to manipulate 
+the device. Usually all devices with equal module will have the 
+same methods. For example a device with module "bb-dist" could
+have a <code>device.get_distance()</code> method.</p>
+
+<p><a name="Creating_your_own_devices_"></a></p>
+<h2>Creating your own devices.</h2>
+
+<p>Besides representing pieces of hardware, a Device can represent an 
+abstract service. The user can define his own device modules. For that
+it must instantiate a table with the appropriate structure, and feed it to 
+Toribio using <code>toribio.add_device(device)</code>. This will allow other tasks
+to easily request it (using <code>toribio.wait_for_device()</code>), and register callbacks
+(using <code>toribio.register_callback()</code>).</p>
+
+<p>The following code creates devices that are attached to distance-sensor devices, 
+and trigger signals when the sensed distance below a configurable threshold.
+The file bellow (deviceloaders/distrigger.lua) initializes device objects, one for
+each distance sensor specified in configuration. Each device will contain a task that 
+periodically checks the reading from the sensor, and if needed triggers a signal.</p>
+
+
+<pre>
+ <span class="keyword">local</span> M = {}
+ <span class="keyword">local</span> toribio = <span class="global">require</span> <span class="string">'toribio'</span>
+ <span class="keyword">local</span> sched = <span class="global">require</span> <span class="string">'sched'</span>
+
+ M.init = <span class="keyword">function</span>(conf)
+     <span class="keyword">local</span> too_close_event={}
+     <span class="keyword">for</span> sensorname, sconf <span class="keyword">in</span> <span class="global">pairs</span>(conf.sensors <span class="keyword">or</span> {}) <span class="keyword">do</span>
+         <span class="keyword">local</span> sensor=toribio.wait_for_device( sensorname )
+
+         <span class="keyword">local</span> device={}
+         device.name=<span class="string">'distrigger:'</span>..sensorname
+         device.<span class="global">module</span>=<span class="string">'distrigger'</span>
+         device.signals={
+             too_close=too_close_event
+         }
+         device.task = sched.run(<span class="keyword">function</span>()
+         <span class="keyword">local</span> too_close = <span class="keyword">false</span>
+             <span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
+                 <span class="keyword">if</span> sensor.getValue() &lt; sconf.min_threshold <span class="keyword">then</span>
+                     <span class="keyword">if</span> <span class="keyword">not</span> too_close <span class="keyword">then</span> 
+                         sched.signal( device.signals.too_close() )
+                         too_close=<span class="keyword">true</span>
+                     <span class="keyword">end</span>
+                 <span class="keyword">else</span> too_close=<span class="keyword">false</span> <span class="keyword">end</span>
+                 sched.sleep( sconf.rate )
+             <span class="keyword">end</span>
+         <span class="keyword">end</span>)
+         device.set_pause = <span class="keyword">function</span> ( pause )
+             device.task:set_pause( pause )
+         <span class="keyword">end</span>
+
+         toribio.add_device( device )
+     <span class="keyword">end</span>
+
+ <span class="keyword">end</span>
+
+ <span class="keyword">return</span> M
+</pre>
+
+<p>The device publishes the signal it emits in the <code>signals</code> table. It also provides a <code>set_pause</code> 
+function to stop the polling to save resources when not needed.</p>
+
+<p>To enable these devices, a configuration must be provided as follows:</p>
+
+
+<pre>
+ deviceloaders.distrigger.<span class="global">load</span>=<span class="keyword">true</span>
+ deviceloaders.distrigger.sensors[<span class="string">'bb-dist:0'</span>].min_threshold = <span class="number">150</span>
+ deviceloaders.distrigger.sensors[<span class="string">'bb-dist:0'</span>].interval = <span class="number">0.2</span> <span class="comment">--time between readings
+</span> deviceloaders.distrigger.sensors[<span class="string">'bb-dist:3'</span>].min_threshold = <span class="number">500</span>
+ deviceloaders.distrigger.sensors[<span class="string">'bb-dist:3'</span>].interval = <span class="number">1</span> <span class="comment">--time between readings
+</span>
+</pre>
+
+<p>The client code could be something like this:</p>
+
+
+<pre>
+ <span class="keyword">local</span> sensor = toribio.wait_for_device(<span class="string">'distrigger:bb-dist:3'</span>)
+ sensor:register_callback(sensor.signals.too_close, <span class="keyword">function</span>()
+     <span class="global">print</span> (<span class="string">'PROXIMITY WARNING!'</span>)
+ <span class="keyword">end</span>)
+</pre>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

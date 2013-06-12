@@ -1,0 +1,14 @@
+* Implement some sort of high level pattern for behavior 
+  programming (subsumption?). Must support asynchronism.
+
+* Keep annoying usb4butia people to migrate to a serial/async
+  protocol.
+
+* Test on a beagleboard and RPi.
+
+* Write a external opencv tool that pushes events to toribio
+  throug a socket.
+
+* Write a web ide using the http-server module
+
+

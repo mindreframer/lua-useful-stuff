@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><strong>dynamixel-bus</strong></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><a href="../modules/mice.html">mice</a></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>dynamixel-bus</code></h1>
+
+<p>Library for Dynamixel protocol.</p>
+<p> This library allows to manipulate devices that use Dynamixel
+ protocol, such as AX-12 robotic servo motors.
+ When available, a dynamixel bus will be represented by a Device
+ object in toribio.devices table. The device will be named (as an
+ example), "dynamixel:/dev/ttyUSB0".</p>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#init">init&nbsp;(conf)</a></td>
+	<td class="summary">Initialize and start the module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_broadcaster">get_broadcaster&nbsp;()</a></td>
+	<td class="summary">Get a broadcasting Motor object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_motor">get_motor&nbsp;(id)</a></td>
+	<td class="summary">Get a Motor object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_sync_motor">get_sync_motor&nbsp;(...)</a></td>
+	<td class="summary">Get a Sync-motor object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#has_errors">has_errors&nbsp;(code)</a></td>
+	<td class="summary">Decodes dynamixel error codes.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#motors">motors</a></td>
+	<td class="summary">Motors connected to the bus.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#events">events</a></td>
+	<td class="summary">Signals emitted by this device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#conf">conf</a></td>
+	<td class="summary">Configuration Table.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#name">name</a></td>
+	<td class="summary">Name of the device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#module">module</a></td>
+	<td class="summary">Module name (in this case, <em>'dynamixel'</em>).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#filename">filename</a></td>
+	<td class="summary">Device file of the bus.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#discovery_finished">discovery_finished</a></td>
+	<td class="summary">The bus scannning status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#task">task</a></td>
+	<td class="summary">Task that will emit signals associated to this device.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "init"></a>
+    <strong>init&nbsp;(conf)</strong>
+    </dt>
+    <dd>
+    Initialize and start the module. 
+ This is called automatically by toribio if the <em>load</em> attribute for the module in the configuration file is set to
+ true.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>conf</em></code>:  the configuration table (see <a href="../modules/dynamixel-bus.html#conf">conf</a>).</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_broadcaster"></a>
+    <strong>get_broadcaster&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get a broadcasting Motor object. 
+ All commands sent to this motor will be broadcasted
+ to all motors.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A Motor object.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get_motor"></a>
+    <strong>get_motor&nbsp;(id)</strong>
+    </dt>
+    <dd>
+    Get a Motor object. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>id</em></code>:  The numeric ID of the motor</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        A Motor object, or nil if not such ID found.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "get_sync_motor"></a>
+    <strong>get_sync_motor&nbsp;(...)</strong>
+    </dt>
+    <dd>
+    Get a Sync-motor object. 
+ A sync-motor allows to control several actuators with a single command.
+ The commands will be applied to all actuators it represents.
+ The "get" methods are not available.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>...</em></code>:  A set of motor Device objects or numeric IDs</li>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a sync_motor object
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "has_errors"></a>
+    <strong>has_errors&nbsp;(code)</strong>
+    </dt>
+    <dd>
+    Decodes dynamixel error codes. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>code</em></code>:  A dynamixel error code as returned by the different motor methods.</li>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local errorset = dynamixel.has_errors(0x10+0x08)
+print ("has errors:" #errorset>0 )
+print ("has range error:", errorset['ERROR_RANGE']==true )</pre>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        A set of error strings. The possible error strings are 'ERROR_INPUT_VOLTAGE', 'ERROR_ANGLE_LIMIT',
+ 'ERROR_OVERHEATING', 'ERROR_RANGE', 'ERROR_CHECKSUM', 'ERROR_OVERLOAD', 'ERROR_INSTRUCTION'. <br/>
+ The table is double-indexed by entry number to allow array-like traversal.
+    </ol>
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "motors"></a>
+    <strong>motors</strong>
+    </dt>
+    <dd>
+    Motors connected to the bus. 
+ The keys are device numbers, the values are Motor objects.
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "events"></a>
+    <strong>events</strong>
+    </dt>
+    <dd>
+    Signals emitted by this device. 
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>discovery_end</em></code>:  The discovery of attached motors has finished.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "conf"></a>
+    <strong>conf</strong>
+    </dt>
+    <dd>
+    Configuration Table. 
+ When the start is done automatically (trough configuration), 
+ this table points to the modules section in the global configuration table loaded from the configuration file.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>load</em></code>:  whether toribio should start this module automatically at startup.</li>
+       <li><code><em>filename</em></code>:  the device file for the serial bus (defaults to '/dev/ttyUSB0').</li>
+       <li><code><em>serialtimeout</em></code>:  the timeout when waiting for a response from an actuator (defaults to 0.05s)</li>
+       <li><code><em>stty_flags</em></code>:  parameters to pass to stty for configuring the serial bus.</li>
+       <li><code><em>serialspeed</em></code>:  serial bus speed in bps (defaults to 1000000).</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "name"></a>
+    <strong>name</strong>
+    </dt>
+    <dd>
+    Name of the device. 
+ Of the form <em>'dynamixel:/dev/ttyUSB0'</em>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "module"></a>
+    <strong>module</strong>
+    </dt>
+    <dd>
+    Module name (in this case, <em>'dynamixel'</em>). 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "filename"></a>
+    <strong>filename</strong>
+    </dt>
+    <dd>
+    Device file of the bus. 
+ For example, '/dev/ttyUSB0'
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "discovery_finished"></a>
+    <strong>discovery_finished</strong>
+    </dt>
+    <dd>
+    The bus scannning status. 
+ This flag will be set to true once the bus has been scanned and all motors discovered..
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "task"></a>
+    <strong>task</strong>
+    </dt>
+    <dd>
+    Task that will emit signals associated to this device. 
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

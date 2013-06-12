@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Toribio</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/bobot.html">bobot</a></li>
+  <li><a href="../modules/dynamixel-bus.html">dynamixel-bus</a></li>
+  <li><a href="../modules/dynamixel-motor.html">dynamixel-motor</a></li>
+  <li><a href="../modules/filedev.html">filedev</a></li>
+  <li><a href="../modules/gpsd.html">gpsd</a></li>
+  <li><a href="../modules/haar.html">haar</a></li>
+  <li><strong>mice</strong></li>
+  <li><a href="../modules/openmoko.html">openmoko</a></li>
+  <li><a href="../modules/openmoko_accel.html">openmoko_accel</a></li>
+  <li><a href="../modules/rnr_client.html">rnr_client</a></li>
+  <li><a href="../modules/toribio.html">toribio</a></li>
+  <li><a href="../modules/xo_accel.html">xo_accel</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul>
+  <li><a href="../scripts/toribio-go.html">toribio-go</a></li>
+</ul>
+<h2>Topics</h2>
+<ul>
+  <li><a href="../topics/0-Installation.md.html">0-Installation.md</a></li>
+  <li><a href="../topics/1-Tutorial.md.html">1-Tutorial.md</a></li>
+  <li><a href="../topics/2-Configuration.md.html">2-Configuration.md</a></li>
+  <li><a href="../topics/3-Tasks.md.html">3-Tasks.md</a></li>
+  <li><a href="../topics/4-Devices.md.html">4-Devices.md</a></li>
+  <li><a href="../topics/README.md.html">README.md</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>mice</code></h1>
+
+<p>Library for accesing a mouse.</p>
+<p> This library allows to read data from a mouse,
+ such as it's coordinates and button presses.
+ The device will be named "mice", module "mice". </p>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#init">init&nbsp;(conf)</a></td>
+	<td class="summary">Initialize and starts the module.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_pos">get_pos&nbsp;()</a></td>
+	<td class="summary">Get mouse position.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reset_pos">reset_pos&nbsp;(newx, newy)</a></td>
+	<td class="summary">Reset position.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_pause">set_pause&nbsp;(pause)</a></td>
+	<td class="summary">Pause the event generation.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#events">events</a></td>
+	<td class="summary">Events emitted by this device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#conf">conf</a></td>
+	<td class="summary">Configuration Table.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#name">name</a></td>
+	<td class="summary">Name of the device (in this case, 'mice').</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#module">module</a></td>
+	<td class="summary">Module name (in this case, 'mice').</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#task">task</a></td>
+	<td class="summary">Task that will emit signals associated to this device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#filename">filename</a></td>
+	<td class="summary">Device file of the mouse.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "init"></a>
+    <strong>init&nbsp;(conf)</strong>
+    </dt>
+    <dd>
+    Initialize and starts the module. 
+ This is called automatically by toribio if the <em>load</em> attribute for the module in the configuration file is set to
+ true.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>conf</em></code>:  the configuration table (see <a href="../modules/mice.html#conf">conf</a>).</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_pos"></a>
+    <strong>get_pos&nbsp;()</strong>
+    </dt>
+    <dd>
+    Get mouse position. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        a pair of x, y coordinates.
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "reset_pos"></a>
+    <strong>reset_pos&nbsp;(newx, newy)</strong>
+    </dt>
+    <dd>
+    Reset position. 
+ Fixes the coordinates associated to the current
+ position.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>newx</em></code>:  number to set as x coordinate of
+ the cursos (defaults to 0)</li>
+       <li><code><em>newy</em></code>:  number to set as y coordinate of
+ the cursos (defaults to 0)</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set_pause"></a>
+    <strong>set_pause&nbsp;(pause)</strong>
+    </dt>
+    <dd>
+    Pause the event generation. 
+ While the device is paused, no events are generated, nor movements tracked.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>pause</em></code>:  mode, true to pause, false to unpause</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Tables"></a>Tables</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "events"></a>
+    <strong>events</strong>
+    </dt>
+    <dd>
+    Events emitted by this device. 
+ Button presses have single parameter: true on press,
+ false on release.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>leftbutton</em></code>:  Left button click.</li>
+       <li><code><em>rightbutton</em></code>:  Right button click.</li>
+       <li><code><em>middlebutton</em></code>:  Middle button click.</li>
+       <li><code><em>move</em></code>:  Mouse moved, first parameter x, second parameter y coordinates.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "conf"></a>
+    <strong>conf</strong>
+    </dt>
+    <dd>
+    Configuration Table. 
+ When the start is done automatically (trough configuration), 
+ this table points to the modules section in the global configuration table loaded from the configuration file.
+
+    <h3>Fields:</h3>
+    <ul>
+       <li><code><em>load</em></code>:  whether toribio should start this module automatically at startup.</li>
+       <li><code><em>filename</em></code>:  the device file for themouse (defaults to ''/dev/input/mice'').</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "name"></a>
+    <strong>name</strong>
+    </dt>
+    <dd>
+    Name of the device (in this case, 'mice'). 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "module"></a>
+    <strong>module</strong>
+    </dt>
+    <dd>
+    Module name (in this case, 'mice'). 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "task"></a>
+    <strong>task</strong>
+    </dt>
+    <dd>
+    Task that will emit signals associated to this device. 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "filename"></a>
+    <strong>filename</strong>
+    </dt>
+    <dd>
+    Device file of the mouse. 
+ For example, '/dev/input/mice'
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
