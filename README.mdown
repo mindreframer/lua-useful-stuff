@@ -1,0 +1,76 @@
+# E a Lua - não a Ruby
+_"This is Lua - it's not Ruby"_
+
+At the November 2012 Austin.rb meeting, we will introduce [the Lua programming language](http://www.lua.org) from the point of view of a Rubyist.  Lua is a language with many interesting applications, a fascinating history, and a lot of visibility in a wide array of uses from embedded scripting engines to cross-platform mobile game programming.
+
+This repository contains heavily commented code examples for showing how to do various "getting started"-style things with Lua.
+
+## History
+Lua was born (and is still officially maintained) at the [Pontifícal Catholic Universiity of Rio de Janeiro](http://www.puc-rio.br/index.html).  The Tecgraf research group there was asked to help the state oil company, PETROBRAS, by creating a language that could be used for manipulating large data sets used in simulations.
+
+PETROBRAS' status as a state-owned concern included many restrictions on the way the company could spend money, especially as it applied to importing computer technology.  The language tools that PUC/Tecgraf was developing would need to run on any of the various kinds of hardware that the massive oil company had in use -- everything from Unix to Windows to MacOS to a host of embedded systems.
+
+Among Tecgraf's first efforts was a specialized configuration langugage called SOL (Structured Object Language) which allowed for type definitions and other features of data description.  By the time the Tecgraf team had completed an implementation, they realized they'd need something more robust - ["a real programming language, with assignment, control structures, sub-routines, and the like"](http://www.lua.org/history.html) - that could be used for general purpose programming.
+
+Because the language evolved from SOL ("Sol" means "Sun" in Portuguese), someone suggested that the new language could be called "Lua", which means "moon".
+
+Lua has been in active use since its introduction in 1994.
+
+## Weird Stuff
+
+Lua makes a lot of sense, but there are a number of [gotchas you might want to check out](http://www.luafaq.org/gotchas.html).  Among them are these:
+
+* A **table** is sort of like an array, sort of like a hash, and is Lua's only complex data type.
+* [Indices for tables start at 1 instead of 0](http://www.luafaq.org/index.html#T1.5.1)
+* All numbers are floating point
+* Functions can return multiple values
+* Regular stuff like socket IO is implemented in modules instead of Lua's stdlib in order to keep the core of the language as small as possible.  Keep in mind that Ruby's stdlib **is** pretty big (xml parsers, web servers, templating, lots of protocols, etc), so we're kind of spoiled.
+* Patterns are NOT full-on (i.e. POSIX/PCRE) regex - even if they sort of look like they are
+* Table keys don't look like strings. They look like undeclared variables, but… they work :-)
+* Tables are Lua's only things resembling classic "objects" - inheritance and other standard OOP behaviors are implemented with them in a prototypal way reminiscent of Javascript
+
+
+## Interesting Uses
+Lua is popping up all over the place.  Its portability has always been a core feature, and that ability to be embedded in such a small footprint has made it the language of choice for multiple software projects' native scripting engines, as well as a higher-level language used to produce code in things like game frameworks.  Here are a few of the places it's in use today:
+
+* [Redis scripting](http://redis.io/commands/eval)
+* [Nmap scripting](http://nmap.org/book/nse.html)
+* [CoronaSDK (iOS/Android 2-D game development)](http://www.coronalabs.com/products/corona-sdk/)
+* [World of Warcraft interface scripting](http://www.wowwiki.com/Lua)
+* [Various pieces of hardware (including Lego Mindstorms NXT)](http://en.wikipedia.org/wiki/Category:Lua-scriptable_hardware)
+* [A bunch of Lua-scriptable game engines](http://en.wikipedia.org/wiki/Category:Lua-scriptable_game_engines)
+* [Tons of games you can straight-up script with Lua (132+)](http://en.wikipedia.org/wiki/Category:Lua-scripted_video_games)
+
+## Installing <a id="installing"></a>
+We will need two things: the Lua interpreter and the LuaRocks package system (similar to RubyGems)
+
+### Installing on OSX
+Use Homebrew:
+
+**Note:** you need to update Homebrew to ensure that you catch a recent patch to make Lua 5.1.4 the default instead of the more bleeding edge 5.2.  Lots of libraries aren't fully compatible w/ 5.2 yet, including ones we're using tonight.
+
+<pre>
+$> brew update
+$> brew install lua luarocks
+$> luarocks install luasocket
+</pre>
+
+
+### Installing on (Ubuntu 12.04) Linux
+
+<pre>
+$> sudo apt-get install lua5.1 luarocks
+$> sudo luarocks install luasocket
+</pre>
+
+## Lua interactive
+After you've installed Lua, you can get into the interactive shell like this:
+
+<pre>
+$> lua
+Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+> print('hello, world!')
+hello, world!
+>
+</pre>
+Exit the shell with Ctrl-D
