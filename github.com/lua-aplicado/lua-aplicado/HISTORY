@@ -1,0 +1,67 @@
+Version 0.0.4 (2012-04-16)
+==========================
+
+Fourth fixed-version release
+
+Changes and improvements:
+    etc/list-exports/config.lua: header added
+    make.sh: fix
+
+Version 0.0.3 (2012-04-04)
+==========================
+
+Third fixed-version release
+
+Changes and improvements:
+    new pre-commit hook
+
+Bug fixes:
+    removed trailing spaces
+
+Version 0.0.2 (2012-02-14)
+==========================
+
+Second fixed-version release
+
+New stuff:
+
+    shell: dumb ad-hoc code to work with sh-like shell
+    shell/remote: dumb ad-hoc code to work with sh-like shells remotely
+    shell/luarocks: dumb ad-hoc code to work with luarocks
+    shell/remote_luarocks: dumb ad-hoc code to work with luarocks remotely
+    shell/git: dumb ad-hoc code to work with git
+    shell/send_email: dumb ad-hoc code to send e-mails with sendmail
+    filesystem:
+        load_all_files_with_curly_placeholders,
+        is_directory,
+        does_file_exist,
+        splitpath,
+        get_filename_from_path,
+        get_extension
+    csv:
+        basic code to convert csv-data to lua table
+    expat:
+        xml_convert_lom: converts lxp.lom result to human readable table
+    random:
+        random_seed_from_string
+
+Changes and improvements:
+
+    filesystem:
+        load_all_files: enhanced error reporting
+        remove_recursively: new optional parameter to force file removal
+        do_atomic_op_with_file:
+            "..." handling added,
+            now uses xpcall instead of pcall,
+            io.open flags changed from a+ to r+
+    chunk_inspector: added globals check inside subfunctions.
+
+Bug fixes:
+
+    filesystem:
+        find_all_files: fixed error handling
+
+Version 0.0.1 (2010-09-12)
+==========================
+
+First fixed-version release

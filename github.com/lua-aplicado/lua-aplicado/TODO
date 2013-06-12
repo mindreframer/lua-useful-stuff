@@ -1,0 +1,7 @@
+Lua-Aplicado library TODO list
+==============================
+
+* Add testing facilities (take them from lua-nucleo)
+* Fix 0001-filesystem.lua
+* Add more tests
+* Write documentation
