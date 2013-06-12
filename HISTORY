@@ -1,0 +1,169 @@
+Version 0.0.7 (2012-04-25)
+==========================
+
+Seventh fixed-version release.
+
+    removed obsolete TODO
+    tstr: fixed number serialization
+    tests:
+      added tests for tstsr and tstr_cat
+      improved test for inf, -inf, nan serialization
+
+Version 0.0.6 (2012-04-16)
+==========================
+
+Sixth fixed-version release.
+
+Improvements and changes:
+    etc/list-exports/config.lua: header added
+    make.sh: fixes
+
+    string.lua:
+      number_to_string(), serialize_number() added, handle inf,-inf and nan
+      use "%.17g" format instead of "%.55g" for number serialization
+    tstr.lua: fix inf,-inf,nan serialization
+    tpretty.lua: fix inf,-inf,nan serialization
+    tserialize.lua: fix inf,-inf,nan serialization
+
+    tests:
+      0160-string.lua:
+        test for number_to_string and serialize_number added
+        test to ensure "%.17g" is enough for number serialization
+      0290-tstr.lua: tests for inf,-inf,nan serialization
+      0330-tpretty.lua: test for inf,-inf,nan serialization
+      0220-tserialize-basic.lua: tests for inf,-inf,nan,1/3 pi serialization
+
+Version 0.0.5 (2012-04-10)
+==========================
+
+Fifth fixed-version release.
+
+Improvements and changes:
+    ensure/returns: improved error reporting
+
+    tests:
+      fixed test 0030 and removed obsolete comments
+      fixed test data for 0300
+      added tests for escape_lua_pattern
+
+    updated luaJIT globals list according to version 2.0.0-beta9
+    added a match into escape_lua_pattern matches table
+
+Version 0.0.4 (2012-04-03)
+==========================
+
+Fourth fixed-version release.
+
+New stuff:
+
+    string:
+        number_to_string_with_base with test
+        cut_with_ellipsis
+    timestamp:
+        get_decasecond_timestamp
+    tavle-utils:
+        tarraytohash with tests
+
+Improvements and changes:
+
+    Added headings into the files
+    Deleted obsolete 'bench' directory
+
+    string:
+        handle numbers in htmlspecialchars
+
+And some other changes.
+
+Version 0.0.3 (2012-02-14)
+==========================
+
+Third fixed-version release.
+
+New stuff:
+
+    table-utils:
+        tkvmap_unpack,
+        tgenerate_{1,2}d_linear added,
+        tgenerate_n deprecated,
+        tslice,
+        tarraylisttohashlist,
+        tflip_inplace,
+        tkvlist2kvpairs,
+        tfilterkeylist,
+        tsetpathvalue,
+        tisempty,
+        tifindvalue_nonrecursive
+    timestamp:
+        get_tomorrow_timestamp
+    string:
+        escape_for_json,
+        starts_with,
+        ends_with,
+        make_escape_subst,
+        url_encode
+    math:
+        epsilon_equals
+    args:
+        check_types
+
+Improvements and changes:
+
+    test suite:
+        now supports fail_on_first_error,
+        now supports test:BROKEN to mark temporarily broken tests
+    tpretty:
+        now generates better-formatted code
+        indent and cols arguments are now optional (defaulting to "  " and 80)
+    import:
+        now respects absolute paths
+    scoped_cat_tree_manager:
+        now can use custom make_concatter
+    coro, pcall:
+        pcall wrapper moved from coro.lua to a separate file
+    log:
+        configurable flush criteria
+
+Bug fixes:
+
+    table-utils:
+        tsetpath,
+        tslice,
+        tarraylisttohashlist
+    timestamp:
+        get_quarter_timestamp
+
+And some other changes.
+
+Version 0.0.2 (2011-01-26)
+==========================
+
+Second fixed-version release.
+
+New stuff:
+
+      stack_with_factory
+      ordered_named_cat_manager
+      scoped_cat_tree_manager
+      timestamp: get_{quarter,minute}_timestamp
+      table-utils:
+          tmap_kv, tmapofrecordgroups,
+          timapofrecordgroups, tilistofrecordfields,
+          tipermute_inplace, tkvtorecordlist
+      string:
+          kv_concat,
+          escape_lua_pattern,
+          fill_curly_placeholders_ex
+      code: globals, exports, profile
+      args: amap
+      require_and_declare
+
+Bug fixes:
+
+      tpretty: fixed array hole handling
+
+And some other changes.
+
+Version 0.0.1 (2010-09-12)
+==========================
+
+First fixed-version release

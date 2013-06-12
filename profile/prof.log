@@ -1,0 +1,22 @@
+   calls     own time      subs     sub time function
+-------------------------------------
+    9047       0.0438         0       0.0000 =[C].-1:string_match
+   36648       0.3412    113758       0.2338 @lua-nucleo/tserialize.lua.52:parse_rec_internal
+    2460       0.0187      2460       0.5750 @lua-nucleo/tserialize.lua.49:parse_rec
+   27215       0.1347         0       0.0000 =[C].-1:string_format
+   18431       0.6296    198946       5.2663 @lua-nucleo/tserialize.lua.169:tserialize
+  226867       0.6757         0       0.0000 =[C].-1:type
+   22168       0.0784         0       0.0000 =[C].-1:tostring
+  180605       0.7952         0       0.0000 @lua-nucleo/tserialize.lua.28:cat
+    9286       0.0609         0       0.0000 =[C].-1:format
+   18431       0.0540         0       0.0000 =[C].-1:select
+   69228       1.2062    465621       1.6529 @lua-nucleo/tserialize.lua.78:recursive_proceed
+       1       0.0000         0       0.0000 =[C].-1:stop
+    2671       0.0496     18697       0.9264 @lua-nucleo/tserialize.lua.153:afterwork
+   79415       0.6822    198657       0.3942 @lua-nucleo/tserialize.lua.31:explode_rec
+  187293       0.5530         0       0.0000 =[C].-1:(for generator)
+   50939       0.1945         0       0.0000 =[C].-1:pairs
+   44815       0.2776         0       0.0000 =[C].-1:table_concat
+   31051       0.1007         0       0.0000 =[C].-1:ipairs
+-------------------------------------
+  Total:       5.8959
