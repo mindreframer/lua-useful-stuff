@@ -1,0 +1,30 @@
+#!/usr/bin/lua
+
+pcall(require, "luarocks.require")
+
+require"luma"
+
+table.insert(package.loaders, 2, luma.loader)
+
+local args = { ... }
+
+local next_is_lib
+
+for _, arg in ipairs(args) do
+  if next_is_lib then
+    next_is_lib = false
+    require(arg)
+  elseif arg == "-l" then
+    next_is_lib = true
+  else
+    local lib = string.match(arg, "^-l[ ]?(.+)$")
+    if lib then
+      require(lib)
+    else
+      local file = io.open(arg)
+      local text = file:read("*a")
+      print(luma.expand(text))
+      file:close()
+    end
+  end
+end

@@ -1,0 +1,9 @@
+# $Id: Makefile,v 1.1.1.1 2007/11/26 17:12:24 mascarenhas Exp $
+
+install:
+	IF NOT EXIST "$(LUA_DIR)\luma" mkdir "$(LUA_DIR)\luma"
+	IF NOT EXIST "$(BIN_DIR)" mkdir "$(BIN_DIR)"
+	copy src\luma.lua "$(LUA_DIR)"
+	copy src\re.lua "$(LUA_DIR)\luma"
+	copy bin\luma "$(BIN_DIR)"
+	copy bin\luma-expand "$(BIN_DIR)\luma-expand"

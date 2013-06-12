@@ -1,0 +1,114 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Luma</title>
+    <link rel="stylesheet" href="doc.css" type="text/css"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="product">
+
+	<div id="product_logo">
+        <a href="http://luma.luaforge.net">
+		<img alt="Luma" src="luma.png"/>
+	    </a>
+    </div>
+	<div id="product_name"><big><strong>Luma</strong></big></div>
+	<div id="product_description">LPEG-based Lua Macros</div>
+</div> <!-- id="product" -->
+
+<div id="main">
+	
+<div id="navigation">
+<h1>Luma</h1>
+	<ul>
+
+		<li><strong>Home</strong>
+			<ul> 
+                            
+			</ul>
+		</li>
+
+		<li><a href="manual.html">Manual</a>
+			<ul> 
+                            
+			</ul>
+		</li>
+
+		<li><a href="license.html">License</a>
+			<ul> 
+                            
+			</ul>
+		</li>
+
+	</ul>
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+
+<h2>Overview</h2>
+
+<p><em>Luma</em> is a macro system for the Lua language that is heavily inspired by Scheme's 
+<a href="http://citeseer.ist.psu.edu/88826.html" title="Syntactic Abstraction in Scheme"><code>define-syntax</code>/<code>syntax-rules</code> system</a>. The Scheme macro system
+uses pattern matching to analyze the syntax of a macro, and template substitution to build
+the code that the macro expands to. This is a powerful yet simple system that builds on top
+of Scheme's structural regularity (the use of S-expressions for all code).</p>
+
+<p>Luma also separates the expansion process in pattern matching and template substitution phases,
+but as Lua source is unstructured text the pattern and template languages have to work with text.
+Luma uses <a href="http://lpeg.luaforge.net" title="LPEG"><em>LPEG</em></a> for pattern matching and <a href="http://cosmo.luaforge.net" title="Cosmo"><em>Cosmo</em></a> for templates.</p>
+
+<h2>Status</h2>
+
+<p>This is the second public release of Luma, version 0.2. It just updates
+Luma to work with the current version of LPEG, 0.10 (Luma 0.1 used LPEG
+0.7).</p>
+
+<h2>Download</h2>
+
+<p>Get Luma from <a href="http://luarocks.org">LuaRocks</a> via the <em>luma</em> package, or from its <a href="http://github.com/mascarenhas/luma/downloads">Github download page</a>.</p>
+
+<h2>History</h2>
+
+<h3>Luma 0.2</h3>
+
+<ul>
+    <li>Updates Luma to work with LPEG 0.10</li>
+</ul>
+
+<h3>Luma 0.1</h3>
+
+<ul>
+    <li>First public release</li>
+</ul>
+
+<h2>Contact Us</h2>
+
+<p>For more information please contact the author, <a href="mailto:mascarenhas-NO-SPAM-THANKS@acm.org">Fabio Mascarenhas</a>.
+Comments are welcome!</p>
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0!</a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+
+</body>
+</html>
+
