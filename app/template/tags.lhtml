@@ -1,0 +1,13 @@
+
+    <? if not self:get( 'tags' ) then ?>
+    	<h4>No Tags Found</h4>
+    	<p><em>You haven't tagged any bookmarks yet!</em> <strong>You can add tags when adding bookmarks.</strong></p>
+    <? else ?>
+    	<h4>Tags <span>you used</span></h4>
+    	<? for k, tag in pairs( self:get( 'tags' ) ) do ?>
+    		<div class="bookmark tag">
+    			<h3><img src="/inc/img/tag.png" alt="" /> <a href="/tag/<?=tag.id ?>"><?=tag.name ?></a></h3>
+    			<div class="meta"><?=tag.bookmarks ?> bookmarks</div>
+    		</div>
+    	<? end ?>
+    <? end ?>

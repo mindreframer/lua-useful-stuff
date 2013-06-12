@@ -1,0 +1,80 @@
+server {
+    #port & domains
+    listen 8084;
+    server_name yummymarks.dev api.yummymarks.dev yummymarks.com api.yummymarks.com;
+
+    #dev mode
+    lua_code_cache off;
+
+    #logging
+    error_log /Users/Fizzadar/Dropbox/Oxygem/Webroot/yummymarks/new/src-lua_nginx/logs/error.log;
+    access_log /Users/Fizzadar/Dropbox/Oxygem/Webroot/yummymarks/new/src-lua_nginx/logs/access.log;
+
+    #error pages
+    error_page 404 /inc/error/404.html;
+    error_page 500 /inc/error/500.html;
+
+
+
+    #rewrite url                        #request                                        #method
+
+    #bookmark browsing
+    rewrite ^/$                         /?request=bookmarks last;                       #get
+    rewrite ^/([0-9]+)$                 /?request=bookmarks&page=$1 last;               #get
+    rewrite ^/bookmark/([0-9]+)$        /?request=bookmark&bookmark_id=$1 last;         #get
+    rewrite ^/bookmark/add$             /?request=bookmark_add last;                    #get+post
+    rewrite ^/bookmark/edit$            /?request=bookmark_edit last;                   #post
+    rewrite ^/bookmark/delete$          /?request=bookmark_delete last;                 #post
+    rewrite ^/bookmark/collect$         /?request=bookmark_collect last;                #post
+    rewrite ^/bookmark/uncollect$       /?request=bookmark_uncollect last;              #post
+    rewrite ^/bookmark/favorite$        /?request=bookmark_favorite last;               #post
+    rewrite ^/bookmark/unfavorite$      /?request=bookmark_unfavorite last;             #post
+
+    #tags
+    rewrite ^/tag/([0-9]+)$             /?request=tag&tag_id=$1 last;                   #get
+    rewrite ^/tags$                     /?request=tags last;                            #get
+
+    #collections
+    rewrite ^/collection/([0-9]+)$      /?request=collection&collection_id=$1 last;     #get
+    rewrite ^/collections$              /?request=collections last;                     #get
+    rewrite ^/collection/edit$          /?request=collection_edit last;                 #post
+    rewrite ^/collection/delete$        /?request=collection_delete last;               #post
+
+    #user controls
+    rewrite ^/logout$                   /?request=logout last;                          #get
+    rewrite ^/settings$                 /?request=settings last;                        #get+post
+
+    #login pages
+    rewrite ^/join$                     /?request=join last;                            #get+post
+    rewrite ^/login$                    /?request=login last;                           #get+post
+    rewrite ^/resetpw$                  /?request=reset_pw last;                        #get+post
+    rewrite ^/resetpw_login$            /?request=reset_pw_login last;                  #get
+
+    #pages
+    rewrite ^/help$                     /?request=help last;                            #get
+    rewrite ^/plugins$                  /?request=plugins last;                         #get
+
+    #api
+    rewrite ^/api/bookmark/check$       /?request=api_bookmark_check last;              #get
+
+    #inc is ok
+    rewrite ^/inc/(.*)$                 /inc/$1 last;
+
+    #default 404
+    return 404;
+
+
+
+    #default server dir
+    location / {
+        default_type 'text/html';
+
+        content_by_lua_file /Users/Fizzadar/Dropbox/Oxygem/Webroot/yummymarks/new/src-lua_nginx/yummy.lua;
+    }
+
+    #static content
+    location /inc {
+        default_type 'text/html';
+        root /Users/Fizzadar/Dropbox/Oxygem/Webroot/yummymarks/new/src-lua_nginx/;
+    }
+}

@@ -1,0 +1,22 @@
+<? local request = luawa.request ?>
+
+<h4><span>Your</span> Settings</h4>
+
+<? if self:get( 'error' ) then ?><div class="message error"><?=self:get( 'error' ) ?></div><? end ?>
+<? if self:get( 'success' ) then ?><div class="message success"><?=self:get( 'success' ) ?></div><? end ?>
+<? if self:get( 'info' ) then ?><div class="message info"><?=self:get( 'info' ) ?></div><? end ?>
+
+<form action="/settings" method="post">
+	<label for="name">Name</label>
+	<input type="text" name="name" id="name" value="<?=self:get( 'me' ).name ?>" />
+
+	<label for="email">Email</label>
+	<input type="text" name="email" id="email" value="<?=self:get( 'me' ).email ?>" />
+
+	<label for="password">New Password (optional)</label>
+	<input type="password" name="password" id="password" value="" />
+
+    <!--<label for="private" class="checkbox">Private Profile (<a href="#">info</a>)<input type="checkbox" class="checkbox" name="private" <? if self:get( 'me' ).private == 1 then ?>checked<? end ?>/></label>-->
+
+	<input class="submit" type="submit" value="Save Settings" />
+</form>

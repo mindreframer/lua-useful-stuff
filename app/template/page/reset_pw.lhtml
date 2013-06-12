@@ -1,0 +1,25 @@
+<? local user = luawa.user ?>
+
+		<h4>Reset <span>your password</span></h4>
+		<? if self:get( 'error' ) then ?><div class="message error"><?=self:get( 'error' ) ?></div><? end ?>
+		<? if self:get( 'success' ) then ?><div class="message success"><?=self:get( 'success' ) ?></div><? end ?>
+		<? if self:get( 'info' ) then ?><div class="message info"><?=self:get( 'info' ) ?></div><? end ?>
+
+		<? if not user:cookieLogin() then ?>
+			<form action="/resetpw" method="post">
+
+				<div><label for="email">Email</label><input type="text" name="email" id="email" /></div>
+
+				<input class="submit button" type="submit" value="Reset Password" />
+
+				<div class="external">
+					<a href="/login">login</a><br />
+					<a href="/join">join</a>
+				</div><!--end external-->
+			</form>
+		<? else ?>
+			<form>
+				Hello, <strong><?=user:cookieName() ?></strong><br /><br />
+				<a href="/"><strong>View your bookmarks</strong></a> or <a href="/logout">logout</a></strong>
+			</form>
+		<? end ?>
