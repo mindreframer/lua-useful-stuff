@@ -1,0 +1,24 @@
+package = 'ldiscount'
+version = '@VERSION@-@RELEASE@'
+
+description = {
+    summary = 'Lua bindings for the Discount Markdown library',
+    detailed = 'Lua bindings for the Discount Markdown library',
+    license = 'ISC',
+    homepage = 'https://github.com/craigbarnes/ldiscount'
+}
+
+supported_platforms = {'unix'}
+
+source = {
+    url = 'git://github.com/craigbarnes/ldiscount.git',
+    tag = '@VERSION@'
+}
+
+dependencies = {'lua >= 5.1'}
+
+build = {
+    type = 'builtin',
+    -- TODO...
+}
+
