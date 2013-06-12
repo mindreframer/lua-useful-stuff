@@ -1,0 +1,27 @@
+<? local user = luawa.user ?>
+
+		<h4>Join <span> yummymarks</span></h4>
+		<? if self:get( 'error' ) then ?><div class="message error"><?=self:get( 'error' ) ?></div><? end ?>
+
+		<? if not user:cookieLogin() then ?>
+			<form action="/join" method="post">
+				<div><label for="name">Display Name</label><input type="text" name="name" id="name" /></div>
+
+				<div><label for="email">Email</label><input type="text" name="email" id="email" /></div>
+
+				<div><label for="password">Password</label><input type="password" id="password" name="password" /></div>
+
+				<input class="submit button" type="submit" value="Join yummymarks" />
+
+				<div class="external">
+					<a href="/login">login</a><br />
+					<a href="/resetpw">reset password</a>
+				</div><!--end external-->
+
+			</form>
+		<? else ?>
+			<form>
+				Hello, <strong><?=user:cookieName() ?></strong><br /><br />
+				<a href="/"><strong>View your bookmarks</strong></a> or <a href="/logout">logout</a></strong>
+			</form>
+		<? end ?>

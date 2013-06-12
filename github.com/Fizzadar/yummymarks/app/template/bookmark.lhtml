@@ -1,0 +1,44 @@
+<? if not self:get( 'bookmark' ) then self:load( 'error/404' ) else ?>
+
+	<div id="favourites" class="no_hover">
+		<div class="bookmark collection">
+			<form class="inline" method="post" action="/bookmark/edit">
+				<h3 class="big">
+					<img src="http://g.etfv.co/<?=self:get( 'bookmark' ).base_url ?>" alt="" />
+					<input type="text" class="long" value="<?=self:get( 'bookmark' ).title ?>" />
+				</h3>
+				<h3 class="big">
+					<img src="/inc/img/tag.png" alt="" />
+					<input type="text" value="<?=self:get( 'bookmark' ).tag_string ?>" />
+					<input type="submit" class="submit" value="Update Bookmark" />
+					<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+				</h3>
+			<? if tonumber( self:get( 'bookmark' ).collection_id ) > 0 then ?>
+				<h3 class="big">
+					<img src="/inc/img/collection.png" alt="" />
+					Collection: <a href="/collection/<?=self:get( 'bookmark' ).collection_id ?>"><?=self:get( 'bookmark' ).collection_name ?></a>
+				</h3>
+			<? end ?>
+			</form>
+			<div class="meta top">
+				<?=self:timeAgo( self:get( 'bookmark' ).time ) ?> ago
+				<span class="always">
+					<? if tonumber( self:get( 'bookmark' ).collection_id ) > 0 then ?>&nbsp;&nbsp;
+						<form method="post" class="text" action="/bookmark/uncollect">
+							<input type="hidden" name="bookmark_id" value="<?=self:get( 'bookmark' ).id ?>" />
+							<input type="submit" value="uncollect" />
+							<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+						</form>
+					<? end ?>
+					&nbsp;&nbsp;
+					<form method="post" class="text" action="/bookmark/delete">
+						<input type="hidden" name="bookmark_id" value="<?=self:get( 'bookmark' ).id ?>" />
+						<input type="submit" value="delete" />
+						<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+					</form>
+				</span>
+			</div>
+		</div>
+	</div>
+
+<? end ?>

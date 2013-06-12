@@ -1,0 +1,34 @@
+<? if not self:get( 'tag' ) then self:load( 'error/404' ) else ?>
+
+	<div id="favourites" class="no_hover">
+		<div class="bookmark collection">
+			<h3 class="big">
+				<img src="/inc/img/tag.png" alt="" /> #<?=self:get( 'tag' ).name ?>
+			</h3>
+			<div class="meta"><?=self:get( 'tag' ).bookmarks ?> bookmarks</div>
+		</div>
+	</div>
+
+	<? if not self:get( 'bookmarks' ) then ?>
+		<h4>No bookmarks</h4>
+		<? if tonumber( self:get( 'page_number' ) ) == 0 then ?>
+			<p><em>You haven't made any bookmarks yet!</em> <a href="#"><strong>Download our plugins</strong></a> or <a href="#"><strong>drag this link to your bookmarks bar</strong></a> to get started.</p>
+		<? else ?>
+			<p><em>There are no bookmarks on this page!</em> The previous page button is the recommended course of action.</p>
+		<? end ?>
+	<? else ?>
+		<h4>Bookmarks <span>tagged</span> <?=self:get( 'tag' ).name ?></h4>
+		<? for k, bookmark in pairs( self:get( 'bookmarks' ) ) do ?>
+			<div class="bookmark">
+				<h3><img src="http://g.etfv.co/<?=bookmark.base_url ?>" alt="" /> <a href="<?=bookmark.url ?>"><?=bookmark.title ?></a></h3>
+				<div class="meta"><?=bookmark.base_url ?> - <?=self:timeAgo( bookmark.time ) ?> ago<span>&nbsp;&nbsp;<a href="/bookmark/<?=bookmark.id ?>">edit</a>
+				</span></div>
+				<ul class="tags">
+					<? for k, tag in pairs( bookmark.tag_list ) do ?>
+						<li><a href="/tag/<?=tag.id ?>">#<?=tag.name ?></a></li>
+					<? end ?>
+				</ul>
+			</div>
+		<? end ?>
+	<? end ?>
+<? end ?>

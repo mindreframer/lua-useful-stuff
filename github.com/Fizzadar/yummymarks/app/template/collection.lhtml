@@ -1,0 +1,44 @@
+<? if not self:get( 'collection' ) then self:load( 'error/404' ) else ?>
+
+	<div id="favourites" class="no_hover">
+		<div class="bookmark collection">
+			<form class="inline wide" method="post" action="/collection/edit">
+				<h3 class="big">
+					<img src="/inc/img/collection.png" alt="" />
+					<input type="text" value="<?=self:get( 'collection' ).name ?>" />
+					<input type="submit" class="submit" value="Update Collection" />
+					<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+				</h3>
+			</form>
+			<div class="meta top"><?=self:get( 'collection' ).bookmarks ?> bookmarks - <?=self:timeAgo( self:get( 'collection' ).time ) ?> ago<span class="always">&nbsp;&nbsp;
+				<form class="text" action="/collection/delete" method="post">
+					<input type="hidden" name="collection_id" value="<?=self:get( 'collection' ).id ?>" />
+					<input type="submit" value="delete" />
+					<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+				</form>
+			</span></div>
+		</div>
+	</div>
+
+	<h4>Bookmarks <span>in <?=self:get( 'collection' ).name ?></span></h4>
+	<? for k, bookmark in pairs( self:get( 'bookmarks' ) ) do ?>
+		<div class="bookmark">
+			<h3><img src="http://g.etfv.co/<?=bookmark.base_url ?>" alt="" /> <a href="<?=bookmark.url ?>"><?=bookmark.title ?></a></h3>
+			<div class="meta"><?=bookmark.base_url ?> - <?=self:timeAgo( bookmark.time ) ?> ago<span>&nbsp;&nbsp;
+				<a href="/bookmark/<?=bookmark.id ?>">edit</a> -
+				<form class="text" action="/bookmark/uncollect" method="post">
+					<input type="hidden" name="bookmark_id" value="<?=bookmark.id ?>" />
+					<input type="hidden" name="collection_id" value="<?=self:get( 'collection' ).id ?>" />
+					<input type="submit" value="uncollect" />
+					<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+				</form>
+			</span></div>
+			<ul class="tags">
+				<? for k, tag in pairs( bookmark.tag_list ) do ?>
+					<li><a href="/tag/<?=tag.id ?>">#<?=tag.name ?></a></li>
+				<? end ?>
+			</ul>
+		</div>
+	<? end ?>
+
+<? end ?>

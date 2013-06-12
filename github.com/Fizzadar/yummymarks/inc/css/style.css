@@ -1,0 +1,384 @@
+body {
+	background: white;
+	margin: 0;
+	font-family: 'Helvetica neue', Helvetica, Arial;
+	font-size: 14px;
+	line-height: 22px;
+	color: #333;
+}
+
+a {
+	color: #BD0000;
+	text-decoration: none;
+	cursor: pointer;
+}
+a:hover {
+	color: #1A1B1B;
+}
+
+form {
+	margin: 0px 0 0 0;
+	float: left;
+	clear: both;
+}
+	form label {
+		font-family: Verdana;
+		color: #666;
+		text-transform: uppercase;
+		font-size: 11px;
+	}
+	form input, form select {
+		display: block;
+		margin: 0px 0 20px 0;
+		width: 300px;
+		border: 1px solid #E7E7E7;
+		padding: 5px;
+		font-size: 16px;
+		background: white;
+		font-family: 'Lucida Grande';
+	}
+	form select {
+		width: 312px;
+	}
+	form input:focus {
+		border: 1px solid #a7A7A7;
+		background: #FFFECC;
+		outline: none;
+	}
+	form input.submit {
+		width: auto;
+		margin: 0;
+		padding: 7px;
+		background: #bd0000;
+		color: white;
+		border: none;
+		text-shadow: 1px 1px 1px black;
+		float: left;
+		cursor: pointer;
+		font-size: 14px;
+	}
+	form label.checkbox {
+		display: block;
+	}
+	form input.checkbox {
+		width: auto;
+		display: inline;
+		margin-left: 5px;
+		vertical-align: text-top;
+	}
+	form div.external {
+		float: left;
+		margin-left: 5px;
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+
+form.inline {
+	display: inline;
+	margin: 0;
+}
+form.inline.wide {
+	width: 330px;
+}
+	form.inline input {
+		display: inline;
+		width: 150px;
+		margin: 0;
+	}
+	form.inline input.long {
+		width: 400px;
+	}
+	form.inline input.submit {
+		float: none;
+		width: auto;
+		margin-left: 0px;
+		padding: 4px;
+		font-size: 12px;
+	}
+
+form.text {
+	display: inline;
+	margin: 0;
+	float: none;
+}
+	form.text input {
+		width: auto;
+		display: inline;
+		padding: 0;
+		font-size: 11px;
+		font-family: Verdana;
+		color: #666;
+		min-width: 0;
+		margin: -3px 0 0 0px;
+		padding: 0;
+		border: none;
+		cursor: pointer;
+		background: transparent;
+	}
+	form.text input:hover {
+		border-bottom: 1px solid #D7D7D7;
+		color: #1A1B1B;
+	}
+
+
+div.message {
+	padding: 5px;
+	width: 300px;
+	float: left;
+}
+div.message.bottom {
+	margin-bottom: 20px;
+}
+div.message.block {
+	margin-left: 20px;
+	float: none;
+}
+	div.message.success {
+		border: 1px solid green;
+		color: green;
+	}
+	div.message.error {
+		border: 1px solid red;
+		color: red;
+	}
+	div.message.info {
+		border: 1px solid blue;
+		color: blue;
+	}
+
+h2#yummy {
+	font-weight: normal;
+}
+	h2#yummy img {
+		background: #BD0000;
+		margin: -3px 7px 10px 0;
+		float: left;
+	}
+	h2#yummy span {
+		font-size: 11px;
+		font-family: verdana;
+		color: #777;
+	}
+	h2#yummy.big span {
+		width: 128px;
+		overflow: hidden;
+		display: block;
+	}
+
+div#wideimage {
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 383px;
+	overflow: hidden;
+}
+	div#wideimage img {
+		width: 100%;
+		margin-top: -300px;
+	}
+
+div#leftside {
+	position: fixed;
+	left: 0;
+	width: 20%;
+	padding: 5px 0 0 0;
+	background: #F7F7F7;
+	height: 100%;
+	z-index: 2;
+	border-right: 1px solid #D7D7D7;
+}
+	div#leftside div.right {
+		width: 128px;
+		margin-right: 20px;
+	}
+	div#leftside ul {
+		float: left;
+		margin: -5px 0 30px -7px;
+		padding: 0;
+	}
+		div#leftside ul li {
+			list-style: none;
+		}
+		div#leftside ul li.active a {
+			color: #333;
+		}
+		div#leftside ul li:first-child {
+			border-top: none;
+		}
+			div#leftside ul li a {
+				background: transparent;
+				float: left;
+				padding: 3px 7px;
+				width: 123px;
+				border-top: 1px solid #E7E7E7;
+				text-decoration: none;
+			}
+			div#leftside ul li:first-child a {
+				border-top: none;
+			}
+			div#leftside ul.grey li a {
+				color: #999;
+			}
+			div#leftside ul.grey li a:hover, div#leftside ul.grey li.active a {
+				color: #1A1B1B;
+			}
+
+div#content {
+	left: 20%;
+	right: 0;
+	padding: 0 0 0 1px;
+	position: absolute;
+	overflow-x: hidden;
+}
+div#content.page {
+	margin-left: 20px;
+}
+	div#content p {
+		padding: 20px 20px 0 20px;
+		max-width: 90%;
+	}
+	div#content.page p {
+		padding: 0;
+	}
+	div#content h4 {
+		margin: 0;
+		padding: 20px 20px 0px 20px;
+		float: left;
+		width: 100%;
+		font-size: 14px;
+	}
+		div#content h4 span {
+			color: #C1C1C1;
+			font-weight: normal;
+		}
+	div#content.page h4 {
+		padding: 20px 20px 20px 0;
+	}
+	div#content h2 {
+		padding: 20px 0px 0 20px;
+		margin: 0 0 -20px 0;
+	}
+	div#content.page h2 {
+		padding: 20px 0 0 0;
+		margin: 0;
+	}
+
+div.bookmark {
+	float: left;
+	width: 100%;
+	padding: 20px;
+}
+div.bookmark:hover {
+	background: #F9F9F9;
+}
+	div.bookmark h3 {
+		margin: 0 0 0 20px;
+		max-width: 90%;
+	}
+	div.bookmark h3.big {
+		font-size: 20px;
+		margin-bottom: 5px;
+	}
+		div.bookmark h3 img {
+			width: 16px;
+			height: 16px;
+			float: left;
+			margin: 2px 4px 0 -20px;
+		}
+	div#content div.bookmark div.meta {
+		font-size: 11px;
+		font-family: Verdana;
+		color: #666;
+		margin: -3px 0 0 20px;
+		padding: 0;
+		clear: both;
+		float: left;
+	}
+	div.bookmark div.meta.top {
+		display: inline;
+	}
+	div.bookmark div.meta span {
+		display: none;
+	}
+		div.bookmark div.meta span a {
+			color: #666;
+			border-bottom: 1px solid transparent;
+		}
+		div.bookmark div.meta span a:hover {
+			border-bottom: 1px solid #D7D7D7;
+			color: #1a1b1b;
+		}
+	div.bookmark:hover div.meta span, div.bookmark div.meta span.always {
+		display: inline;
+	}
+	div.bookmark ul.tags {
+		margin: 0 0 0 20px;
+		padding: 0;
+		float: left;
+		clear: both;
+	}
+		div.bookmark ul.tags li {
+			list-style: none;
+			float: left;
+			margin-right: 10px;
+		}
+div.collection {
+}
+	div.collection ul.bookmarks {
+		margin: 5px 0 0 0;
+		padding: 0 0 0 36px;
+		float: left;
+		clear: both;
+	}
+		div.collection ul.bookmarks li {
+			list-style: square;
+		}
+div.video {
+}
+	div.video iframe {
+		float: left;
+		clear: both;
+		margin: 5px 0 0 21px;
+	}
+
+div#favourites {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #D7D7D7;
+	border-top: 1px solid #D7D7D7;
+	margin-top: -1px;
+	margin-bottom: 10px;
+	background: #F7F7F7;
+}
+	div#favourites div.bookmark, div#favourites h4 {
+		background: #F7F7F7;
+	}
+	div#favourites div.bookmark:hover {
+		background: #E7E7E7;
+	}
+	div#favourites.no_hover div.bookmark:hover {
+		background: #F7F7F7;
+	}
+	div#favourites div.bookmark p.meta span a:hover {
+		border-bottom: 1px solid #A7A7A7;
+	}
+
+div#page_nav {
+	margin: 20px 0 20px 20px;
+}
+	div#page_nav a {
+		padding: 7px;
+		background: #BD0000;
+		color: #FFF;
+		text-shadow: 1px 1px 1px black;
+		font-family: 'Lucida Grande';
+	}

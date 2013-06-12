@@ -1,0 +1,81 @@
+<? local user = luawa.user ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<!--meta-->
+	<title><? if self:get( 'page_title' ) then ?><?=self:get( 'page_title' ) ?> | <? end ?>yummymarks</title>
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="bookmarking" />
+	<meta name="description" content="Simple bookmarking service" />
+
+	<!--favicon-->
+	<link rel="shortcut icon" href="/inc/img/favicon.png" />
+	<link rel="icon" href="/inc/img/favicon.png" type="image/x-icon" />
+
+	<!--style-->
+	<link rel="stylesheet" href="/inc/css/style.css" />
+</head>
+<body>
+
+	<div id="leftside"><div class="right">
+		<h2 id="yummy" class="big"><a href="/"><img src="/inc/img/logo_big.png" /></a> yummymarks<span><? if user:cookieLogin() then ?>/<?=user:cookieName() ?><? else ?>&nbsp;<? end ?></span></h2>
+
+		<ul>
+			<? if user:cookieLogin() then ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Bookmark' ) then ?>
+					<li class="active"><a href="/">Bookmarks &rarr;</a></li>
+				<? else ?>
+					<li><a href="/">Bookmarks</a></li>
+				<? end ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Collection' ) then ?>
+					<li class="active"><a href="/collections">Collections &rarr;</a></li>
+				<? else ?>
+					<li><a href="/collections">Collections</a></li>
+				<? end ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Tag' ) then ?>
+					<li class="active"><a href="/tags">Tags &rarr;</a></li>
+				<? else ?>
+					<li><a href="/tags">Tags</a></li>
+				<? end ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Settings' ) then ?>
+					<li class="active"><a href="/settings">Settings &rarr;</a></li>
+				<? else ?>
+					<li><a href="/settings">Settings</a></li>
+				<? end ?>
+
+
+
+
+				<li><a href="/logout">Logout</a></li>
+			<? else ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Login' ) then ?>
+					<li class="active"><a href="/login">Login &rarr;</a></li>
+				<? else ?>
+					<li><a href="/login">Login</a></li>
+				<? end ?>
+				<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Join' ) then ?>
+					<li class="active"><a href="/join">Join &rarr;</a></li>
+				<? else ?>
+					<li><a href="/join">Join</a></li>
+				<? end ?>
+			<? end ?>
+		</ul>
+
+		<ul class="grey">
+			<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Plugins' ) then ?>
+				<li class="active"><a href="/plugins">Plugins &rarr;</a></li>
+			<? else ?>
+				<li><a href="/plugins">Plugins</a></li>
+			<? end ?>
+			<? if self:get( 'page_title' ) and self:get( 'page_title' ):find( 'Help' ) then ?>
+				<li class="active"><a href="/help">Help &rarr;</a></li>
+			<? else ?>
+				<li><a href="/help">Help</a></li>
+			<? end ?>
+		</ul>
+	</div></div><!--end leftside-->
+
+	<div id="content"<? if self:get( 'page' ) then ?> class="page"<? end ?>>
+
+
+		<!--<div class="message error block">Bookmark deleted</div>-->

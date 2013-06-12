@@ -1,0 +1,82 @@
+<? if self:get( 'favorites' ) then ?>
+	<div id="favourites">
+		<h4>Favorite <span>Bookmarks</span></h4>
+		<? for k, bookmark in pairs( self:get( 'favorites' ) ) do ?>
+			<div class="bookmark">
+				<h3><img src="http://g.etfv.co/<?=bookmark.base_url ?>" alt="" /> <a href="<?=bookmark.url ?>"><?=bookmark.title ?></a></h3>
+				<div class="meta"><?=bookmark.base_url ?> - <?=self:timeAgo( bookmark.time ) ?> ago<span>&nbsp;&nbsp;<a href="/bookmark/<?=bookmark.id ?>">edit</a> -
+					<form method="post" class="text" action="/bookmark/unfavorite">
+						<input type="hidden" name="bookmark_id" value="<?=bookmark.id ?>" />
+						<input type="submit" value="unfavorite" />
+						<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+					</form>
+				</span></div>
+				<ul class="tags">
+					<? for k, tag in pairs( bookmark.tag_list ) do ?>
+						<li><a href="/tag/<?=tag.id ?>">#<?=tag.name ?></a></li>
+					<? end ?>
+				</ul>
+			</div>
+		<? end ?>
+	</div><!--end favourites-->
+<? end ?>
+
+
+<? if not self:get( 'bookmarks' ) then ?>
+	<h4>No bookmarks</h4>
+	<? if tonumber( self:get( 'page_number' ) ) == 0 then ?>
+		<p><em>You haven't made any bookmarks yet!</em> <a href="/plugins"><strong>Download our plugins</strong></a> or <a href="#"><strong>drag this link to your bookmarks bar</strong></a> to get started.</p>
+	<? else ?>
+		<p><em>There are no bookmarks on this page!</em> The previous page button is the recommended course of action.</p>
+	<? end ?>
+<? else ?>
+	<h4>Recent <span>Bookmarks</span></h4>
+	<? for k, bookmark in pairs( self:get( 'bookmarks' ) ) do ?>
+		<? if bookmark.type == 'collection' then ?>
+			<div class="bookmark collection">
+				<h3><img src="/inc/img/collection.png" alt="" /> Collection: <a href="/collection/<?=bookmark.id ?>"><?=bookmark.name ?></a></h3>
+				<div class="meta"><?=table.getn( bookmark.bookmarks ) ?> new bookmarks<span>&nbsp;&nbsp;<a href="/collection/<?=bookmark.id ?>">edit</a> -
+					<form method="post" class="text" action="/collection/delete"><input type="submit" value="delete" /><input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" /></form>
+				</span></div>
+				<ul class="bookmarks">
+					<? for k, b in pairs( bookmark.bookmarks ) do ?>
+						<li><a href="<?=b.url ?>"><?=b.title ?></a> <span class="meta">
+							<form method="post" class="text"><input type="submit" value="uncollect" /></form> -
+							<a href="#">edit</a> -
+							<form method="post" class="text"><input type="submit" value="favorite" /></form>
+						</span></li>
+					<? end ?>
+				</ul>
+			</div>
+		<? else ?>
+			<div class="bookmark">
+				<h3><img src="http://g.etfv.co/<?=bookmark.base_url ?>" alt="" /> <a href="<?=bookmark.url ?>"><?=bookmark.title ?></a></h3>
+				<div class="meta"><?=bookmark.base_url ?> - <?=self:timeAgo( bookmark.time ) ?> ago<span>&nbsp;&nbsp;<a href="/bookmark/<?=bookmark.id ?>">edit</a> -
+					<form method="post" class="text" action="/bookmark/favorite">
+						<input type="hidden" name="bookmark_id" value="<?=bookmark.id ?>" />
+						<input type="submit" value="favorite" />
+						<input type="hidden" name="token" value="<?=self:get( 'token' ) ?>" />
+					</form>
+				</span></div>
+				<ul class="tags">
+					<? for k, tag in pairs( bookmark.tag_list ) do ?>
+						<li><a href="/tag/<?=tag.id ?>">#<?=tag.name ?></a></li>
+					<? end ?>
+				</ul>
+			</div>
+		<? end ?>
+	<? end ?>
+<? end ?>
+
+<!--pagination-->
+<div id="page_nav">
+	<? if self:get( 'page_number_prev' ) >= 1 then ?>
+		<a href="/<?=self:get( 'page_number_prev' ) ?>">&larr; Previous Page</a>
+	<? elseif self:get( 'page_number_prev' ) == 0 then ?>
+		<a href="/">&larr; Previous Page</a>
+	<? end ?>
+
+	<? if self:get( 'bookmarks' ) then ?>
+		<a href="/<?=self:get( 'page_number_next' ) ?>">Next Page &rarr;</a>
+	<? end ?>
+</div><!--end page_nav-->

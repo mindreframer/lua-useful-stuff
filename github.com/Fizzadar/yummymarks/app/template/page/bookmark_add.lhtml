@@ -1,0 +1,31 @@
+<?
+	local user = luawa.user
+	if not user:cookieLogin() then return luawa.header:redirect( '/' ) end
+	self:set( 'page_title', 'Add Bookmark' )
+?>
+<?=self:load( 'core/header', true ) ?>
+
+
+		<h4>Add <span>Bookmark</span></h4>
+
+		<form action="">
+			<div><label for="title">Title</label>
+			<input type="text" value="Website page title n stuff" /></div>
+
+			<div class="wide"><label for="tags">Tags (comma separated)</label>
+			<input type="text" /></div>
+
+			<div><label for="collection">Collection - <a href="#" onclick="document.getElementById( 'new_collection' ).style.display = 'block'; return false;">New Collection</a></label>
+			<select>
+				<option selected>none</option>
+				<option>collection 1</option>
+				<option>collection 2</option>
+			</select></div>
+			<div id="new_collection" class="wide" style="display: none;"><label for="tags">Collection Name</label>
+			<input type="text" /></div>
+
+			<input type="submit" class="submit" value="<? if not user:cookieLogin() then ?>Join &amp; <? end ?>Add Bookmark" />
+		</form>
+
+
+<?=self:load( 'core/footer', true ) ?>

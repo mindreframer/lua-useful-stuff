@@ -1,0 +1,15 @@
+
+	<? if not self:get( 'collections' ) then ?>
+		<h4>No Collections Found</h4>
+		<p><em>You haven't made any collections yet!</em> <strong>To create one, click on the collection checkbox when making a bookmark.</strong></p>
+	<? else ?>
+		<h4>Collections <span>you created</span></h4>
+
+		<? for k, collection in pairs( self:get( 'collections' ) ) do ?>
+			<div class="bookmark collection">
+				<h3><img src="/inc/img/collection.png" alt="" /> <a href="/collection/<?=collection.id ?>"><?=collection.name ?></a></h3>
+				<div class="meta"><?=collection.bookmarks ?> bookmarks - <?=self:timeAgo( collection.time ) ?> ago<span>&nbsp;&nbsp;<a href="/collection/<?=collection.id ?>">edit</a>
+				</span></div>
+			</div>
+		<? end ?>
+	<? end ?>
