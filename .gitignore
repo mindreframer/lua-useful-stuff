@@ -1,0 +1,7 @@
+*.o
+*.so
+*.dll
+*.stackdump
+.depcheck
+*.rockspec
+cairodemo-*.png
