@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Simulua home -->
+<!-- $Id: index.html,v 1.1 2008-08-19 23:36:45 carvalho Exp $ -->
+
+<head>
+	<title>Simulua documentation</title>
+	<meta name="description" content="Simulua" />
+	<meta name="keywords" content="discrete event,simulation,lua" />
+	<meta name="author" content="Luis Carvalho" />
+	<meta http-equiv="content-language" content="en" />
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+	<meta http-equiv="content-style-type" content="text/css" />
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+  <!--
+  <link rel="stylesheet" type="text/css"
+    href="http://simulua.luaforge.net/style.css" media="screen" />
+    -->
+</head>
+
+<body>
+<div id="page">
+	
+<div id="header">
+	<h1>Simulua</h1>
+  Discrete-event simulation in Lua
+</div>
+
+<div id="horizbar">
+	<a href="#introduction" accesskey="1">Introduction</a>&nbsp; :: &nbsp;
+	<a href="#simulation">Simulation</a>&nbsp; :: &nbsp; 
+	<a href="#processes">Processes</a>&nbsp; :: &nbsp; 
+	<a href="#control">Control</a>&nbsp; :: &nbsp; 
+	<a href="#examples">Examples</a>&nbsp; :: &nbsp; 
+	<a href="#facilities">Facilities</a>&nbsp; :: &nbsp; 
+	<a href="#installation">Installation</a>
+</div>
+
+<div class="content">
+
+<h2 id="introduction">Introduction</h2>
+<small>What Simulua is</small>
+<p><strong>Simulua</strong> is a
+<a href="http://en.wikipedia.org/wiki/Discrete_event_simulation">
+discrete-event simulation</a> (DES) library for Lua, in the same tradition and
+flavor of the
+<a href="http://en.wikipedia.org/wiki/Simula">SIMULA</a> family of programming
+languages. The simulation in Simulua is <em>process-oriented</em>, that is,
+the operation path of a simulated system is obtained from interactions of
+processes running in parallel. Events are then implicitly managed through
+process management and scheduled through an event list. Processes are
+implemented in Simulua using property tables and their corresponding
+coroutines as execution threads.</p>
+
+<p>The <a href="#simulation">Simulation</a> section gives more details about
+the simulation engine, <a href="#processes">Processes</a> explains processes,
+<a href="#control">Control</a> describes how the simulation is managed, and
+section <a href="#examples">Examples</a> provides some examples. The examples,
+in particular, are very helpful in understanding the concepts. Containers,
+accumulators and other important auxiliary routines are described in
+<a href="#facilities">Facilities</a>.</p>
+
+<p>Simulua is licensed under the
+<a href="http://www.lua.org/license.html">same license as Lua</a>&mdash;the
+<a href="http://www.opensource.org/licenses/mit-license.php">MIT
+ license</a>&mdash;and so can be freely used for academic and commercial
+purposes. Please refer to the <a href="#installation">Installation</a> section
+for more details.</p>
+
+
+<h2 id="simulation">Simulation</h2>
+<small>Process-oriented DES in Lua</small>
+<p>The main concept in Simulua is the <em>process</em>, represented by a pair:
+a table that stores properties&mdash;the process &quot;object&quot;
+itself&mdash;and a corresponding coroutine that creates and manages events.
+The sequence of events that composes a simulation run is executed through an
+<em>event list</em> that is implemented as a binomial heap with event times as
+priorities. The event list, and hence process execution, is managed by an
+implicit scheduler/dispatcher coroutine. The scheduler advances the simulation
+time to the next event time of the latest retrieved process from the list.
+Note that it is possible for two processes to execute in &quot;parallel&quot;,
+that is, at the same simulation time.</p>
+
+<p>The currently active process and current simulation time can be queried
+with <code>simulua.current</code> and <code>simulua.time</code>:</p>
+
+<h4 id="current"><code>simulua.current()</code></h4>
+<p>Returns the process that is currently executing.</p>
+
+<h4 id="time"><code>simulua.time([proc])</code></h4>
+<p>If <code>proc</code> is <code>nil</code> returns the current simulation
+time, otherwise returns the event time of process <code>proc</code>.</p>
+
+
+<h2 id="processes">Processes</h2>
+<small>The main actors</small>
+<p>A process is created with <code>simulua.process</code>:</p>
+
+<h4 id="process"><code>simulua.process(exec [, prop])</code></h4>
+<p>Returns a process that executes function <code>exec</code> and has optional
+property table <code>prop</code>.</p>
+
+<p>A process resumes execution when it is retrieved from the event list at the
+current time. If a process is not in the event list it is said to be
+<em>idle</em>. A process is inserted into the event list when it is
+<em>activated</em>; the activation can occur after either some time delay or
+process in the event list. A process can <em>cancel</em> the execution of
+another process, effectively removing the latter from the event list; if the
+process cancels itself it is said to <em>passivate</em>. A <em>hold</em>
+operation reschedules a process to resume after a time delay. A process can
+also <em>wait</em> for a container, like a queue: in this case the process is
+inserted, or pushed, into the container and passivates. The relevant Simulua
+process methods are listed below.</p>
+
+<h4 id="idle"><code>simulua.idle(proc)</code></h4>
+<p>Returns <code>true</code> if process <code>proc</code> is idle.</p>
+
+<h4 id="activate"><code>simulua.activate(proc [, delay [, after]])</code></h4>
+<p>Activates process <code>proc</code> if it is idle, inserting it into the
+event list, or reactivates it by changing its event time in the list.</p>
+
+<p>Parameter <code>delay</code> can be either a number, in which case
+<code>proc</code> receives priority time <code>simulua.time() + delay</code>
+in the event list, or a process, when <code>proc</code> acquires event
+time <code>simulua.time(proc)</code>. If <code>delay</code> is
+<code>nil</code> or <code>delay &lt; 0</code>, then <code>delay</code> is set
+to zero. If <code>delay</code> is an idle process, <code>proc</code> is
+canceled.</p>
+
+<p>If <code>after</code> is <code>true</code> the insertion or change
+operation has no priority, that is, <code>proc</code> is positioned
+<em>after</em> processes with the same priority time in the event list. Note
+that heap operations assume priority by default.</p>
+
+<h4 id="cancel"><code>simulua.cancel(proc)</code></h4>
+<p>Removes process <code>proc</code> from the event list (it has no effect if
+<code>proc</code> is not scheduled).</p>
+
+<h4 id="passivate"><code>simulua.passivate()</code></h4>
+<p>Equivalent to <code>simulua.cancel(simulua.current())</code>.</p>
+
+<h4 id="hold"><code>simulua.hold(delay)</code></h4>
+<p>Reschedules the current process to event time
+<code>simulua.time() + delay</code>. If <code>delay</code> is
+<code>nil</code> or negative, <code>delay</code> is set to zero.</p>
+
+<h4 id="wait"><code>simulua.wait(cont, ...)</code></h4>
+<p>Inserts current process into container <code>cont</code> and passivates. A
+valid container must have a method <code>into</code> for insertions. Any
+extra parameters to <code>simulua.wait</code> are passed to
+<code>cont.into</code>.</p>
+
+
+<h2 id="control">Control</h2>
+<small>Managing simulation execution</small>
+<p>There are only two methods that control the simulation:
+<code>simulua.start</code> and <code>simulua.stop</code>. The simulation
+itself is run by a <em>main</em> process that is created and scheduled at time
+zero by <code>simulua.start</code>. The simulation ends when the main process
+finishes executing.</p>
+
+<h4 id="start"><code>simulua.start(exec)</code></h4>
+<p>Starts the simulation by creating the main process having <code>exec</code>
+as function. <code>simulua.start</code> initializes the event priority heap,
+creates the main process, and resumes the scheduler.</p>
+
+<h4 id="stop"><code>simulua.stop()</code></h4>
+<p>Stops the simulation. It is equivalent to
+<code>simulua.cancel(main)</code>.</p>
+
+
+<h2 id="examples">Examples</h2>
+<small>Understanding simulation</small>
+<p>The following examples are adapted from 
+<a href="http://www.macs.hw.ac.uk/~rjp/bookhtml/chap19.html">Chapter 19</a> of
+Rob Pooley's book,
+<a href="http://www.macs.hw.ac.uk/~rjp/bookhtml">An introduction to
+ programming in Simula</a> (we strongly recommend reading&mdash;and referring
+to&mdash;this chapter to better understand the examples and the simulation
+concepts from SIMULA). The main methods from Simulua are highlighted in bold
+in the code.</p>
+
+<p>The first example implements a simple, deterministic simulation of a mill
+worker day. We have two processes, <code>mill</code> and <code>worker</code>,
+that run concurrently after <code>worker</code> is first activated by the main
+process: the worker loads the mill in five units of time, activates the mill
+and checks regularly for it to finish its load, and finally unloads the mill;
+the mill simply processes its load at two time units per component and
+finishes when it is empty.</p>
+
+<pre>
+<em>-- Mill model, example 19.1 from
+-- Pooley, R., "An introduction to programming in Simula"</em>
+
+local <strong>simulua</strong> = require "simulua"
+
+<em>-- variables</em>
+local count = 0
+
+<em>-- processes</em>
+local mill = {components = 0}
+mill = <strong>simulua.process</strong>(function()
+  while true do
+    print("Machine starts", <strong>simulua.time</strong>())
+    while mill.components &gt; 0 do
+      <strong>simulua.hold</strong>(2) <em>-- machining time for one component</em>
+      mill.components = mill.components - 1
+    end
+    <strong>simulua.passivate</strong>()
+  end
+end, mill)
+
+local worker = <strong>simulua.process</strong>(function()
+  while <strong>simulua.time</strong>() &lt; 400 do
+    print("Loading starts", <strong>simulua.time</strong>())
+    count = count + 1 <em>-- keep a tally</em>
+    <strong>simulua.hold</strong>(5)
+    mill.components = mill.components + 50 <em>-- load up</em>
+    <strong>simulua.activate</strong>(mill) <em>-- restart machine</em>
+    while mill.components &gt; 0 do <strong>simulua.hold</strong>(0.5) end <em>-- check regularly</em>
+    <strong>simulua.cancel</strong>(mill) <em>-- switch off</em>
+    <strong>simulua.hold</strong>(10) <em>-- unloading takes longer</em>
+    print("Unloading finishes", <strong>simulua.time</strong>())
+  end
+  <strong>simulua.passivate</strong>()
+end)
+
+<em>-- simulation</em>
+<strong>simulua.start</strong>(function() <em>-- main</em>
+  <strong>simulua.activate</strong>(worker)
+  print(string.format("count = %d", count))
+  <strong>simulua.hold</strong>(800)
+  print("Simulation ends", <strong>simulua.time</strong>())
+end)
+</pre>
+
+<p>The main methods in this example are <code>simulua.activate</code>,
+<code>simulua.hold</code> and <code>simulua.cancel</code> (also implicit in
+<code>simulua.passivate</code>) as they control process cooperation and thus
+the simulation execution. Note that <code>simulua.time()</code> is used to
+check for the end of a worker's day, the end of the simulation, and to report
+activities. Chapter 19 of Rob Pooley's book gives more details about the
+simulation run.</p>
+
+<p>The next example models an employment office with two interviewers and a
+shared receptionist. We again refer to Chapter 19 for a better description of
+the simulation, but the concepts and methods should be getting more familiar.
+The new resources in this example are the <em>queue</em> container and
+<code>simulua.wait</code>: the main process pushes four job hunters, each of
+different skill, through the system, where they should wait for the
+receptionist in queue <code>receptionist.Q</code> and then for their
+respective interviewer in either <code>manual.Q</code> or
+<code>skilled.Q</code>.</p>
+
+<pre>
+<em>-- Employment office queuing model, example 19.2 from
+-- Pooley, R., "An introduction to programming in Simula"</em>
+
+local <strong>simulua</strong> = require "simulua"
+local queue = require "queue"
+
+<em>-- variables</em>
+local MANUAL = 1  <em>-- skill category</em>
+
+<em>-- processes</em>
+local manual, skilled <em>-- interviewers</em>
+local receptionist
+
+local function interviewer (title)
+  local interviewerQ = queue()
+  return <strong>simulua.process</strong>(function()
+    while true do
+      if not interviewerQ:isempty() then
+        <strong>simulua.hold</strong>(3.5) <em>-- interview time taken as 3.5 minutes</em>
+        local next = interviewerQ:retrieve()
+        <strong>simulua.activate</strong>(next, <strong>simulua.current</strong>(), true) <em>-- after current</em>
+        <strong>simulua.hold</strong>(3) <em>-- 3 minutes to clear desk</em>
+      else
+        <strong>simulua.hold</strong>(5) <em>-- wait 5 minutes before checking queue again</em>
+      end
+    end
+  end, {Q = interviewerQ})
+end
+
+local function jobhunter (skill)
+  return <strong>simulua.process</strong>(function()
+    print(string.format(
+        "Job hunter %d joins receptionist queue at time %.1f",
+        skill, <strong>simulua.time</strong>()))
+    <strong>simulua.wait</strong>(receptionist.Q)
+    print(string.format(
+        "Job hunter %d joins interview queue at time %.1f",
+        skill, <strong>simulua.time</strong>()))
+    <strong>simulua.hold</strong>(1) <em>-- 1 minute to join new queue</em>
+    if skill == MANUAL then
+      <strong>simulua.wait</strong>(manual.Q)
+    else
+      <strong>simulua.wait</strong>(skilled.Q)
+    end
+    print(string.format(
+        "Job hunter %d leaves employment office at time %.1f",
+        skill, <strong>simulua.time</strong>()))
+  end)
+end
+
+do <em>-- receptionist</em>
+  local receptionistQ = queue()
+  receptionist = <strong>simulua.process</strong>(function()
+    while true do
+      if not receptionistQ:isempty() then
+        <strong>simulua.hold</strong>(2)
+        local customer = receptionistQ:retrieve()
+        <strong>simulua.activate</strong>(customer)
+      else
+        <strong>simulua.hold</strong>(1)
+      end
+    end
+  end, {Q = receptionistQ})
+end
+
+<em>-- simulation</em>
+<strong>simulua.start</strong>(function()
+  <strong>simulua.activate</strong>(receptionist)
+  manual = interviewer"Manual"
+  <strong>simulua.activate</strong>(manual)
+  skilled = interviewer"Skilled"
+  <strong>simulua.activate</strong>(skilled)
+  for _, skill in ipairs{1, 2, 2, 1} do
+    <strong>simulua.activate</strong>(jobhunter(skill))
+    <strong>simulua.hold</strong>(2)
+  end
+  <strong>simulua.hold</strong>(100)
+end)
+</pre>
+
+<p>All three examples in Chapter 19 can be found in the <code>examples</code>
+folder of the Simulua distribution.</p>
+
+
+<h2 id="facilities">Facilities</h2>
+<small>Containers, accumulators, and probabilities</small>
+<p>We have already seen a <em>container</em>, a queue, in the last section.
+The motivation behind containers in Simulua is to provide mechanisms for
+process scheduling through <code>simulua.wait</code>. To this end we provide
+three containers: queues, that implement a
+<acronym title="Last-In-First-Out">LIFO</acronym> policy (module
+<code>queue</code>); stacks, for
+<acronym title="First-In-First-Out">FIFO</acronym> policy (module
+<code>stack</code>); and binomial heaps for priority based policy (module
+<code>binomial</code>). For a container to be used by
+<code>simulua.wait</code> it needs to provide a <code>into</code> method for
+insertion.</p>
+
+<p>Sometimes we want to report the <em>mean</em> of a variable in the
+simulation. In this case, another useful facility is an
+<em>accumulator</em>, that updates the value of the mean as requested during a
+simulation run. The mean of a variable as tracked by an accumulator
+<code>accum</code> can be recovered in <code>accum.mean</code>.</p>
+
+<h4 id="accumulator"><code>simulua.accumulator()</code></h4>
+<p>Returns an accumulator, a table with keys <code>last</code> storing the
+last updated time and <code>mean</code> representing the last updated
+mean.</p>
+
+<h4 id="update"><code>accum:update(value [, last])</code></h4>
+<p>Updates accumulator <code>accum</code> at time <code>last</code> according
+to last observed <code>value</code>. If <code>last</code> is nil it is set to
+<code>simulua.time()</code>.</p>
+
+<p>For convenience, Simulua also includes libraries for random number
+generation (module <code>rng</code>) and cumulative distribution functions
+(module <code>cdf</code>), both borrowed from 
+<a href="http://numlua.luaforge.net">Numeric Lua</a>.</p>
+
+<p>The next example simulates a warehouse where both batch arrival and
+processing times are exponentially distributed. Batches can be rejected if the
+number of units exceeds warehouse storage. We also keep track of the number of
+items in the warehouse and report its mean along with the proportion of
+rejected batches at the end of the simulation.</p>
+
+<pre>
+<em>-- The "versatile warehouse model" from Section 3.1 of
+-- Mitrani, I. (1982), "Simulation techniques for discrete event systems"</em>
+
+local <strong>simulua</strong> = require "simulua"
+local rng = require "rng"
+local queue = require "queue"
+
+<em>-- variables</em>
+local r = rng() <em>-- note: change seed for different runs</em>
+local warehouse = <strong>simulua.accumulator</strong>() <em>-- for number of items</em>
+local n = 0 <em>-- number of current items in warehouse</em>
+local arrived, rejected = 0, 0 <em>-- number of items</em>
+
+<em>-- parameters</em>
+local arr, rem = 20, 10 <em>-- arrival and removal means</em>
+local in1, in2 = 3, 5  <em>-- range for arrivals</em>
+local out1, out2 = 4, 6 <em>-- range for removals</em>
+local m = 10 <em>-- units of storage</em>
+local simperiod = 1000 <em>-- simulation period</em>
+
+<em>-- processes</em>
+local arrivals, worker
+do <em>-- arrivals</em>
+  local number <em>-- of items in batch</em>
+  arrivals = <strong>simulua.process</strong>(function()
+    while true do
+      <strong>simulua.hold</strong>(r:exp(arr))
+      arrived = arrived + 1
+      number = r:unifint(in1, in2)
+      if number &gt; m - n then
+        rejected = rejected + 1
+      else
+        warehouse:<strong>update</strong>(n)
+        n = n + number
+        if <strong>simulua.idle</strong>(worker) then
+          <strong>simulua.activate</strong>(worker)
+        end
+      end
+    end
+  end)
+end
+do <em>-- worker</em>
+  local size, number <em>-- size of outgoing batch and number removed</em>
+  worker = <strong>simulua.process</strong>(function()
+    while true do
+      while n &gt; 0 do
+        <strong>simulua.hold</strong>(r:exp(rem))
+        warehouse:update(n)
+        size = r:unifint(out1, out2)
+        number = size &lt; n and size or n
+        n = n - number
+      end
+      <strong>simulua.passivate</strong>() <em>-- warehouse is now empty</em>
+    end
+  end)
+end
+
+<em>-- simulation</em>
+<strong>simulua.start</strong>(function()
+  <strong>simulua.activate</strong>(arrivals)
+  <strong>simulua.activate</strong>(worker)
+  <strong>simulua.hold</strong>(simperiod)
+  print(string.format("Proportion of rejected batches: %.2f",
+    rejected / arrived))
+  print(string.format("Average no. of items in warehouse: %.2f",
+    warehouse.<strong>mean</strong>))
+end)
+</pre>
+
+
+<h2 id="installation">Installation</h2>
+<small>How to obtain and install Simulua</small>
+<p>Simulua is distributed as a source package and can be obtained at
+<a href="http://luaforge.net/projects/simulua">Luaforge</a>. Depending on how
+Lua 5.1 is installed in your system you might have to edit the Makefile and
+copy the modules to their suitable places. Alternatively, you can use
+<a href="http://www.luarocks.org">LuaRocks</a> and install from the rockspec
+also available in Luaforge. Simulua can also be built standalone from folder
+<code>etc</code> in the distribution.</p>
+
+
+<h3>License</h3>
+<p>Copyright (c) 2008 Luis Carvalho</p>
+
+<p>Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation files
+(the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the
+Software, and to permit persons to whom the Software is furnished
+to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+
+</div><!-- end content -->
+
+<div id="footer">
+<p>
+<a href="http://gforge.org/">
+  <img alt="Powered by GForge" src="http://gforge.org/images/pow-gforge.png" />
+</a>
+<br />
+<a href="http://validator.w3.org/check/referer">Valid XHTML 1.1</a>
+&nbsp; :: &nbsp;
+<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a>
+<br />
+Last modified: $Date: 2008-08-19 23:36:45 $, $Author: carvalho $.
+</p>
+</div>
+
+</div><!-- end page -->
+</body>
+</html>
+
+<!-- vi:set sw=2 ts=2 noai: -->
