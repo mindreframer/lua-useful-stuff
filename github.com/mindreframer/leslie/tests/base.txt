@@ -1,0 +1,5 @@
+{% block head %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block meta %}Meta{% endblock %}
+{% endblock %}

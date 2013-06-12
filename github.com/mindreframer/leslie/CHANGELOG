@@ -1,0 +1,48 @@
+# Leslie 0.2
+
+*release date 30-Apr-2009, revision 29*
+
+- Added security check for ssi includes.
+
+- Added tests for scope testing and ssi includes.
+
+## Issues
+
+- Fixed issue - global context was not defined in template
+  blocks with local scope.
+
+
+# Leslie 0.2a-pre
+
+*release date 17-Apr-2009, revision 23*
+
+- Support for custom tags.
+
+- Added loader tags: extends, block, include and ssi tag.
+
+- Added templatetag tag.
+
+
+# Leslie 0.1
+
+*release date 20-Feb-2009, revision 16*
+
+- Added support for comment block tags.
+
+- Complete API test suite.
+
+## Issues:
+
+- Fixed issues with compatibilty with Django Template System -
+  comparison of variables, condition evaluation, rendering.
+
+- Fixed evaluation of undefined context variables.
+
+- Lexer change - removing newline character after block tokens.
+
+- NodeList function was called from global environment insted of
+  leslie.parser module.
+
+- Mode attribute of class IfEqualNode was not set properly.
+
+- For tag parsing issues fixed.

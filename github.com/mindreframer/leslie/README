@@ -1,0 +1,27 @@
+Leslie dependencies:
+
+- lua 5.1
+- lpeg library
+- class library (modified version included in package)
+
+Supported tags:
+
+- block
+- comment
+- empty
+- extends
+- for
+- firstof
+- include
+- if (partly)
+- ifequal
+- ifnotequal
+- ssi
+- templatetag
+- with
+
+
+Filters are currently not supported.
+
+For more information about using Django template language see
+http://docs.djangoproject.com/en/dev/ref/templates/builtins/

@@ -1,0 +1,779 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+
+	<li><a href="../index.html">Index</a></li>
+
+</ul>
+
+
+<!-- Module list -->
+
+<h1>Modules</h1>
+<ul>
+
+	<li>
+		<a href="../modules/leslie.html">leslie</a>
+	</li>
+
+	<li><strong>leslie.parser</strong></li>
+
+	<li>
+		<a href="../modules/leslie.tags.html">leslie.tags</a>
+	</li>
+
+	<li>
+		<a href="../modules/leslie.utils.html">leslie.utils</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/init.html">init.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/lexer.html">lexer.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/loader_tags.html">loader_tags.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/parser.html">parser.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/tags.html">tags.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/utils.html">utils.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module <code>leslie.parser</code></h1>
+
+<p></p>
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#Node:render">Node:render</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#NodeList:extend">NodeList:extend</a>&nbsp;(node)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#NodeList:findByType">NodeList:findByType</a>&nbsp;(type)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#NodeList:initialize">NodeList:initialize</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#NodeList:render">NodeList:render</a>&nbsp;(context)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Lexer:gen">Lexer:gen</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Lexer:tokenize">Lexer:tokenize</a>&nbsp;(template)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:delete_first_token">Parser:delete_first_token</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:initialize">Parser:initialize</a>&nbsp;(tokens)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:next_token">Parser:next_token</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:parse">Parser:parse</a>&nbsp;(parse_until)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:prepend_token">Parser:prepend_token</a>&nbsp;(token)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Parser:skip_past">Parser:skip_past</a>&nbsp;(end_tag)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#TextNode:initialize">TextNode:initialize</a>&nbsp;(str)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#TextNode:render">TextNode:render</a>&nbsp;(context)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Token:initialize">Token:initialize</a>&nbsp;(token_type, contents)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Token:split_contents">Token:split_contents</a>&nbsp;()</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#VariableNode:initialize">VariableNode:initialize</a>&nbsp;(filter_expression)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#VariableNode:render">VariableNode:render</a>&nbsp;(context)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#findByType">findByType</a>&nbsp;(nodelist, type)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#nodelist_iterator">nodelist_iterator</a>&nbsp;(nodelist, type)</td>
+	<td class="summary"> </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#register_tag">register_tag</a>&nbsp;(name, func)</td>
+	<td class="summary"> </td>
+	</tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+<dt><a name="Node:render"></a><strong>Node:render</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="NodeList:extend"></a><strong>NodeList:extend</strong>&nbsp;(node)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  node:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="NodeList:initialize"></a><strong>NodeList:initialize</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+<dt><a name="NodeList:findByType"></a><strong>NodeList:findByType</strong>&nbsp;(type)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  type: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="NodeList:render"></a><strong>NodeList:render</strong>&nbsp;(context)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  context:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+<dt><a name="Lexer:gen"></a><strong>Lexer:gen</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Lexer:tokenize"></a><strong>Lexer:tokenize</strong>&nbsp;(template)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  template:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+<dt><a name="Parser:delete_first_token"></a><strong>Parser:delete_first_token</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Parser:initialize"></a><strong>Parser:initialize</strong>&nbsp;(tokens)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  tokens:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Parser:next_token"></a><strong>Parser:next_token</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Parser:parse"></a><strong>Parser:parse</strong>&nbsp;(parse_until)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  parse_until:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Parser:prepend_token"></a><strong>Parser:prepend_token</strong>&nbsp;(token)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  token:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+<dt><a name="Parser:skip_past"></a><strong>Parser:skip_past</strong>&nbsp;(end_tag)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  end_tag:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+
+<dt><a name="TextNode:initialize"></a><strong>TextNode:initialize</strong>&nbsp;(str)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  str:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="TextNode:render"></a><strong>TextNode:render</strong>&nbsp;(context)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  context:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+
+<dt><a name="Token:initialize"></a><strong>Token:initialize</strong>&nbsp;(token_type, contents)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  token_type:
+	</li>
+
+	<li>
+	  contents:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Token:split_contents"></a><strong>Token:split_contents</strong>&nbsp;()</dt>
+<dd>
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="VariableNode:initialize"></a><strong>VariableNode:initialize</strong>&nbsp;(filter_expression)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  filter_expression:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="VariableNode:render"></a><strong>VariableNode:render</strong>&nbsp;(context)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+
+	<li>
+	  context:
+	</li>
+
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="findByType"></a><strong>findByType</strong>&nbsp;(nodelist, type)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  nodelist: 
+	</li>
+	
+	<li>
+	  type: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="nodelist_iterator"></a><strong>nodelist_iterator</strong>&nbsp;(nodelist, type)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  nodelist: 
+	</li>
+	
+	<li>
+	  type: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+<dt><a name="register_tag"></a><strong>register_tag</strong>&nbsp;(name, func)</dt>
+<dd>
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  name: 
+	</li>
+	
+	<li>
+	  func: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>

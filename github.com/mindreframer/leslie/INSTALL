@@ -1,0 +1,18 @@
+Make sure you have lpeg library installed.
+
+To install Leslie, copy entire leslie directory to Lua's package directory.
+
+/usr/share/lua/5.1 (Ubuntu)
+
+If you are not sure where package directory is located, check package.path
+variable in Lua.
+
+Another way to use Leslie is to modify package.path variable.
+
+dir = "/path/where/leslie/is/located" -- /home/user/lua
+pattern = dir .. "/?/init.lua;" .. dir .. "/?.lua;"
+package.path = pattern .. package.path
+
+If you have trouble installing Leslie, read the documentation about including
+lua files
+http://www.lua.org/pil/8.1.html
