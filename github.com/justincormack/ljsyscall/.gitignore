@@ -1,0 +1,10 @@
+# misc temp files
+tmp/*
+*~
+*.core
+ktrace.out
+
+# ctest files
+test/ctest.c
+test/ctest
+
