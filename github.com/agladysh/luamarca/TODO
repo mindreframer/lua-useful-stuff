@@ -1,0 +1,17 @@
+Luamarca TODO list:
+===================
+
+-- Make interpreter list configurable
+
+-- Redesign and rewrite test running framework to pure Lua.
+
+-- Update or remove benchmarks in notready/ folder
+
+-- Document the intent of each benchmark
+
+-- Separate benchmark unrelated item groups in the results (better split them to separate benchmarks).
+
+-- Add some analisys tools: plotting etc.
+
+-- Allow optional per-method NUM_ITERATIONS configuration
+   (allow NUM_ITERATIONS to be table?)

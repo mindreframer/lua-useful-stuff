@@ -1,0 +1,41 @@
+Luamarca: a set of silly Lua benchmarks
+=======================================
+
+The name is from Portuguese "marca de referência", "a benchmark".
+
+See the copyright information in the file named `COPYRIGHT`.
+
+This code is still in its embryonic phase.
+More appropriate description would be added later.
+
+WARNING: Current benchmark system code is weird. You've been warned.
+         Patches are welcome. ;-)
+
+$ ./run_benchmark.sh bench/arguments.lua 2e6
+
+NOTE: Always run smoke check before submitting new benchmarks:
+
+$ etc/smoke.sh bench/*.lua
+
+Benchmark file standard:
+------------------------
+
+-- Return all methods from the file's main chunk
+-- Return recommended number of iterations as NUM_ITERATIONS key
+   (ignored in current implementation)
+
+Example:
+
+    local bench = { }
+
+    bench.NUM_ITERATIONS = 1e6
+
+    bench.methodA = function()
+      -- Do something
+    end
+
+    bench.methodB = function()
+      -- Do something in another way
+    end
+
+    return bench
