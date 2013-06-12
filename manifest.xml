@@ -1,0 +1,23 @@
+<package>
+  <description brief="A Lua client library for ROS">
+    This package is a Lua client library for ROS. It allows connecting to a
+    rosmaster instance and to develop ROS packages in Lua.
+  </description>
+  <author>Tim Niemueller</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/roslua</url>
+  <export>
+    <doxymaker external="http://timn.github.com/roslua/" />
+  </export>
+  <depend package="roslang"/>
+  <depend package="roslib"/>
+  <rosdep name="lua" />
+  <rosdep name="lua-devel" />
+  <rosdep name="lua-md5" />
+  <rosdep name="lua-posix" />
+  <rosdep name="lua-socket" />
+  <rosdep name="lua-wsapi" />
+  <rosdep name="lua-xmlrpc" />
+  <rosdep name="xavante" />
+</package>
