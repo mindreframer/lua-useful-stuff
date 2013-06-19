@@ -87,11 +87,11 @@ Projects added here:
 
     hnakamur/luajit-examples:
       my example codes for LuaJIT
-       24 commits, 5 stars, 0 forks
+       24 commits, 7 stars, 0 forks
 
     justincormack/ljsyscall:
       LuaJIT Linux syscall FFI
-       1000+ commits, 84 stars, 15 forks
+       1000+ commits, 85 stars, 15 forks
 
     kikito/i18n.lua:
       A very complete i18n lib for Lua
@@ -99,7 +99,7 @@ Projects added here:
 
     kikito/inspect.lua:
       Human-readable representation of Lua tables
-       48 commits, 46 stars, 9 forks
+       48 commits, 47 stars, 10 forks
 
     kikito/lua_missions:
       Lua Koans, minus the Zen stuff
@@ -107,11 +107,11 @@ Projects added here:
 
     kikito/middleclass:
       Object-orientation for Lua
-       119 commits, 203 stars, 25 forks
+       119 commits, 205 stars, 25 forks
 
     kikito/stateful.lua:
       Stateful classes for Lua
-       30 commits, 24 stars, 5 forks
+       30 commits, 25 stars, 5 forks
 
     keplerproject/copas:
       Copas is a dispatcher based on coroutines that can be used by TCP/IP servers.
@@ -131,15 +131,15 @@ Projects added here:
 
     keplerproject/orbit:
       Orbit is an MVC web framework for Lua.
-       178 commits, 51 stars, 12 forks
+       178 commits, 51 stars, 13 forks
 
     keplerproject/xavante:
       Xavante is a Lua HTTP 1.1 Web server that uses a modular architecture based on URI mapped handlers.
-       361 commits, 52 stars, 16 forks
+       361 commits, 53 stars, 18 forks
 
     leafo/lapis:
       a web framework written in MoonScript
-       278 commits, 156 stars, 13 forks
+       286 commits, 156 stars, 13 forks
 
     lipp/jet:
       Distributed applications with JSON-RPC
@@ -209,7 +209,7 @@ Projects added here:
 
     mindreframer/ProFi.lua:
       a non-official git mirror for ProFi, a Lua profiler
-       14 commits, 1 stars, 0 forks
+       14 commits, 2 stars, 0 forks
 
     neomantra/lds:
       LuaJIT Data Structures - hold cdata in lists, trees, hash tables, and more
@@ -269,7 +269,7 @@ Projects added here:
 
     silentbicycle/tamale:
       TAble MAtching Lua Extension - An Erlang-style pattern-matching library for Lua
-       46 commits, 29 stars, 0 forks
+       46 commits, 30 stars, 0 forks
 
     slembcke/debugger.lua:
       A simple, embedabble CLI debugger for Lua.
@@ -277,7 +277,7 @@ Projects added here:
 
     SnabbCo/snabbswitch:
       The Snabb Switch Project
-       285 commits, 80 stars, 11 forks
+       285 commits, 81 stars, 11 forks
 
     sroccaserra/object-lua:
       A class-oriented OOP module for Lua
@@ -305,7 +305,7 @@ Projects added here:
 
     stevedonovan/Penlight:
       A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management.  Much of the functionality is inspired by the Python standard libraries.
-       338 commits, 138 stars, 28 forks
+       340 commits, 138 stars, 29 forks
 
     stevedonovan/Orbiter:
       A personal Lua Web Application Server
@@ -341,7 +341,7 @@ Projects added here:
 
     xopxe/Toribio:
       Embedded Robotics Platform.
-       111 commits, 3 stars, 0 forks
+       112 commits, 3 stars, 0 forks
 
     Yonaba/30log:
       30 lines library for object orientation in Lua
@@ -361,5 +361,5 @@ Projects added here:
 
     zdevito/terra:
       A low-level counterpart to Lua
-       478 commits, 386 stars, 24 forks
+       480 commits, 387 stars, 25 forks
 <!-- PROJECTS_LIST_END -->
