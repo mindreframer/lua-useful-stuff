@@ -3,6 +3,7 @@
 Lua is an obscure little language, but it has some really unique features and is gaining
 popularity in the last time. It is intergrated into:
 
+  - http://tylerneylon.com/a/learn-lua/
   - https://sites.google.com/site/marbux/home/where-lua-is-used
   - Redis (http://redis.io/commands/eval)
   - Nginx (https://github.com/chaoslawful/lua-nginx-module)
