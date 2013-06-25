@@ -100,15 +100,15 @@ Projects added here:
 
     kikito/inspect.lua:
       Human-readable representation of Lua tables
-       48 commits, 47 stars, 10 forks
+       48 commits, 48 stars, 10 forks
 
     kikito/lua_missions:
       Lua Koans, minus the Zen stuff
-       67 commits, 80 stars, 33 forks
+       67 commits, 92 stars, 34 forks
 
     kikito/middleclass:
       Object-orientation for Lua
-       119 commits, 205 stars, 25 forks
+       119 commits, 207 stars, 25 forks
 
     kikito/stateful.lua:
       Stateful classes for Lua
@@ -128,7 +128,7 @@ Projects added here:
 
     keplerproject/luarocks:
       LuaRocks is  a deployment and management system for Lua modules.
-       524 commits, 127 stars, 35 forks
+       529 commits, 130 stars, 38 forks
 
     keplerproject/orbit:
       Orbit is an MVC web framework for Lua.
@@ -136,11 +136,11 @@ Projects added here:
 
     keplerproject/xavante:
       Xavante is a Lua HTTP 1.1 Web server that uses a modular architecture based on URI mapped handlers.
-       361 commits, 53 stars, 18 forks
+       361 commits, 55 stars, 18 forks
 
     leafo/lapis:
       a web framework written in MoonScript
-       286 commits, 156 stars, 13 forks
+       286 commits, 158 stars, 13 forks
 
     lipp/jet:
       Distributed applications with JSON-RPC
@@ -148,7 +148,7 @@ Projects added here:
 
     lipp/lua-websockets:
       Websockets for Lua.
-       313 commits, 33 stars, 3 forks
+       313 commits, 38 stars, 6 forks
 
     lipp/zbus:
       A simple TCP/IP based message bus in Lua.
@@ -168,7 +168,7 @@ Projects added here:
 
     lua-nucleo/lua-nucleo:
       A random collection of core and utility level Lua libraries
-       747 commits, 34 stars, 11 forks
+       747 commits, 35 stars, 11 forks
 
     LuaDist/srlua:
       A tool for building self-running Lua programs.
@@ -198,7 +198,7 @@ Projects added here:
 
     meric/l2l:
       A lisp that compiles to and runs as fast as lua. Equipped with macroes and compile-time compiler manipulation. Comes with all built-in lua functions.
-       50 commits, 48 stars, 5 forks
+       50 commits, 47 stars, 5 forks
 
     mindreframer/leslie:
       a non-official git mirror for leslie - a Lua implementation for Django template language
@@ -262,7 +262,7 @@ Projects added here:
 
     seomoz/qless-core:
       Core Lua Scripts for qless
-       120 commits, 32 stars, 4 forks
+       120 commits, 33 stars, 4 forks
 
     silentbicycle/lunatest:
       xUnit-style + randomized unit testing framework for Lua (and C projects using Lua, etc.)
@@ -278,7 +278,7 @@ Projects added here:
 
     SnabbCo/snabbswitch:
       The Snabb Switch Project
-       285 commits, 81 stars, 11 forks
+       303 commits, 86 stars, 11 forks
 
     sroccaserra/object-lua:
       A class-oriented OOP module for Lua
@@ -290,7 +290,7 @@ Projects added here:
 
     stevedonovan/Microlight:
       A little library of useful Lua functions, intended as the 'light' version of Penlight
-       32 commits, 37 stars, 9 forks
+       32 commits, 38 stars, 9 forks
 
     stevedonovan/ldeb:
       ldeb converts Lua scripts into Debian packages
@@ -306,7 +306,7 @@ Projects added here:
 
     stevedonovan/Penlight:
       A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management.  Much of the functionality is inspired by the Python standard libraries.
-       340 commits, 138 stars, 29 forks
+       348 commits, 142 stars, 29 forks
 
     stevedonovan/Orbiter:
       A personal Lua Web Application Server
@@ -326,7 +326,7 @@ Projects added here:
 
     Wiladams/TINN:
       TINN Is Not Node
-       59 commits, 8 stars, 0 forks
+       60 commits, 8 stars, 0 forks
 
     Wiladams/TINNSnips:
       Snippets of code that work with the TINN tool
@@ -362,5 +362,5 @@ Projects added here:
 
     zdevito/terra:
       A low-level counterpart to Lua
-       480 commits, 387 stars, 25 forks
+       488 commits, 389 stars, 27 forks
 <!-- PROJECTS_LIST_END -->
