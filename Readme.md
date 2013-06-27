@@ -94,26 +94,6 @@ Projects added here:
       LuaJIT Linux syscall FFI
        1000+ commits, 85 stars, 15 forks
 
-    kikito/i18n.lua:
-      A very complete i18n lib for Lua
-       43 commits, 6 stars, 1 forks
-
-    kikito/inspect.lua:
-      Human-readable representation of Lua tables
-       48 commits, 48 stars, 10 forks
-
-    kikito/lua_missions:
-      Lua Koans, minus the Zen stuff
-       67 commits, 92 stars, 34 forks
-
-    kikito/middleclass:
-      Object-orientation for Lua
-       119 commits, 207 stars, 25 forks
-
-    kikito/stateful.lua:
-      Stateful classes for Lua
-       30 commits, 25 stars, 5 forks
-
     keplerproject/copas:
       Copas is a dispatcher based on coroutines that can be used by TCP/IP servers.
        122 commits, 29 stars, 6 forks
@@ -137,6 +117,26 @@ Projects added here:
     keplerproject/xavante:
       Xavante is a Lua HTTP 1.1 Web server that uses a modular architecture based on URI mapped handlers.
        361 commits, 55 stars, 18 forks
+
+    kikito/i18n.lua:
+      A very complete i18n lib for Lua
+       43 commits, 6 stars, 1 forks
+
+    kikito/inspect.lua:
+      Human-readable representation of Lua tables
+       48 commits, 48 stars, 10 forks
+
+    kikito/lua_missions:
+      Lua Koans, minus the Zen stuff
+       67 commits, 92 stars, 34 forks
+
+    kikito/middleclass:
+      Object-orientation for Lua
+       119 commits, 207 stars, 25 forks
+
+    kikito/stateful.lua:
+      Stateful classes for Lua
+       30 commits, 25 stars, 5 forks
 
     leafo/lapis:
       a web framework written in MoonScript
@@ -204,13 +204,13 @@ Projects added here:
       a non-official git mirror for leslie - a Lua implementation for Django template language
        35 commits, 0 stars, 0 forks
 
-    mindreframer/scilua:
-      a non-official git mirror for http://www.scilua.org/
-       8 commits, 0 stars, 0 forks
-
     mindreframer/ProFi.lua:
       a non-official git mirror for ProFi, a Lua profiler
        14 commits, 2 stars, 0 forks
+
+    mindreframer/scilua:
+      a non-official git mirror for http://www.scilua.org/
+       8 commits, 0 stars, 0 forks
 
     neomantra/lds:
       LuaJIT Data Structures - hold cdata in lists, trees, hash tables, and more
@@ -232,9 +232,13 @@ Projects added here:
       A highly customizable test library for Lua that allows declarative tests with nested contexts.
        79 commits, 72 stars, 19 forks
 
-    pkulchenko/serpent:
-      Lua serializer and pretty printer
-       46 commits, 31 stars, 8 forks
+    Olivine-Labs/luassert:
+      Assertion library for Lua
+       155 commits, 11 stars, 12 forks
+
+    Olivine-Labs/lustache:
+      Mustache templates for Lua
+       48 commits, 25 stars, 5 forks
 
     pavouk/lgi:
       Dynamic Lua binding to GObject libraries using GObject-Introspection
@@ -244,13 +248,9 @@ Projects added here:
       A lua library that helps you create component based projects inspired by Artemis.
        24 commits, 16 stars, 4 forks
 
-    Olivine-Labs/luassert:
-      Assertion library for Lua
-       155 commits, 11 stars, 12 forks
-
-    Olivine-Labs/lustache:
-      Mustache templates for Lua
-       48 commits, 25 stars, 5 forks
+    pkulchenko/serpent:
+      Lua serializer and pretty printer
+       46 commits, 31 stars, 8 forks
 
     rgieseke/locco:
       Locco is Docco in Lua.
@@ -288,10 +288,6 @@ Projects added here:
       Working through Project Euler with Lua for some practice
        16 commits, 1 stars, 0 forks
 
-    stevedonovan/Microlight:
-      A little library of useful Lua functions, intended as the 'light' version of Penlight
-       32 commits, 38 stars, 9 forks
-
     stevedonovan/ldeb:
       ldeb converts Lua scripts into Debian packages
        3 commits, 2 stars, 1 forks
@@ -304,13 +300,17 @@ Projects added here:
       An extended Lua macro preprocessor
        65 commits, 31 stars, 5 forks
 
-    stevedonovan/Penlight:
-      A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management.  Much of the functionality is inspired by the Python standard libraries.
-       348 commits, 142 stars, 29 forks
+    stevedonovan/Microlight:
+      A little library of useful Lua functions, intended as the 'light' version of Penlight
+       32 commits, 38 stars, 9 forks
 
     stevedonovan/Orbiter:
       A personal Lua Web Application Server
        68 commits, 16 stars, 5 forks
+
+    stevedonovan/Penlight:
+      A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management.  Much of the functionality is inspired by the Python standard libraries.
+       348 commits, 142 stars, 29 forks
 
     timn/roslua:
       ROS Client Library for Lua
@@ -324,6 +324,10 @@ Projects added here:
 
        36 commits, 9 stars, 6 forks
 
+    Wiladams/LAPHLibs:
+      Lua Application Programming Helper Libraries
+       57 commits, 22 stars, 2 forks
+
     Wiladams/TINN:
       TINN Is Not Node
        60 commits, 8 stars, 0 forks
@@ -331,10 +335,6 @@ Projects added here:
     Wiladams/TINNSnips:
       Snippets of code that work with the TINN tool
        40 commits, 3 stars, 0 forks
-
-    Wiladams/LAPHLibs:
-      Lua Application Programming Helper Libraries
-       57 commits, 22 stars, 2 forks
 
     winton/nginx-accelerator:
       Drop-in page caching using nginx, lua, and memcached
