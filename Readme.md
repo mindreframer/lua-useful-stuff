@@ -63,20 +63,20 @@ Projects added here:
        45 commits, 25 stars, 7 forks
 
     craigbarnes/ldiscount:
-      Lua binding to Discount
+      Lua bindings for the Discount Markdown library
        14 commits, 4 stars, 1 forks
 
     EmergingThreats/et-luajit-scripts:
 
-       27 commits, 1 stars, 0 forks
+       28 commits, 1 stars, 0 forks
 
     Fizzadar/Luawa:
       Lua Web Application (Framework)
-       68 commits, 1 stars, 0 forks
+       68 commits, 2 stars, 1 forks
 
     Fizzadar/yummymarks:
 
-       1 commit, 1 stars, 0 forks
+       1 commits, 2 stars, 1 forks
 
     geoffleyland/luatrace:
       A tool for tracing Lua script execution and analysing time profiles and coverage
@@ -92,7 +92,7 @@ Projects added here:
 
     justincormack/ljsyscall:
       LuaJIT Linux syscall FFI
-       1000+ commits, 85 stars, 15 forks
+       1000+ commits, 86 stars, 15 forks
 
     keplerproject/copas:
       Copas is a dispatcher based on coroutines that can be used by TCP/IP servers.
@@ -107,12 +107,12 @@ Projects added here:
        131 commits, 45 stars, 10 forks
 
     keplerproject/luarocks:
-      LuaRocks is  a deployment and management system for Lua modules.
-       529 commits, 130 stars, 38 forks
+      LuaRocks is a deployment and management system for Lua modules.
+       530 commits, 132 stars, 39 forks
 
     keplerproject/orbit:
       Orbit is an MVC web framework for Lua.
-       178 commits, 51 stars, 13 forks
+       178 commits, 51 stars, 14 forks
 
     keplerproject/xavante:
       Xavante is a Lua HTTP 1.1 Web server that uses a modular architecture based on URI mapped handlers.
@@ -124,23 +124,23 @@ Projects added here:
 
     kikito/inspect.lua:
       Human-readable representation of Lua tables
-       48 commits, 48 stars, 10 forks
+       48 commits, 49 stars, 11 forks
 
     kikito/lua_missions:
       Lua Koans, minus the Zen stuff
-       67 commits, 92 stars, 34 forks
+       67 commits, 95 stars, 35 forks
 
     kikito/middleclass:
       Object-orientation for Lua
-       119 commits, 207 stars, 25 forks
+       119 commits, 212 stars, 25 forks
 
     kikito/stateful.lua:
       Stateful classes for Lua
-       30 commits, 25 stars, 5 forks
+       30 commits, 25 stars, 6 forks
 
     leafo/lapis:
       a web framework written in MoonScript
-       286 commits, 158 stars, 13 forks
+       286 commits, 161 stars, 14 forks
 
     lipp/jet:
       Distributed applications with JSON-RPC
@@ -148,7 +148,7 @@ Projects added here:
 
     lipp/lua-websockets:
       Websockets for Lua.
-       313 commits, 38 stars, 6 forks
+       316 commits, 38 stars, 7 forks
 
     lipp/zbus:
       A simple TCP/IP based message bus in Lua.
@@ -164,28 +164,19 @@ Projects added here:
 
     lua-cookbook/lua-cookbook:
       The Lua Cookbook
-       31 commits, 54 stars, 14 forks
+       31 commits, 56 stars, 14 forks
 
     lua-nucleo/lua-nucleo:
       A random collection of core and utility level Lua libraries
-       747 commits, 35 stars, 11 forks
+       750 commits, 36 stars, 12 forks
 
     LuaDist/srlua:
       A tool for building self-running Lua programs.
        17 commits, 6 stars, 3 forks
 
     luaforge/simulua:
-      Simulua is a discrete-event simulation library for Lua. The simulation in Simulua is process-oriented, that is, the operation path of a simulated system is obtained from interactions of processes running in parallel and managed by an event list.
-
-    This repository was converted from a CVS repository on luaforge.net on Jan. 20, 2010.
-    If you are the maintainer, please fork and then email luaforge@gmail.com and ask us to reroot it to you.
-    (Or you can ask us to delete the repository.)
-
-
-
-        This repository was converted from a CVS repository on luaforge.net on Jan. 20, 2010.
-    If you are the maintainer, please fork and then email luaforge@gmail.com and ask us to reroot it to you.
-    (Or you can ask us to delete the repository.)
+      Simulua is a discrete-event simulation library for Lua. The simulation in Simulua is process-oriented, that is, the operation path of a simulated system is obtained from interactions of processes running in parallel and managed by an event list. This repository was converted from a CVS repository on luaforge.net on Jan. 20, 2010.
+    If you are the …
        4 commits, 1 stars, 0 forks
 
     martin-damien/babel:
@@ -198,7 +189,7 @@ Projects added here:
 
     meric/l2l:
       A lisp that compiles to and runs as fast as lua. Equipped with macroes and compile-time compiler manipulation. Comes with all built-in lua functions.
-       50 commits, 47 stars, 5 forks
+       50 commits, 46 stars, 5 forks
 
     mindreframer/leslie:
       a non-official git mirror for leslie - a Lua implementation for Django template language
@@ -242,7 +233,7 @@ Projects added here:
 
     pavouk/lgi:
       Dynamic Lua binding to GObject libraries using GObject-Introspection
-       1000+ commits, 61 stars, 15 forks
+       1000+ commits, 62 stars, 15 forks
 
     perky/FEZ:
       A lua library that helps you create component based projects inspired by Artemis.
@@ -258,11 +249,11 @@ Projects added here:
 
     rrthomas/lua-stdlib:
       General Lua libraries
-       706 commits, 50 stars, 4 forks
+       716 commits, 50 stars, 4 forks
 
     seomoz/qless-core:
       Core Lua Scripts for qless
-       120 commits, 33 stars, 4 forks
+       120 commits, 33 stars, 5 forks
 
     silentbicycle/lunatest:
       xUnit-style + randomized unit testing framework for Lua (and C projects using Lua, etc.)
@@ -278,11 +269,11 @@ Projects added here:
 
     SnabbCo/snabbswitch:
       The Snabb Switch Project
-       303 commits, 86 stars, 11 forks
+       303 commits, 87 stars, 11 forks
 
     sroccaserra/object-lua:
       A class-oriented OOP module for Lua
-       35 commits, 26 stars, 1 forks
+       35 commits, 27 stars, 1 forks
 
     statianzo/lua_euler:
       Working through Project Euler with Lua for some practice
@@ -302,19 +293,19 @@ Projects added here:
 
     stevedonovan/Microlight:
       A little library of useful Lua functions, intended as the 'light' version of Penlight
-       32 commits, 38 stars, 9 forks
+       32 commits, 37 stars, 9 forks
 
     stevedonovan/Orbiter:
       A personal Lua Web Application Server
        68 commits, 16 stars, 5 forks
 
     stevedonovan/Penlight:
-      A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management.  Much of the functionality is inspired by the Python standard libraries.
-       348 commits, 142 stars, 29 forks
+      A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management. Much of the functionality is inspired by the Python standard libraries.
+       351 commits, 145 stars, 30 forks
 
     timn/roslua:
       ROS Client Library for Lua
-       245 commits, 11 stars, 2 forks
+       245 commits, 10 stars, 2 forks
 
     trevrosen/lua-presentation:
       A presentation on Lua originally created for Austin.rb
@@ -330,7 +321,7 @@ Projects added here:
 
     Wiladams/TINN:
       TINN Is Not Node
-       60 commits, 8 stars, 0 forks
+       65 commits, 8 stars, 0 forks
 
     Wiladams/TINNSnips:
       Snippets of code that work with the TINN tool
@@ -353,14 +344,14 @@ Projects added here:
        36 commits, 12 stars, 6 forks
 
     Yonaba/Lua-Class-System:
-      Lua Class System (LCS) is a small library which offers a clean, minimalistic but powerful  API for (Pseudo) Object Oriented programming style using Lua.
+      Lua Class System (LCS) is a small library which offers a clean, minimalistic but powerful API for (Pseudo) Object Oriented programming style using Lua.
        19 commits, 12 stars, 3 forks
 
     Yonaba/Moses:
-      Utility library for functional programming  in Lua
+      Utility library for functional programming in Lua
        132 commits, 25 stars, 8 forks
 
     zdevito/terra:
       A low-level counterpart to Lua
-       488 commits, 389 stars, 27 forks
+       491 commits, 393 stars, 27 forks
 <!-- PROJECTS_LIST_END -->
