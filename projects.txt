@@ -48,6 +48,7 @@ https://github.com/perky/FEZ.git
 https://github.com/pkulchenko/serpent.git
 https://github.com/rgieseke/locco.git
 https://github.com/rrthomas/lua-stdlib.git
+https://github.com/rtsisyk/luafun.git
 https://github.com/seomoz/qless-core.git
 https://github.com/silentbicycle/lunatest.git
 https://github.com/silentbicycle/tamale.git
@@ -74,4 +75,3 @@ https://github.com/Yonaba/Allen.git
 https://github.com/Yonaba/Lua-Class-System.git
 https://github.com/Yonaba/Moses.git
 https://github.com/zdevito/terra.git
-https://github.com/rtsisyk/luafun.git
