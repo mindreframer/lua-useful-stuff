@@ -253,6 +253,10 @@ Projects added here:
       General Lua libraries
        716 commits, last change: 2013-06-02 07:07:58, 50 stars, 4 forks
 
+    rtsisyk/luafun:
+      A high-performance functional programming library designed for LuaJIT tracing just-in-time compiler
+       4 commits, last change: 2013-11-20 12:00:35, 109 stars, 2 forks
+
     seomoz/qless-core:
       Core Lua Scripts for qless
        153 commits, last change: 2013-07-09 11:41:51, 33 stars, 5 forks
