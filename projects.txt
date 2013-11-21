@@ -74,3 +74,4 @@ https://github.com/Yonaba/Allen.git
 https://github.com/Yonaba/Lua-Class-System.git
 https://github.com/Yonaba/Moses.git
 https://github.com/zdevito/terra.git
+https://github.com/rtsisyk/luafun.git
