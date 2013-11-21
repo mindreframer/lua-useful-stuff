@@ -54,7 +54,7 @@ Projects added here:
 
     agladysh/luamarca:
       Collection of silly Lua benchmarks
-       22 commits, last change: 2012-12-23 11:16:43, 3 stars, 0 forks
+       74 commits, last change: 2013-11-14 11:05:43, 3 stars, 1 forks
 
     badgerman/euler:
       Project Euler solutions, mostly in Lua
@@ -62,19 +62,19 @@ Projects added here:
 
     catwell/luajit-msgpack-pure:
       MessagePack for LuaJIT (using FFI, no bindings)
-       45 commits, last change: 2013-01-19 05:21:32, 25 stars, 7 forks
+       46 commits, last change: , 29 stars, 8 forks
 
     craigbarnes/ldiscount:
       Lua bindings for the Discount Markdown library
-       14 commits, last change: , 4 stars, 1 forks
+       31 commits, last change: , 5 stars, 1 forks
 
     EmergingThreats/et-luajit-scripts:
 
-       32 commits, last change: 2013-07-05 14:30:08, 1 stars, 0 forks
+       53 commits, last change: 2013-11-15 10:59:58, 4 stars, 0 forks
 
     Fizzadar/Luawa:
       Lua Web Application (Framework)
-       71 commits, last change: 2013-02-24 04:31:45, 2 stars, 1 forks
+       88 commits, last change: 2013-11-16 15:41:12, 4 stars, 2 forks
 
     Fizzadar/yummymarks:
 
@@ -82,99 +82,99 @@ Projects added here:
 
     geoffleyland/luatrace:
       A tool for tracing Lua script execution and analysing time profiles and coverage
-       138 commits, last change: , 44 stars, 6 forks
+       138 commits, last change: 2013-04-03 22:00:56, 53 stars, 8 forks
 
     GloryFish/love2d-verlet-cloth:
       Verlet cloth simulation in Lua, for LÖVE
-       4 commits, last change: , 1 stars, 0 forks
+       4 commits, last change: , 2 stars, 0 forks
 
     hnakamur/luajit-examples:
       my example codes for LuaJIT
-       24 commits, last change: 2013-03-12 09:21:33, 9 stars, 0 forks
+       24 commits, last change: 2013-03-12 09:21:33, 10 stars, 0 forks
 
     justincormack/ljsyscall:
       LuaJIT Linux syscall FFI
-       1000+ commits, last change: 2013-07-10 05:37:17, 86 stars, 15 forks
+       3,681 commits, last change: 2013-11-16 03:17:18, 106 stars, 17 forks
 
     keplerproject/copas:
       Copas is a dispatcher based on coroutines that can be used by TCP/IP servers.
-       122 commits, last change: 2013-01-24 12:20:27, 29 stars, 7 forks
+       139 commits, last change: 2013-11-18 15:18:21, 33 stars, 8 forks
 
     keplerproject/coxpcall:
       Coxpcall encapsulates the protected calls with a coroutine based loop, so errors can be dealed without the usual pcall/xpcall issues with coroutines.
-       42 commits, last change: 2013-06-10 09:00:44, 7 stars, 3 forks
+       49 commits, last change: 2013-11-18 07:06:12, 8 stars, 2 forks
 
     keplerproject/luadoc:
       LuaDoc is a documentation tool for Lua source code.
-       131 commits, last change: 2011-10-01 11:54:12, 44 stars, 11 forks
+       131 commits, last change: 2011-09-29 01:13:53, 45 stars, 12 forks
 
     keplerproject/luarocks:
       LuaRocks is a deployment and management system for Lua modules.
-       542 commits, last change: 2013-07-04 11:20:24, 133 stars, 41 forks
+       688 commits, last change: 2013-11-18 00:43:12, 165 stars, 48 forks
 
     keplerproject/orbit:
       Orbit is an MVC web framework for Lua.
-       178 commits, last change: 2013-06-06 07:35:22, 51 stars, 14 forks
+       187 commits, last change: 2013-10-28 11:06:26, 57 stars, 16 forks
 
     keplerproject/xavante:
       Xavante is a Lua HTTP 1.1 Web server that uses a modular architecture based on URI mapped handlers.
-       361 commits, last change: 2013-01-29 09:11:23, 55 stars, 18 forks
+       365 commits, last change: 2013-11-17 09:38:33, 63 stars, 20 forks
 
     kikito/i18n.lua:
       A very complete i18n lib for Lua
-       43 commits, last change: 2013-01-01 16:02:08, 7 stars, 1 forks
+       43 commits, last change: , 8 stars, 1 forks
 
     kikito/inspect.lua:
       Human-readable representation of Lua tables
-       48 commits, last change: 2013-01-20 15:51:44, 49 stars, 11 forks
+       66 commits, last change: 2013-09-15 13:22:34, 72 stars, 17 forks
 
     kikito/lua_missions:
       Lua Koans, minus the Zen stuff
-       67 commits, last change: 2013-04-08 08:26:51, 95 stars, 35 forks
+       67 commits, last change: 2013-04-08 08:26:51, 118 stars, 44 forks
 
     kikito/middleclass:
       Object-orientation for Lua
-       119 commits, last change: 2013-01-01 16:57:39, 215 stars, 25 forks
+       140 commits, last change: 2013-10-10 10:12:15, 259 stars, 28 forks
 
     kikito/stateful.lua:
       Stateful classes for Lua
-       30 commits, last change: 2013-03-01 15:41:32, 25 stars, 6 forks
+       30 commits, last change: 2013-03-01 15:41:32, 28 stars, 5 forks
 
     leafo/lapis:
       a web framework written in MoonScript
-       293 commits, last change: 2013-07-03 18:38:58, 165 stars, 16 forks
+       481 commits, last change: 2013-11-20 09:48:56, 278 stars, 31 forks
 
     lipp/jet:
       The JSON Bus.
-       3 commits, last change: 2013-07-10 00:28:50, 0 stars, 0 forks
+       3 commits, last change: , 1 stars, 0 forks
 
     lipp/lua-websockets:
       Websockets for Lua.
-       322 commits, last change: 2013-07-03 07:51:09, 39 stars, 7 forks
+       327 commits, last change: 2013-10-25 08:38:49, 55 stars, 6 forks
 
     lipp/zbus:
       A simple TCP/IP based message bus in Lua.
-       105 commits, last change: 2012-09-07 06:14:19, 6 stars, 0 forks
+       105 commits, last change: , 6 stars, 1 forks
 
     logiceditor-com/codebase:
       Open-Source Lua codebase we use in our projects
-       1000+ commits, last change: 2012-04-11 10:34:03, 4 stars, 2 forks
+       1,339 commits, last change: , 4 stars, 2 forks
 
     lua-aplicado/lua-aplicado:
       A random collection of application-level Lua libraries
-       204 commits, last change: 2013-02-16 03:42:29, 7 stars, 4 forks
+       247 commits, last change: 2013-10-28 10:01:46, 8 stars, 5 forks
 
     lua-cookbook/lua-cookbook:
       The Lua Cookbook
-       31 commits, last change: 2013-03-21 04:14:50, 56 stars, 14 forks
+       31 commits, last change: 2013-03-21 04:14:50, 59 stars, 15 forks
 
     lua-nucleo/lua-nucleo:
       A random collection of core and utility level Lua libraries
-       750 commits, last change: 2013-06-29 23:39:56, 36 stars, 12 forks
+       815 commits, last change: 2013-11-08 12:54:59, 40 stars, 12 forks
 
     LuaDist/srlua:
       A tool for building self-running Lua programs.
-       17 commits, last change: 2013-05-07 06:29:35, 6 stars, 3 forks
+       17 commits, last change: 2013-05-07 06:29:35, 13 stars, 3 forks
 
     luaforge/simulua:
       Simulua is a discrete-event simulation library for Lua. The simulation in Simulua is process-oriented, that is, the operation path of a simulated system is obtained from interactions of processes running in parallel and managed by an event list. This repository was converted from a CVS repository on luaforge.net on Jan. 20, 2010.
@@ -183,39 +183,39 @@ Projects added here:
 
     martin-damien/babel:
       Babel is a module to enable internationalisation in Lua applications. It is designed to work with LÖVE 2D too.
-       24 commits, last change: 2013-05-10 11:10:33, 3 stars, 3 forks
+       26 commits, last change: , 5 stars, 3 forks
 
     mascarenhas/luma:
       LPEG-based Lua macros
-       56 commits, last change: 2011-04-19 14:25:17, 8 stars, 0 forks
+       56 commits, last change: , 8 stars, 0 forks
 
     meric/l2l:
       A lisp that compiles to and runs as fast as lua. Equipped with macroes and compile-time compiler manipulation. Comes with all built-in lua functions.
-       50 commits, last change: 2013-03-10 04:49:22, 46 stars, 5 forks
+       50 commits, last change: 2013-03-10 04:49:22, 52 stars, 6 forks
 
     mindreframer/leslie:
       a non-official git mirror for leslie - a Lua implementation for Django template language
-       35 commits, last change: 2009-09-01 06:19:35, 0 stars, 0 forks
+       35 commits, last change: 2009-09-01 06:19:35, 0 stars, 1 forks
 
     mindreframer/ProFi.lua:
       a non-official git mirror for ProFi, a Lua profiler
-       14 commits, last change: , 2 stars, 0 forks
+       14 commits, last change: , 7 stars, 0 forks
 
     mindreframer/scilua:
       a non-official git mirror for http://www.scilua.org/
-       8 commits, last change: , 0 stars, 0 forks
+       8 commits, last change: 2013-04-04 07:25:53, 1 stars, 0 forks
 
     neomantra/lds:
       LuaJIT Data Structures - hold cdata in lists, trees, hash tables, and more
-       9 commits, last change: 2012-10-15 11:28:38, 12 stars, 1 forks
+       9 commits, last change: 2012-10-15 11:28:38, 16 stars, 2 forks
 
     neomantra/luajit-nanomsg:
       LuaJIT FFI binding to the nanomsg library
-       20 commits, last change: , 4 stars, 1 forks
+       26 commits, last change: 2013-11-11 10:56:03, 12 stars, 1 forks
 
     Neopallium/lua-handlers:
       Provides a set of async. callback based handlers for working with raw TCP/UDP socket, ZeroMQ sockets, or HTTP client/server.
-       127 commits, last change: 2013-05-27 04:35:59, 62 stars, 5 forks
+       127 commits, last change: 2013-05-27 04:35:59, 65 stars, 6 forks
 
     norman/lua-postgres:
       A basic Postgres driver for Lua
@@ -223,35 +223,35 @@ Projects added here:
 
     norman/telescope:
       A highly customizable test library for Lua that allows declarative tests with nested contexts.
-       79 commits, last change: 2013-02-21 05:17:01, 73 stars, 19 forks
+       88 commits, last change: 2013-10-05 08:30:04, 80 stars, 19 forks
 
     Olivine-Labs/luassert:
       Assertion library for Lua
-       155 commits, last change: 2013-05-23 17:13:53, 11 stars, 12 forks
+       157 commits, last change: 2013-08-26 01:32:46, 14 stars, 14 forks
 
     Olivine-Labs/lustache:
       Mustache templates for Lua
-       48 commits, last change: 2013-04-18 10:54:56, 25 stars, 5 forks
+       53 commits, last change: 2013-10-28 14:12:51, 38 stars, 9 forks
 
     pavouk/lgi:
       Dynamic Lua binding to GObject libraries using GObject-Introspection
-       1000+ commits, last change: 2013-06-27 14:03:55, 63 stars, 15 forks
+       1,121 commits, last change: 2013-11-17 11:11:15, 80 stars, 18 forks
 
     perky/FEZ:
       A lua library that helps you create component based projects inspired by Artemis.
-       24 commits, last change: 2012-08-12 05:51:16, 17 stars, 4 forks
+       24 commits, last change: 2012-08-12 05:51:16, 22 stars, 5 forks
 
     pkulchenko/serpent:
       Lua serializer and pretty printer
-       46 commits, last change: 2013-06-12 11:06:02, 31 stars, 8 forks
+       53 commits, last change: 2013-11-05 11:52:05, 41 stars, 9 forks
 
     rgieseke/locco:
       Locco is Docco in Lua.
-       10 commits, last change: 2013-01-19 08:48:37, 24 stars, 4 forks
+       10 commits, last change: 2013-01-19 08:48:37, 25 stars, 4 forks
 
     rrthomas/lua-stdlib:
       General Lua libraries
-       716 commits, last change: 2013-06-02 07:07:58, 50 stars, 4 forks
+       726 commits, last change: 2013-11-18 01:18:40, 53 stars, 4 forks
 
     rtsisyk/luafun:
       A high-performance functional programming library designed for LuaJIT tracing just-in-time compiler
@@ -259,27 +259,27 @@ Projects added here:
 
     seomoz/qless-core:
       Core Lua Scripts for qless
-       153 commits, last change: 2013-07-09 11:41:51, 33 stars, 5 forks
+       186 commits, last change: 2013-10-22 15:01:27, 39 stars, 7 forks
 
     silentbicycle/lunatest:
       xUnit-style + randomized unit testing framework for Lua (and C projects using Lua, etc.)
-       77 commits, last change: 2013-01-20 17:03:11, 33 stars, 12 forks
+       77 commits, last change: 2013-01-20 17:03:11, 37 stars, 13 forks
 
     silentbicycle/tamale:
       TAble MAtching Lua Extension - An Erlang-style pattern-matching library for Lua
-       46 commits, last change: 2010-10-08 04:50:03, 30 stars, 0 forks
+       46 commits, last change: , 31 stars, 0 forks
 
     slembcke/debugger.lua:
       A simple, embedabble CLI debugger for Lua.
-       13 commits, last change: 2012-10-02 13:12:37, 21 stars, 2 forks
+       13 commits, last change: 2012-10-02 13:12:37, 24 stars, 2 forks
 
     SnabbCo/snabbswitch:
       The Snabb Switch Project
-       306 commits, last change: 2013-07-05 23:16:23, 89 stars, 11 forks
+       386 commits, last change: 2013-11-11 04:00:04, 122 stars, 16 forks
 
     sroccaserra/object-lua:
       A class-oriented OOP module for Lua
-       35 commits, last change: 2010-03-04 05:20:33, 27 stars, 1 forks
+       35 commits, last change: 2010-03-04 05:20:33, 29 stars, 1 forks
 
     statianzo/lua_euler:
       Working through Project Euler with Lua for some practice
@@ -287,77 +287,77 @@ Projects added here:
 
     stevedonovan/ldeb:
       ldeb converts Lua scripts into Debian packages
-       3 commits, last change: 2012-05-09 01:52:17, 2 stars, 1 forks
+       3 commits, last change: , 3 stars, 1 forks
 
     stevedonovan/luaish:
       A Lua REPL with global name tab-completion and a shell sub-mode
-       5 commits, last change: 2012-05-23 04:27:48, 21 stars, 4 forks
+       5 commits, last change: 2012-05-23 04:27:48, 25 stars, 4 forks
 
     stevedonovan/LuaMacro:
       An extended Lua macro preprocessor
-       65 commits, last change: 2013-06-10 21:51:38, 31 stars, 5 forks
+       65 commits, last change: 2013-06-10 21:51:38, 36 stars, 5 forks
 
     stevedonovan/Microlight:
       A little library of useful Lua functions, intended as the 'light' version of Penlight
-       32 commits, last change: 2012-12-29 01:39:19, 37 stars, 9 forks
+       33 commits, last change: , 41 stars, 9 forks
 
     stevedonovan/Orbiter:
       A personal Lua Web Application Server
-       68 commits, last change: 2013-01-24 03:14:22, 16 stars, 5 forks
+       70 commits, last change: 2013-07-19 06:04:45, 19 stars, 6 forks
 
     stevedonovan/Penlight:
       A set of pure Lua libraries focusing on input data handling (such as reading configuration files), functional programming (such as map, reduce, placeholder expressions,etc), and OS path management. Much of the functionality is inspired by the Python standard libraries.
-       351 commits, last change: 2013-06-27 00:41:58, 146 stars, 30 forks
+       385 commits, last change: 2013-10-08 07:05:04, 200 stars, 37 forks
 
     timn/roslua:
       ROS Client Library for Lua
-       245 commits, last change: 2013-01-29 05:46:53, 10 stars, 2 forks
+       245 commits, last change: , 10 stars, 3 forks
 
     trevrosen/lua-presentation:
       A presentation on Lua originally created for Austin.rb
-       23 commits, last change: 2012-11-15 21:03:59, 3 stars, 0 forks
+       24 commits, last change: , 4 stars, 0 forks
 
     webscriptio/lib:
 
-       36 commits, last change: 2013-04-13 18:18:43, 9 stars, 6 forks
+       36 commits, last change: , 11 stars, 6 forks
 
     Wiladams/LAPHLibs:
       Lua Application Programming Helper Libraries
-       57 commits, last change: 2013-04-03 05:06:21, 22 stars, 2 forks
+       57 commits, last change: 2013-04-03 05:06:21, 26 stars, 3 forks
 
     Wiladams/TINN:
-      TINN Is Not Node
-       69 commits, last change: 2013-07-08 10:03:22, 8 stars, 0 forks
+      TINN Is Not Node - All things Windows
+       127 commits, last change: 2013-06-05 16:32:52, 13 stars, 0 forks
 
     Wiladams/TINNSnips:
       Snippets of code that work with the TINN tool
-       43 commits, last change: 2013-07-08 10:00:40, 3 stars, 0 forks
+       71 commits, last change: 2013-11-04 16:06:27, 4 stars, 0 forks
 
     winton/nginx-accelerator:
       Drop-in page caching using nginx, lua, and memcached
-       91 commits, last change: , 2 stars, 3 forks
+       91 commits, last change: , 2 stars, 4 forks
 
     xopxe/Toribio:
       Embedded Robotics Platform.
-       112 commits, last change: 2013-06-18 08:28:41, 3 stars, 0 forks
+       120 commits, last change: 2013-10-03 11:07:37, 4 stars, 0 forks
 
     Yonaba/30log:
       30 lines library for object orientation in Lua
-       66 commits, last change: 2013-06-16 03:55:56, 18 stars, 6 forks
+       92 commits, last change: 2013-09-20 08:56:00, 31 stars, 10 forks
 
     Yonaba/Allen:
       An utility library to manipulate strings in Lua
-       36 commits, last change: 2013-04-29 12:59:57, 12 stars, 6 forks
+       38 commits, last change: , 11 stars, 7 forks
 
     Yonaba/Lua-Class-System:
       Lua Class System (LCS) is a small library which offers a clean, minimalistic but powerful API for (Pseudo) Object Oriented programming style using Lua.
-       19 commits, last change: 2012-11-12 12:58:29, 12 stars, 3 forks
+       25 commits, last change: 2013-09-20 09:00:22, 19 stars, 5 forks
 
     Yonaba/Moses:
       Utility library for functional programming in Lua
-       132 commits, last change: 2013-05-11 09:03:27, 25 stars, 8 forks
+       136 commits, last change: 2013-10-12 04:30:47, 34 stars, 8 forks
 
     zdevito/terra:
       A low-level counterpart to Lua
-       514 commits, last change: 2013-07-09 21:57:37, 392 stars, 28 forks
+       616 commits, last change: 2013-11-18 00:35:59, 517 stars, 40 forks
 <!-- PROJECTS_LIST_END -->
